@@ -289,10 +289,11 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
     <div id="p-gg" class="pnl">
       <div class="tbl-wrap">
         <table class="at">
-          <thead><tr><th>Ítem</th><th>Descripción Gasto General</th><th>Unid</th><th class="r">Cant.</th><th class="r">Precio</th><th class="r">Subtotal</th><th class="no-print"></th></tr></thead>
+          <thead><tr><th>Ítem</th><th>Descripción Gasto General</th><th>Unid</th><th class="r">Cant.</th><th class="r">Tiempo Uso</th><th class="r">Precio</th><th class="r">Subtotal</th><th class="no-print"></th></tr></thead>
           <tbody id="gg-body"></tbody>
         </table>
-        <div class="tbl-add no-print"><button class="bs addp" onclick="addGG()">+ Agregar Gasto General</button></div>
+        <div class="tbl-add no-print" style="justify-content:center;padding:20px"><button class="bs addp" onclick="toggleGGDropdown()" style="padding:12px 24px;font-size:12px;background:#1e3a5f;color:white;border:none;border-radius:20px;font-weight:600">AGREGAR CAMPO ▼</button></div>
+        <div id="gg-dropdown" style="display:none;position:absolute;background:white;border:1px solid #e2e8f0;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.15);z-index:100;min-width:250px;max-height:300px;overflow-y:auto"></div>
       </div>
       <div style="text-align:right;padding:10px;font-weight:600;color:var(--navy)" id="gg-total-label">Total Gastos Generales: $ 0</div>
     </div>
@@ -519,15 +520,12 @@ function renderGG(){
   subgrupos.forEach(sg => {
     let items = ggItems.filter(it => it.subgrupo === sg);
     if(items.length > 0) {
-      html += `<tr style="background:#f0f4f8;font-weight:600;color:#1e3a8a"><td colspan="8" style="padding:8px">${sg}</td></tr>`;
+      html += `<tr style="background:#f0f4f8;font-weight:600;color:#1e3a8a"><td colspan="9" style="padding:8px">${sg} <button class="bs addp" style="float:right" onclick="addGGItem('${sg}'); toggleGGDropdown();">+ Gasto</button></td></tr>`;
       items.forEach(it => {
         html += `<tr>
           <td><input class="mono" value="${esc(it.num)}" oninput="ugg('${it.id}','num',this.value)"/></td>
           <td><input value="${esc(it.name)}" oninput="ugg('${it.id}','name',this.value)"/></td>
-          <td><select style="width:100%;padding:8px" onchange="ugg('${it.id}','subgrupo',this.value)">
-            ${subgrupos.map(s=>`<option value="${s}" ${it.subgrupo===s?'selected':''}>${s}</option>`).join('')}
-          </select></td>
-          <td><input style="width:50px" value="${esc(it.unit)}" oninput="ugg('${it.id}','unit',this.value)"/></td>
+          <td><input value="${esc(it.unit)}" oninput="ugg('${it.id}','unit',this.value)"/></td>
           <td><input class="r" type="text" value="${fmtQ(N(it.qty))}" oninput="ugg('${it.id}','qty',this.value)" onfocus="this.select()"/></td>
           <td><input class="r" type="text" value="${fmtQ(N(it.tiempoUso)||1)}" oninput="ugg('${it.id}','tiempoUso',this.value)" onfocus="this.select()"/></td>
           <td><input class="r" type="text" value="${fmtP(N(it.price))}" oninput="ugg('${it.id}','price',this.value)" onfocus="this.select()"/></td>
@@ -551,6 +549,29 @@ function ugg(id,f,v){
   rc();markUnsaved();
 }
 function dgg(id){ggItems=ggItems.filter(x=>x.id!==id);renderGG();markUnsaved();}
+function toggleGGDropdown(){
+  const dropdown=document.getElementById('gg-dropdown');
+  if(dropdown.style.display==='none'){
+    const subgrupos=['Personal supervisión','Personal técnico','Maquinaria y equipos','Elementos de seguridad','Consumos de obra','Herramientas menores','Gastos zonales','Gastos de oficina central','Gastos financiero','Otros'];
+    const usedSubgrupos=new Set(ggItems.map(it=>it.subgrupo));
+    let html='';
+    subgrupos.forEach(sg=>{
+      if(!usedSubgrupos.has(sg)){
+        html+=`<div style="padding:10px;border-bottom:1px solid #e2e8f0;cursor:pointer" onclick="addGGItem('${sg}'); toggleGGDropdown();">${sg}</div>`;
+      }
+    });
+    if(html==='')html='<div style="padding:10px;color:#94a3b8">Todos los campos agregados</div>';
+    dropdown.innerHTML=html;
+    dropdown.style.display='block';
+  }else{
+    dropdown.style.display='none';
+  }
+}
+function addGGItem(subgrupo){
+  ggItems.push({id:gid(),num:'',name:'',unit:'gl',qty:1,tiempoUso:1,price:0,subgrupo:subgrupo});
+  renderGG();
+  markUnsaved();
+}
 
 /* ── APU ── */
 function openApu(id){
