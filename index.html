@@ -223,10 +223,10 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
   border: 1px solid var(--border);
   border-radius: 12px;
   box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-  width: 220px;
+  width: 240px;
   display: none;
   overflow-y: auto;
-  max-height: 300px;
+  max-height: 350px;
 }
 .dropdown-menu.show {
   display: block;
@@ -254,7 +254,7 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
 <body>
 
 <div id="rotate-warning">
-  <svg viewBox="0 0 24 24"><path d="M16.48 2.52c3.27 1.55 5.61 4.72 5.97 8.48h2.02c-.38-4.82-3.38-8.91-7.5-11.05l-.49 2.57zm-14.46 8.48c.36-3.76 2.7-6.93 5.97-8.48l-.49-2.57c-4.12 2.14-7.12 6.23-7.5 11.05h2.02zm14.46 10.48c-3.27 1.55-5.61 4.72-5.97 8.48h-2.02c.38 4.82 3.38 8.91 7.5 11.05l.49-2.57zm-14.46-8.48c-.36 3.76-2.7 6.93-5.97 8.48l.49 2.57c4.12-2.14 7.12-6.23 7.5-11.05h-2.02z"/></svg>
+  <svg viewBox="0 0 24 24"><path d="M16.48 2.52c3.27 1.55 5.61 4.72 5.97 8.48h2.02c-.38-4.82-3.38-8.91-7.5-11.05l-.49 2.57zm-14.46 8.48c.36-3.76 2.7-6.93 5.97-8.48l-.49-2.57c-4.12 2.14-7.12 6.23-7.5 11.05h2.02zm14.46 10.48c-3.27 1.55-5.61 4.72-5.97 8.48h-2.02c.38 4.82 3.38 8.91 7.5 11.05l.49-2.57zm-14.46-8.48c-.36 3.76-2.7 6.93-5.97 8.48l.49 2.57c4.12-2.14 7.12 6.23 7.5-11.05h-2.02z"/></svg>
   <h2>Por favor, gira tu dispositivo</h2>
   <p>Esta aplicación requiere una pantalla ancha para funcionar correctamente.</p>
 </div>
@@ -843,7 +843,6 @@ function newProject(){
   currentProjectId=null;
   items=[{id:gid(),t:'ch',num:'1.-',name:'',unit:'',qty:0,price:0,isApu:false,isCub:false},{id:gid(),t:'it',num:'1.1',name:'',unit:'',qty:0,price:0,isApu:false,isCub:false}];
   ggItems=[]; apuData={}; tofData={};
-  CFG.coverImgUrl = ''; 
   ['pObra','pMandante','pUbicacion','pProfesional'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('pFecha').value=new Date().toISOString().split('T')[0];
   rb(); renderGG(); updBrand(); closeMod();
@@ -851,7 +850,7 @@ function newProject(){
 function saveProject(){
   let obra=document.getElementById('pObra').value.trim(); if(!obra){alert('Nombre de obra requerido');return;}
   if(!currentProjectId) currentProjectId='proj_'+Date.now();
-  let p={id:currentProjectId,obra,mandante:document.getElementById('pMandante').value,ubicacion:document.getElementById('pUbicacion').value,profesional:document.getElementById('pProfesional').value,fecha:document.getElementById('pFecha').value,items,ggItems,apuData,tofData,pGG:document.getElementById('pGG').value,pUtil:document.getElementById('pUtil').value,pImp:document.getElementById('pImp').value,pIVA:document.getElementById('pIVA').value,ggFijo:document.getElementById('ggFijo').checked,coverImgUrl:CFG.coverImgUrl};
+  let p={id:currentProjectId,obra,mandante:document.getElementById('pMandante').value,ubicacion:document.getElementById('pUbicacion').value,profesional:document.getElementById('pProfesional').value,fecha:document.getElementById('pFecha').value,items,ggItems,apuData,tofData,pGG:document.getElementById('pGG').value,pUtil:document.getElementById('pUtil').value,pImp:document.getElementById('pImp').value,pIVA:document.getElementById('pIVA').value,ggFijo:document.getElementById('ggFijo').checked};
   lsS('od_proj_'+currentProjectId,p);
   let idx=getIdx(),e=idx.find(x=>x.id===currentProjectId);
   if(e){e.obra=obra;e.savedAt=new Date().toISOString();}else idx.unshift({id:currentProjectId,obra,savedAt:new Date().toISOString()});
@@ -880,7 +879,6 @@ function openProjects(){
 function loadP(id){
   let p=lsL('od_proj_'+id); if(!p)return;
   currentProjectId=id; items=p.items; ggItems=p.ggItems; apuData=p.apuData; tofData=p.tofData;
-  CFG.coverImgUrl = p.coverImgUrl || '';
   document.getElementById('pObra').value=p.obra; document.getElementById('pMandante').value=p.mandante;
   document.getElementById('pUbicacion').value=p.ubicacion; document.getElementById('pProfesional').value=p.profesional;
   document.getElementById('pFecha').value=p.fecha; document.getElementById('pGG').value=p.pGG;
