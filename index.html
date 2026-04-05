@@ -517,25 +517,41 @@ function addGG(){ggItems.push({id:gid(),num:'',name:'',unit:'gl',qty:1,tiempoUso
 function renderGG(){
   const subgrupos=['Personal supervisión','Personal técnico','Maquinaria y equipos','Elementos de seguridad','Consumos de obra','Herramientas menores','Gastos zonales','Gastos de oficina central','Gastos financiero','Otros'];
   let html = '';
+  let sgIdx = 1;
   subgrupos.forEach(sg => {
     let items = ggItems.filter(it => it.subgrupo === sg);
     if(items.length > 0) {
-      html += `<tr style="background:#f0f4f8;font-weight:600;color:#1e3a8a"><td colspan="9" style="padding:8px">${sg} <button class="bs addp" style="float:right" onclick="addGGItem('${sg}'); toggleGGDropdown();">+ Gasto</button></td></tr>`;
-      items.forEach(it => {
+      html += `<tr style="background:#f0f4f8;font-weight:600;color:#1e3a8a"><td colspan="9" style="padding:8px">${sgIdx}.- ${sg} <button class="bs addp" style="float:right" onclick="addGGItem('${sg}'); toggleGGDropdown();">+ Gasto</button></td></tr>`;
+      items.forEach((it, itIdx) => {
+        const autoNum = sgIdx + '.' + (itIdx + 1);
+        if(!it.num) it.num = autoNum;
         html += `<tr>
-          <td><input class="mono" value="${esc(it.num)}" oninput="ugg('${it.id}','num',this.value)"/></td>
-          <td><input value="${esc(it.name)}" oninput="ugg('${it.id}','name',this.value)"/></td>
-          <td><input value="${esc(it.unit)}" oninput="ugg('${it.id}','unit',this.value)"/></td>
-          <td><input class="r" type="text" value="${fmtQ(N(it.qty))}" oninput="ugg('${it.id}','qty',this.value)" onfocus="this.select()"/></td>
-          <td><input class="r" type="text" value="${fmtQ(N(it.tiempoUso)||1)}" oninput="ugg('${it.id}','tiempoUso',this.value)" onfocus="this.select()"/></td>
-          <td><input class="r" type="text" value="${fmtP(N(it.price))}" oninput="ugg('${it.id}','price',this.value)" onfocus="this.select()"/></td>
-          <td class="r mono">${sym()} ${fmtB(N(it.qty)*N(it.tiempoUso||1)*N(it.price))}</td>
-          <td class="no-print"><button class="bs del" onclick="dgg('${it.id}')">×</button></td>
+          <td style="width:60px"><input class="mono" value="${esc(it.num)}" oninput="ugg('${it.id}','num',this.value)"/></td>
+          <td style="min-width:300px"><input value="${esc(it.name)}" oninput="ugg('${it.id}','name',this.value)"/></td>
+          <td style="width:80px"><input value="${esc(it.unit)}" oninput="ugg('${it.id}','unit',this.value)" onfocus="this.select()"/></td>
+          <td style="width:70px"><input class="r" type="text" value="${fmtQ(N(it.qty))}" oninput="ugg('${it.id}','qty',this.value)" onfocus="this.select()"/></td>
+          <td style="width:70px"><input class="r" type="text" value="${fmtQ(N(it.tiempoUso)||1)}" oninput="ugg('${it.id}','tiempoUso',this.value)" onfocus="this.select()"/></td>
+          <td style="width:100px"><input class="r" type="text" value="${fmtP(N(it.price))}" oninput="ugg('${it.id}','price',this.value)" onfocus="this.select()"/></td>
+          <td class="r mono" style="width:120px">${sym()} ${fmtB(N(it.qty)*N(it.tiempoUso||1)*N(it.price))}</td>
+          <td class="no-print" style="width:40px"><button class="bs del" onclick="dgg('${it.id}')">×</button></td>
         </tr>`;
       });
+      sgIdx++;
     }
   });
   document.getElementById('gg-body').innerHTML = html;
+  setTimeout(() => {
+    document.querySelectorAll('#gg-body input').forEach((inp, idx, arr) => {
+      inp.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          let next = arr[idx + 1];
+          if (next) next.focus();
+          else this.blur();
+        }
+      });
+    });
+  }, 100);
   rc();
 }
 function ugg(id,f,v){
@@ -822,13 +838,13 @@ function genPrintHtml(){
     '@media print{' +
       'body{counter-reset:page;position:relative}' +
       'body::before{content:"PresAI Software avanzado de presupuesto";position:fixed;bottom:25mm;left:50%;transform:translateX(-50%);opacity:0.08;font-size:14px;color:#999;pointer-events:none;z-index:1}' +
-      '.pageNumber{counter-increment:page;content:counter(page)}' +
+      '.pageNumber::after{counter-increment:page;content:counter(page)}' +
       '.print-footer{display:flex !important}' +
     '}' +
   '</style></head><body>';
   
   if(CFG.printCover){
-    html += '<div style="min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;page-break-after:always;break-after:page;padding:20mm;box-sizing:border-box;padding-bottom:25mm">' +
+    html += '<div style="height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;page-break-after:always;break-after:page;padding:20mm;box-sizing:border-box;padding-bottom:25mm;overflow:hidden">' +
       (CFG.coverImgUrl?'<img src="'+CFG.coverImgUrl+'" style="max-width:85%;max-height:45vh;margin-bottom:30px;object-fit:contain"/>':'') +
       '<h1 style="font-size:32px;color:'+color+';margin-bottom:10px">'+esc(obra)+'</h1>' +
       '<h2 style="font-size:18px;color:#666;margin-bottom:40px">PRESUPUESTO DE OBRA</h2>' +
