@@ -17,34 +17,11 @@
 body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3);min-height:100vh}
 .app{max-width:1200px;margin:0 auto;display:flex;flex-direction:column;min-height:100vh}
 
-/* ── ROTATION WARNING ── */
-#rotate-warning {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: var(--navy);
-  color: white;
-  z-index: 9999;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 20px;
-}
-#rotate-warning svg { width: 64px; height: 64px; margin-bottom: 20px; fill: white; }
-#rotate-warning h2 { font-size: 20px; margin-bottom: 10px; }
-#rotate-warning p { font-size: 14px; opacity: 0.8; }
-
-@media screen and (orientation: portrait) and (max-width: 1024px) {
-  #rotate-warning { display: flex; }
-  .app { display: none; }
-}
-
 /* ── HEADER ── */
 .hdr{background:var(--navy);display:flex;flex-wrap:wrap;align-items:center;position:sticky;top:0;z-index:50;box-shadow:0 2px 10px rgba(0,0,0,0.3)}
 .hdr-left{display:flex;align-items:center;gap:10px;padding:9px 16px;flex:1;min-width:200px}
 .hdr-logo-wrap{width:38px;height:38px;min-width:38px;border-radius:8px;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer;border:1px solid rgba(255,255,255,0.2)}
-.hdr-logo-wrap img,.hdr-logo-wrap svg{max-width:100%;max-height:100%;object-fit:contain}
+.hdr-logo-wrap img{max-width:100%;max-height:100%;object-fit:contain}
 .hdr-logo-wrap svg{width:20px;height:20px;fill:none;stroke:#fff;stroke-width:1.5;stroke-linecap:round}
 .hdr-txt .name{font-size:16px;font-weight:700;color:#fff;letter-spacing:-0.3px}
 .hdr-txt .name span{color:#93c5fd}
@@ -139,7 +116,6 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
 .btn-p:hover{opacity:.87}
 .btn-s{font-family:var(--ff);font-size:12px;padding:7px 12px;border-radius:6px;cursor:pointer;background:var(--bg);color:var(--txt2);border:1px solid var(--border2)}
 .btn-s:hover{background:var(--bg2)}
-.pbadge{font-family:var(--mono);font-size:14px;font-weight:600}
 
 /* ── APU ── */
 .sec-wrap{margin-bottom:10px}
@@ -172,20 +148,6 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
 .tof-row input:focus{border-color:var(--navy);background:var(--bg2)}
 .tof-row .r{text-align:right}
 
-/* ── PRINT ── */
-@media print{
-  body{background:#fff;font-size:11px}
-  .hdr,.tabs,.tbl-add,.no-print,.hbtn,.bs.del,.bs.addp,.btn-p,.btn-s{display:none!important}
-  .app{max-width:100%;margin:0;padding:0}
-  .content{padding:0}
-  .tbl-wrap,.tot-card,.proj-bar{border:none;border-radius:0;margin-bottom:20px}
-  .tbl-hdr{background:#eee!important;border-bottom:2px solid #000!important}
-  .row-ch{background:#f5f5f5!important;border-bottom:1px solid #ccc!important}
-  .ri{padding:4px 2px}
-  .pnl{display:block!important}
-  #p-apu,#p-cub,#p-cfg{display:none!important}
-}
-
 /* ── FLOATING BUTTON ── */
 .float-btn-wrap {
   position: fixed;
@@ -213,9 +175,6 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
   transform: scale(1.05);
   background: #2c5282;
 }
-.btn-float:active {
-  transform: scale(0.95);
-}
 .dropdown-menu {
   position: absolute;
   bottom: 100%;
@@ -228,7 +187,8 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
   box-shadow: 0 10px 25px rgba(0,0,0,0.2);
   width: 220px;
   display: none;
-  overflow: hidden;
+  overflow-y: auto;
+  max-height: 300px;
 }
 .dropdown-menu.show {
   display: block;
@@ -241,9 +201,6 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
   border-bottom: 1px solid var(--border);
   transition: background 0.2s;
 }
-.dropdown-item:last-child {
-  border-bottom: none;
-}
 .dropdown-item:hover {
   background: var(--navy-lt);
   color: var(--navy);
@@ -253,6 +210,44 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
   background: #f1f5f9;
   cursor: not-allowed;
   text-decoration: line-through;
+}
+
+/* ── PORTADA ── */
+.cover-preview {
+  width: 100%;
+  max-width: 600px;
+  margin: 20px auto;
+  background: white;
+  border: 1px solid var(--border);
+  padding: 40px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.cover-logo { max-width: 200px; margin-bottom: 30px; }
+.cover-img { width: 100%; max-height: 300px; object-fit: cover; margin: 20px 0; border-radius: 8px; }
+.cover-title { font-size: 24px; font-weight: 700; color: var(--navy); margin-bottom: 10px; }
+.cover-info { font-size: 14px; color: var(--txt2); margin-top: 40px; }
+
+/* ── PRINT ── */
+@media print{
+  @page { size: auto; margin: 15mm; }
+  body{background:#fff;font-size:11px}
+  .hdr,.tabs,.tbl-add,.no-print,.hbtn,.bs.del,.bs.addp,.btn-p,.btn-s,.float-btn-wrap{display:none!important}
+  .app{max-width:100%;margin:0;padding:0}
+  .content{padding:0}
+  .tbl-wrap,.tot-card,.proj-bar{border:none;border-radius:0;margin-bottom:20px}
+  .tbl-hdr{background:#eee!important;border-bottom:2px solid #000!important}
+  .row-ch{background:#f5f5f5!important;border-bottom:1px solid #ccc!important}
+  .ri{padding:4px 2px}
+  .pnl{display:none!important}
+  .pnl.print-on{display:block!important}
+  .page-break { page-break-before: always; }
+  .print-footer { position: fixed; bottom: 0; width: 100%; font-size: 9px; text-align: center; border-top: 1px solid #eee; padding-top: 5px; }
+  .print-signatures { margin-top: 50px; display: flex; justify-content: space-around; }
+  .sig-box { border-top: 1px solid #000; width: 200px; text-align: center; padding-top: 5px; }
 }
 </style>
 </head>
@@ -267,12 +262,12 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
 <div class="app">
   <header class="hdr">
     <div class="hdr-left">
-      <div class="hdr-logo-wrap" id="logoWrap" onclick="sw('cfg',document.querySelector('.tab:last-child'))">
+      <div class="hdr-logo-wrap" id="logoWrap" onclick="sw('cover',document.querySelector('.tab:first-child'))">
         <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       </div>
       <div class="hdr-txt">
         <div class="name">Pres<span>AI</span></div>
-        <div class="sub">v4.2.0 — PRO</div>
+        <div class="sub">v4.3.0 — PRO</div>
       </div>
       <div class="hdr-proj" id="hdrProj" style="display:none">
         <div class="hdr-proj-name" id="hdrProjName">Proyecto</div>
@@ -280,31 +275,38 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
       </div>
     </div>
     <div class="hdr-right">
+      <button class="hbtn" onclick="undo()" title="Deshacer (Ctrl+Z)"><svg viewBox="0 0 24 24"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/></svg></button>
       <button class="hbtn" onclick="openProjects()"><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg> Abrir</button>
       <button class="hbtn green" onclick="saveProject()"><svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Guardar</button>
-      <button class="hbtn" onclick="window.print()"><svg viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> PDF</button>
+      <button class="hbtn" onclick="openPrintMenu()"><svg viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Imprimir</button>
+      <button class="hbtn" onclick="openConfig()"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
     </div>
   </header>
 
   <nav class="tabs">
-    <div class="tab on" onclick="sw('bud',this)">Presupuesto</div>
+    <div class="tab on" onclick="sw('cover',this)">Portada</div>
+    <div class="tab" onclick="sw('bud',this)">Presupuesto</div>
     <div class="tab" onclick="sw('gg',this)">Gastos Generales</div>
     <div class="tab" onclick="sw('apu',this)">APU</div>
     <div class="tab" onclick="sw('cub',this)">Cubicaciones</div>
-    <div class="tab" onclick="sw('cfg',this)">Configuración</div>
   </nav>
 
   <main class="content">
-    <!-- PANEL: BUDGET -->
-    <div id="p-bud" class="pnl on">
+    <!-- PANEL: PORTADA -->
+    <div id="p-cover" class="pnl on">
       <div class="proj-bar">
         <div class="pf pf-full"><label>Nombre de la Obra</label><input id="pObra" placeholder="Ej: Construcción Edificio Central" oninput="updBrand();markUnsaved()"/></div>
         <div class="pf"><label>Mandante / Cliente</label><input id="pMandante" placeholder="Nombre del cliente" oninput="markUnsaved()"/></div>
         <div class="pf"><label>Ubicación</label><input id="pUbicacion" placeholder="Ciudad, Región" oninput="markUnsaved()"/></div>
         <div class="pf"><label>Profesional a Cargo</label><input id="pProfesional" placeholder="Nombre del profesional" oninput="markUnsaved()"/></div>
         <div class="pf"><label>Fecha</label><input type="date" id="pFecha" oninput="markUnsaved()"/></div>
+        <div class="pf pf-full"><label>Imagen de Portada (URL o subir en Config)</label><input id="pCoverImg" placeholder="https://..." oninput="CFG.coverImgUrl=this.value;renderCover();markUnsaved()"/></div>
       </div>
+      <div class="cover-preview" id="cover-preview"></div>
+    </div>
 
+    <!-- PANEL: BUDGET -->
+    <div id="p-bud" class="pnl">
       <div class="tbl-wrap">
         <div class="tbl-hdr">
           <span>Ítem</span><span>Descripción de la Partida</span><span>Unid</span><span class="r">Cant.</span><span class="r">P. Unitario</span><span class="r">Subtotal</span><span class="no-print"></span>
@@ -349,13 +351,9 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
           </thead>
           <tbody id="gg-body"></tbody>
         </table>
-        <div class="tbl-add no-print">
-          <button class="bs addp" onclick="addGG()">+ Agregar Gasto General</button>
-        </div>
       </div>
       <div style="text-align:right;padding:10px;font-weight:600;color:var(--navy)" id="gg-total-label">Total Gastos Generales: $ 0</div>
       
-      <!-- Botón Flotante Agregar Subgrupo -->
       <div class="float-btn-wrap no-print">
         <div class="dropdown-menu" id="sg-dropdown"></div>
         <button class="btn-float" onclick="toggleSgDropdown()">
@@ -375,40 +373,6 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
       <div id="cub-list-empty" style="padding:40px;text-align:center;color:var(--txt3)">No hay Cubicaciones creadas aún.</div>
       <div id="cub-list-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px"></div>
     </div>
-
-    <!-- PANEL: CONFIG -->
-    <div id="p-cfg" class="pnl">
-      <div class="tot-card" style="grid-template-columns:1fr">
-        <div class="cfg-lbl">Personalización de la Aplicación</div>
-        <div class="ls-grid" style="grid-template-columns:1fr 1fr">
-          <div class="li"><label>Moneda</label>
-            <select id="cfg-currency" onchange="CFG.currency=this.value;rc();rb();renderGG();markUnsaved()" style="width:100%;padding:6px;border:1px solid var(--border2);border-radius:4px">
-              <option value="CLP">Peso Chileno ($)</option>
-              <option value="USD">Dólar (US$)</option>
-              <option value="UF">UF</option>
-            </select>
-          </div>
-          <div class="li"><label>Color Principal</label><input type="color" id="cfg-color" onchange="CFG.colorHeader=this.value;applyColor();markUnsaved()"/></div>
-          <div class="li"><label>Decimales Cantidad</label><input type="number" id="cfg-dec-q" oninput="CFG.decimalsQty=N(this.value);rc();rb();renderGG();markUnsaved()"/></div>
-          <div class="li"><label>Decimales Precio</label><input type="number" id="cfg-dec-p" oninput="CFG.decimalsPrice=N(this.value);rc();rb();renderGG();markUnsaved()"/></div>
-          <div class="li"><label>Logo URL (Imagen)</label><input type="text" id="cfg-logo" placeholder="https://..." oninput="CFG.logoDataUrl=this.value;updLogoHdr();markUnsaved()"/></div>
-          <div class="li"><label>Auto-guardado (seg)</label><input type="number" id="cfg-autosave" oninput="CFG.autoSaveInterval=N(this.value);setupAutoSave();markUnsaved()"/></div>
-        </div>
-        <div class="ls-box">
-          <div class="ls-title">Opciones de Visualización</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
-            <label style="font-size:11px"><input type="checkbox" id="cfg-gg-p" onchange="CFG.ggProrrateado=this.checked;rc();markUnsaved()"/> Prorratear GG</label>
-            <label style="font-size:11px"><input type="checkbox" id="cfg-u-p" onchange="CFG.utilProrrateado=this.checked;rc();markUnsaved()"/> Prorratear Utilidad</label>
-            <label style="font-size:11px"><input type="checkbox" id="cfg-i-p" onchange="CFG.impProrrateado=this.checked;rc();markUnsaved()"/> Prorratear Imprevistos</label>
-          </div>
-        </div>
-        <div style="margin-top:20px;display:flex;gap:10px">
-          <button class="btn-p blue" onclick="exportJSON()">Exportar Proyecto (.json)</button>
-          <button class="btn-p amber" onclick="document.getElementById('importFile').click()">Importar Proyecto</button>
-          <input type="file" id="importFile" style="display:none" accept=".json" onchange="importJSON(this)"/>
-        </div>
-      </div>
-    </div>
   </main>
 </div>
 
@@ -423,19 +387,28 @@ let tofData = {};
 let currentProjectId = null;
 let isDirty = false;
 let autoSaveInterval = null;
+let undoStack = [];
 
 const CFG_DEF = {
   currency: 'CLP',
+  paridad: 1,
   decimalsQty: 2,
   decimalsPrice: 0,
   decimalsBudget: 0,
+  decimalsApu: 2,
   colorHeader: '#1e3a5f',
   logoDataUrl: '',
+  coverImgUrl: '',
   autoSave: true,
   autoSaveInterval: 30,
   ggProrrateado: false,
   utilProrrateado: false,
-  impProrrateado: false
+  impProrrateado: false,
+  empresaNombre: '',
+  empresaDatos: '',
+  firmaEmpresa: '',
+  firmaPropietario: '',
+  formatoPapel: 'carta' // 'carta' o 'oficio'
 };
 let CFG = Object.assign({}, CFG_DEF);
 
@@ -451,38 +424,34 @@ function lsD(k){localStorage.removeItem(k);}
 function getIdx(){return lsL('od_index')||[];}
 function saveIdx(idx){lsS('od_index',idx);}
 
-function saveCFG(){lsS('od_cfg',CFG);}
-function loadCFG(){let x=lsL('od_cfg');if(x)CFG=Object.assign(CFG,x);applyColor();updBrand();updLogoHdr();setupAutoSave();
-  document.getElementById('cfg-currency').value=CFG.currency;
-  document.getElementById('cfg-color').value=CFG.colorHeader;
-  document.getElementById('cfg-dec-q').value=CFG.decimalsQty;
-  document.getElementById('cfg-dec-p').value=CFG.decimalsPrice;
-  document.getElementById('cfg-logo').value=CFG.logoDataUrl;
-  document.getElementById('cfg-autosave').value=CFG.autoSaveInterval;
-  document.getElementById('cfg-gg-p').checked=CFG.ggProrrateado;
-  document.getElementById('cfg-u-p').checked=CFG.utilProrrateado;
-  document.getElementById('cfg-i-p').checked=CFG.impProrrateado;
+function pushUndo(){
+  undoStack.push(JSON.stringify({items,ggItems,apuData,tofData,CFG}));
+  if(undoStack.length > 50) undoStack.shift();
 }
-function applyColor(){document.documentElement.style.setProperty('--navy',CFG.colorHeader);}
-function updBrand(){
-  document.getElementById('hdrProjName').textContent = document.getElementById('pObra').value || (currentProjectId?'Proyecto':'Nuevo proyecto');
-}
-function updLogoHdr(){
-  if(CFG.logoDataUrl) document.getElementById('logoWrap').innerHTML=`<img src="${CFG.logoDataUrl}"/>`;
+function undo(){
+  if(undoStack.length === 0) return;
+  let state = JSON.parse(undoStack.pop());
+  items=state.items; ggItems=state.ggItems; apuData=state.apuData; tofData=state.tofData; CFG=state.CFG;
+  rb(); renderGG(); renderCover();
 }
 
 function N(v){
   if(typeof v === 'string') v = v.replace(/\./g,'').replace(',','.');
   return parseFloat(v)||0;
 }
-function sym(){return CFG.currency==='USD'?'US$':CFG.currency==='UF'?'UF':'$';}
+function sym(){
+  if(CFG.currency==='USD') return 'US$';
+  if(CFG.currency==='UF') return 'UF';
+  return '$';
+}
 function fmtN(n,d){
-  if(CFG.currency==='UF') return n.toLocaleString('es-CL',{minimumFractionDigits:d||2,maximumFractionDigits:d||2});
-  return n.toLocaleString('es-CL',{minimumFractionDigits:d||0,maximumFractionDigits:d||0});
+  let dec = d !== undefined ? d : (CFG.currency==='UF' ? 2 : 0);
+  return n.toLocaleString('es-CL',{minimumFractionDigits:dec,maximumFractionDigits:dec});
 }
 function fmtQ(n){return fmtN(n,CFG.decimalsQty);}
 function fmtP(n){return fmtN(n,CFG.decimalsPrice);}
 function fmtB(n){return fmtN(n,CFG.decimalsBudget);}
+function fmtA(n){return fmtN(n,CFG.decimalsApu);}
 function esc(s){return(s||'').toString().replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
 
 function numToWords(n){
@@ -534,7 +503,7 @@ function rb(){
         <select class="ri" onchange="ui('${it.id}','unit',this.value)">
           ${UNITS_BUDGET.map(u=>`<option value="${u}" ${it.unit===u?'selected':''}>${u}</option>`).join('')}
         </select>
-        <input class="ri r" type="text" value="${fmtQ(N(it.qty))}" oninput="ui('${it.id}','qty',this.value)" onfocus="this.select()"/>
+        <input class="ri r ${it.isCub?'magenta':''}" type="text" value="${fmtQ(N(it.qty))}" oninput="ui('${it.id}','qty',this.value)" onfocus="this.select()"/>
         <input class="ri r ${it.isApu?'magenta':''}" type="text" value="${fmtP(N(it.price))}" oninput="ui('${it.id}','price',this.value)" onfocus="this.select()"/>
         <div class="span-tot ${it.isApu?'magenta':''}">${sym()} ${fmtB(N(it.qty)*N(it.price))}</div>
         <div class="span-acts no-print">
@@ -549,11 +518,13 @@ function rb(){
   rc();
 }
 function ui(id,f,v){
+  pushUndo();
   if(f==='qty'||f==='price') v=N(v);
   items=items.map(it=>{
     if(it.id===id){
       let obj=Object.assign({},it,{[f]:v});
       if(f==='price') obj.isApu=false;
+      if(f==='qty') obj.isCub=false;
       return obj;
     }
     return it;
@@ -574,21 +545,24 @@ function ui(id,f,v){
 }
 
 function addItToChapter(chId){
+  pushUndo();
   var ci=items.findIndex(x=>x.id===chId);
   var last=ci;for(var i=ci+1;i<items.length;i++){if(items[i].t==='ch')break;last=i;}
   items.splice(last+1,0,{id:gid(),t:'it',num:'',name:'',unit:'un',qty:1,price:0,isApu:false,isCub:false});
   rb();markUnsaved();
 }
 function addCh(){
+  pushUndo();
   items.push({id:gid(),t:'ch',num:'',name:'',unit:'',qty:0,price:0,isApu:false,isCub:false});
   rb();markUnsaved();
 }
 function addIt(){
+  pushUndo();
   var lastCh=null;for(var i=items.length-1;i>=0;i--){if(items[i].t==='ch'){lastCh=items[i];break;}}
   if(lastCh) addItToChapter(lastCh.id);
   else {let cid=gid();items.push({id:cid,t:'ch',num:'1.-',name:'',unit:'',qty:0,price:0,isApu:false,isCub:false});addItToChapter(cid);}
 }
-function di(id){if(confirm('¿Eliminar fila?')){items=items.filter(it=>it.id!==id);rb();markUnsaved();}}
+function di(id){if(confirm('¿Eliminar fila?')){pushUndo();items=items.filter(it=>it.id!==id);rb();markUnsaved();}}
 
 function rc(){
   var dc=items.reduce((a,it)=>it.t==='it'?a+N(it.qty)*N(it.price):a,0);
@@ -598,24 +572,14 @@ function rc(){
   var util=dc*(pU/100),imp=dc*(pImp/100),net=dc+ggV+util+imp,iva=net*(pIVA/100),grand=net+iva;
   
   var html=`<div class="tr2"><span class="tl">Costo Directo</span><span class="tv">${sym()} ${fmtB(dc)}</span></div>`;
+  if(!CFG.ggProrrateado) html+=`<div class="tr2"><span class="tl">Gastos Generales${ggF?' ('+pGG+'%)':''}</span><span class="tv">${sym()} ${fmtB(ggV)}</span></div>`;
+  else html+=`<div class="tr2 prorate"><span class="tl">Gastos Generales ($ ${fmtB(ggV)} prorrateados)</span></div>`;
   
-  if(!CFG.ggProrrateado){
-    html+=`<div class="tr2"><span class="tl">Gastos Generales${ggF?' ('+pGG+'%)':''}</span><span class="tv">${sym()} ${fmtB(ggV)}</span></div>`;
-  } else {
-    html+=`<div class="tr2 prorate"><span class="tl">Gastos Generales ($ ${fmtB(ggV)} prorrateados)</span></div>`;
-  }
+  if(!CFG.utilProrrateado) html+=`<div class="tr2"><span class="tl">Utilidad (${pU}%)</span><span class="tv">${sym()} ${fmtB(util)}</span></div>`;
+  else html+=`<div class="tr2 prorate"><span class="tl">Utilidad ($ ${fmtB(util)} prorrateada)</span></div>`;
   
-  if(!CFG.utilProrrateado){
-    html+=`<div class="tr2"><span class="tl">Utilidad (${pU}%)</span><span class="tv">${sym()} ${fmtB(util)}</span></div>`;
-  } else {
-    html+=`<div class="tr2 prorate"><span class="tl">Utilidad ($ ${fmtB(util)} prorrateada)</span></div>`;
-  }
-  
-  if(!CFG.impProrrateado && pImp>0){
-    html+=`<div class="tr2"><span class="tl">Imprevistos (${pImp}%)</span><span class="tv">${sym()} ${fmtB(imp)}</span></div>`;
-  } else if(pImp>0) {
-    html+=`<div class="tr2 prorate"><span class="tl">Imprevistos ($ ${fmtB(imp)} prorrateados)</span></div>`;
-  }
+  if(!CFG.impProrrateado && pImp>0) html+=`<div class="tr2"><span class="tl">Imprevistos (${pImp}%)</span><span class="tv">${sym()} ${fmtB(imp)}</span></div>`;
+  else if(pImp>0) html+=`<div class="tr2 prorate"><span class="tl">Imprevistos ($ ${fmtB(imp)} prorrateados)</span></div>`;
   
   html+=`<div class="tr2 sep"><span class="tl" style="font-weight:500">Total Neto</span><span class="tv" style="font-weight:500">${sym()} ${fmtB(net)}</span></div>
     <div class="tr2"><span class="tl">IVA (${pIVA}%)</span><span class="tv">${sym()} ${fmtB(iva)}</span></div>
@@ -628,74 +592,82 @@ function rc(){
 
 /* ── GG ── */
 function addGG(sg){
+  pushUndo();
   ggItems.push({id:gid(),num:'',name:'',unit:'gl',qty:1,tiempoUso:1,price:0,subgrupo:sg||'Otros'});
   renderGG();markUnsaved();
 }
-
 function toggleSgDropdown(){
   const dd = document.getElementById('sg-dropdown');
   const usedSg = new Set(ggItems.map(it => it.subgrupo));
-  
   let html = '';
   SUBGRUPOS_GG.forEach(sg => {
     const isUsed = usedSg.has(sg);
     html += `<div class="dropdown-item ${isUsed?'disabled':''}" onclick="${isUsed?'':'addSg(\''+sg+'\')'}">${sg}</div>`;
   });
-  
   dd.innerHTML = html;
   dd.classList.toggle('show');
 }
-
 function addSg(sg){
   addGG(sg);
   document.getElementById('sg-dropdown').classList.remove('show');
 }
-
 function renderGG(){
   let html = '';
   const usedSg = [...new Set(ggItems.map(it => it.subgrupo))];
-  
-  // Ordenar según el orden original de SUBGRUPOS_GG
   usedSg.sort((a,b) => SUBGRUPOS_GG.indexOf(a) - SUBGRUPOS_GG.indexOf(b));
-
   usedSg.forEach(sg => {
     let items = ggItems.filter(it => it.subgrupo === sg);
     let subtotal = items.reduce((a,it) => a + N(it.qty)*N(it.tiempoUso)*N(it.price), 0);
-    
     html += `<tr style="background:#f0f4f8;font-weight:600;color:#1e3a8a">
       <td colspan="6" style="padding:8px">${sg}</td>
       <td class="r" style="padding:8px">Subtotal: ${sym()} ${fmtB(subtotal)}</td>
-      <td class="no-print"></td>
+      <td class="no-print" style="text-align:center"><button class="bs addp" onclick="addGG('${sg}')">+</button></td>
     </tr>`;
-    
     items.forEach(it => {
       html += `<tr>
-        <td><input class="mono" value="${esc(it.num)}" oninput="ugg('${it.id}','num',this.value)"/></td>
-        <td><input value="${esc(it.name)}" oninput="ugg('${it.id}','name',this.value)"/></td>
-        <td><input style="width:50px" value="${esc(it.unit)}" oninput="ugg('${it.id}','unit',this.value)"/></td>
-        <td><input class="r" type="text" value="${fmtQ(N(it.qty))}" oninput="ugg('${it.id}','qty',this.value)" onfocus="this.select()"/></td>
-        <td><input class="r" type="text" value="${fmtQ(N(it.tiempoUso))}" oninput="ugg('${it.id}','tiempoUso',this.value)" onfocus="this.select()"/></td>
-        <td><input class="r" type="text" value="${fmtP(N(it.price))}" oninput="ugg('${it.id}','price',this.value)" onfocus="this.select()"/></td>
+        <td><input class="mono" value="${esc(it.num)}" oninput="ugg('${it.id}','num',this.value)" onkeydown="ggKey(event,this)"/></td>
+        <td><input value="${esc(it.name)}" oninput="ugg('${it.id}','name',this.value)" onkeydown="ggKey(event,this)"/></td>
+        <td><input style="width:50px" value="${esc(it.unit)}" oninput="ugg('${it.id}','unit',this.value)" onkeydown="ggKey(event,this)"/></td>
+        <td><input class="r" type="text" value="${fmtQ(N(it.qty))}" oninput="ugg('${it.id}','qty',this.value)" onfocus="this.select()" onkeydown="ggKey(event,this)"/></td>
+        <td><input class="r" type="text" value="${fmtQ(N(it.tiempoUso))}" oninput="ugg('${it.id}','tiempoUso',this.value)" onfocus="this.select()" onkeydown="ggKey(event,this)"/></td>
+        <td><input class="r" type="text" value="${fmtP(N(it.price))}" oninput="ugg('${it.id}','price',this.value)" onfocus="this.select()" onkeydown="ggKey(event,this)"/></td>
         <td class="r mono">${sym()} ${fmtB(N(it.qty)*N(it.tiempoUso)*N(it.price))}</td>
-        <td class="no-print" style="display:flex;gap:4px">
-          <button class="bs addp" onclick="addGG('${it.subgrupo}')" title="Agregar gasto a este subgrupo">+</button>
-          <button class="bs del" onclick="dgg('${it.id}')">×</button>
-        </td>
+        <td class="no-print" style="text-align:center"><button class="bs del" onclick="dgg('${it.id}')">×</button></td>
       </tr>`;
     });
   });
-  
   document.getElementById('gg-body').innerHTML = html;
   rc();
 }
-
+function ggKey(e,el){
+  if(e.key==='Enter'){
+    e.preventDefault();
+    let inputs = Array.from(document.querySelectorAll('#gg-body input'));
+    let idx = inputs.indexOf(el);
+    if(idx < inputs.length-1) inputs[idx+1].focus();
+    else el.blur();
+  }
+}
 function ugg(id,f,v){
   if(f==='qty'||f==='price'||f==='tiempoUso') v=N(v);
   ggItems=ggItems.map(x=>x.id===id?Object.assign(x,{[f]:v}):x);
-  renderGG(); // Re-render para actualizar subtotales de grupo
-  markUnsaved();
+  // Actualizar solo el subtotal de la fila y el subtotal del grupo para evitar parpadeo masivo
+  let row = document.querySelector(`tr:has(input[oninput*="'${id}'"])`);
+  if(row){
+    let it = ggItems.find(x=>x.id===id);
+    row.querySelector('.r.mono').textContent = sym()+' '+fmtB(N(it.qty)*N(it.tiempoUso)*N(it.price));
+    // Actualizar subtotal del grupo
+    let groupHeader = row.previousElementSibling;
+    while(groupHeader && !groupHeader.style.background.includes('f0f4f8')) groupHeader = groupHeader.previousElementSibling;
+    if(groupHeader){
+      let sg = it.subgrupo;
+      let subtotal = ggItems.filter(x=>x.subgrupo===sg).reduce((a,x)=>a+N(x.qty)*N(x.tiempoUso)*N(x.price),0);
+      groupHeader.querySelector('.r').textContent = 'Subtotal: '+sym()+' '+fmtB(subtotal);
+    }
+  }
+  rc();markUnsaved();
 }
-function dgg(id){ggItems=ggItems.filter(x=>x.id!==id);renderGG();markUnsaved();}
+function dgg(id){pushUndo();ggItems=ggItems.filter(x=>x.id!==id);renderGG();markUnsaved();}
 
 /* ── APU ── */
 function openApu(id){
@@ -716,7 +688,7 @@ function renderApuEdit(id){
     let rows=a.secs[si].rows||[];
     let st=rows.reduce((x,r)=>x+N(r.qty)*N(r.price),0);
     html+=`<div class="sec-wrap">
-      <div class="sec-hdr s-${cls[si]}"><span class="sl">${t}</span><span class="st" id="st-${id}-${si}">${sym()} ${fmtP(st)}</span></div>
+      <div class="sec-hdr s-${cls[si]}"><span class="sl">${t}</span><span class="st" id="st-${id}-${si}">${sym()} ${fmtA(st)}</span></div>
       <table class="at"><thead><tr><th>Descripción</th><th>Unid</th><th class="r">Rend.</th><th class="r">P.U.</th><th class="r">Subtotal</th><th></th></tr></thead><tbody>`;
     rows.forEach((r,ri)=>html+=`<tr>
       <td><input value="${esc(r.desc)}" oninput="uapu('${id}',${si},${ri},'desc',this.value)"/></td>
@@ -725,8 +697,8 @@ function renderApuEdit(id){
         <option value="%" ${r.unit==='%'?'selected':''}>%</option>
       </select></td>
       <td><input class="r" type="text" value="${fmtQ(N(r.qty))}" oninput="uapu('${id}',${si},${ri},'qty',this.value)" onfocus="this.select()"/></td>
-      <td><input class="r" type="text" value="${fmtP(N(r.price))}" oninput="uapu('${id}',${si},${ri},'price',this.value)" onfocus="this.select()"/></td>
-      <td class="r mn" id="sub-${id}-${si}-${ri}">${fmtP(N(r.qty)*N(r.price))}</td>
+      <td><input class="r" type="text" value="${fmtA(N(r.price))}" oninput="uapu('${id}',${si},${ri},'price',this.value)" onfocus="this.select()"/></td>
+      <td class="r mn" id="sub-${id}-${si}-${ri}">${fmtA(N(r.qty)*N(r.price))}</td>
       <td><button class="bs del" onclick="dapu('${id}',${si},${ri})">×</button></td></tr>`);
     html+=`</tbody></table><button class="bs addp" style="margin-top:4px" onclick="aapu('${id}',${si})">+ Recurso</button></div>`;
   });
@@ -737,48 +709,47 @@ function renderApuEdit(id){
     <div class="ls-grid">
       <div class="li"><label>AFP</label><input type="number" value="${a.ls.afp}" oninput="uls('${id}','afp',this.value)" onfocus="this.select()"/></div>
       <div class="li"><label>Salud</label><input type="number" value="${a.ls.salud}" oninput="uls('${id}','salud',this.value)" onfocus="this.select()"/></div>
-      <div class="li"><label>Seguro</label><input type="number" value="${a.ls.seguro}" oninput="uls('${id}','salud',this.value)" onfocus="this.select()"/></div>
+      <div class="li"><label>Seguro</label><input type="number" value="${a.ls.seguro}" oninput="uls('${id}','seguro',this.value)" onfocus="this.select()"/></div>
       <div class="li"><label>Mutual</label><input type="number" value="${a.ls.mutual}" oninput="uls('${id}','mutual',this.value)" onfocus="this.select()"/></div>
       <div class="li"><label>SIS</label><input type="number" value="${a.ls.sis}" oninput="uls('${id}','sis',this.value)" onfocus="this.select()"/></div>
       <div class="li"><label>Otros</label><input type="number" value="${a.ls.otros}" oninput="uls('${id}','otros',this.value)" onfocus="this.select()"/></div>
-    </div><div class="ls-foot"><span class="lt">Total Leyes Sociales (${pct.toFixed(2)}%)</span><span class="lv" id="ls-tot-${id}">${sym()} ${fmtP(lt)}</span></div></div>`;
+    </div><div class="ls-foot"><span class="lt">Total Leyes Sociales (${pct.toFixed(2)}%)</span><span class="lv" id="ls-tot-${id}">${sym()} ${fmtA(lt)}</span></div></div>`;
   let totalApu = a.secs.reduce((x,s)=>x+s.rows.reduce((y,r)=>y+N(r.qty)*N(r.price),0),0) + lt;
-  html+=`<div style="margin-top:15px;text-align:right;font-size:16px;font-weight:700;color:var(--navy)" id="apu-total-${id}">Precio Unitario Total: ${sym()} ${fmtP(totalApu)}</div>`;
+  html+=`<div style="margin-top:15px;text-align:right;font-size:16px;font-weight:700;color:var(--navy)" id="apu-total-${id}">Precio Unitario Total: ${sym()} ${fmtA(totalApu)}</div>`;
   document.getElementById('apu-edit-body').innerHTML=html;
-  items.find(x=>x.id===id).price = totalApu;
-  items.find(x=>x.id===id).isApu = true;
-  rb();
+  it.price = totalApu; it.isApu = true; rb();
 }
-function aapu(id,si){apuData[id].secs[si].rows.push({desc:'',unit:'',qty:1,price:0});renderApuEdit(id);markUnsaved();}
+function aapu(id,si){pushUndo();apuData[id].secs[si].rows.push({desc:'',unit:'',qty:1,price:0});renderApuEdit(id);markUnsaved();}
 function uapu(id,si,ri,f,v){
   if(f==='qty'||f==='price') v=N(v);
   let a=apuData[id], r=a.secs[si].rows[ri];
   r[f]=v;
   if(f==='desc' && (v.toLowerCase().includes('perdida') || v.toLowerCase().includes('pérdida'))){
     r.unit = '%';
-    if(ri > 0){
-      let prev = a.secs[si].rows[ri-1];
-      r.price = N(prev.qty) * N(prev.price);
+    // Lógica de pérdida: sobre el material anterior o sobre todos los anteriores si hay más de uno
+    let mats = a.secs[si].rows.filter((x,idx)=>idx < ri && !x.desc.toLowerCase().includes('perdida'));
+    if(mats.length > 0){
+      r.price = mats.reduce((sum,m)=>sum + N(m.qty)*N(m.price), 0);
     }
     renderApuEdit(id);
   }
   let subEl = document.getElementById(`sub-${id}-${si}-${ri}`);
-  if(subEl) subEl.textContent = fmtP(N(r.qty)*N(r.price));
+  if(subEl) subEl.textContent = fmtA(N(r.qty)*N(r.price));
   let st = a.secs[si].rows.reduce((x,r)=>x+N(r.qty)*N(r.price),0);
   let stEl = document.getElementById(`st-${id}-${si}`);
-  if(stEl) stEl.textContent = sym()+' '+fmtP(st);
+  if(stEl) stEl.textContent = sym()+' '+fmtA(st);
   let mo=a.secs[0].rows.reduce((x,r)=>x+N(r.qty)*N(r.price),0);
   let pct=N(a.ls.afp)+N(a.ls.salud)+N(a.ls.seguro)+N(a.ls.mutual)+N(a.ls.sis)+N(a.ls.sanna)+N(a.ls.otros);
   let lt=a.ls.on?mo*(pct/100):0;
   let lsEl = document.getElementById(`ls-tot-${id}`);
-  if(lsEl) lsEl.textContent = sym()+' '+fmtP(lt);
+  if(lsEl) lsEl.textContent = sym()+' '+fmtA(lt);
   let totalApu = a.secs.reduce((x,s)=>x+s.rows.reduce((y,r)=>y+N(r.qty)*N(r.price),0),0) + lt;
   let totEl = document.getElementById(`apu-total-${id}`);
-  if(totEl) totEl.textContent = 'Precio Unitario Total: '+sym()+' '+fmtP(totalApu);
+  if(totEl) totEl.textContent = 'Precio Unitario Total: '+sym()+' '+fmtA(totalApu);
   items.find(x=>x.id===id).price = totalApu;
   rc();markUnsaved();
 }
-function dapu(id,si,ri){apuData[id].secs[si].rows.splice(ri,1);renderApuEdit(id);markUnsaved();}
+function dapu(id,si,ri){pushUndo();apuData[id].secs[si].rows.splice(ri,1);renderApuEdit(id);markUnsaved();}
 function uls(id,f,v){apuData[id].ls[f]=v;renderApuEdit(id);markUnsaved();}
 
 /* ── TOF (Cubicaciones) ── */
@@ -814,33 +785,149 @@ function renderTof(id){
   document.getElementById('tof-body').innerHTML=html;
   it.qty=total; it.isCub=true; rb();
 }
-function atof(id){tofData[id].push({d:'',n:1,a:0,h:0,l:0});renderTof(id);markUnsaved();}
+function atof(id){pushUndo();tofData[id].push({d:'',n:1,a:0,h:0,l:0});renderTof(id);markUnsaved();}
 function utof(id,ri,f,v){
   if(f!=='d') v=N(v);
   tofData[id][ri][f]=v;
   renderTof(id);markUnsaved();
 }
-function dtof(id,ri){tofData[id].splice(ri,1);renderTof(id);markUnsaved();}
+function dtof(id,ri){pushUndo();tofData[id].splice(ri,1);renderTof(id);markUnsaved();}
+
+/* ── PORTADA ── */
+function renderCover(){
+  let html = `
+    <div class="cover-logo">${CFG.logoDataUrl ? `<img src="${CFG.logoDataUrl}" style="max-width:100%"/>` : ''}</div>
+    <div class="cover-title">${esc(document.getElementById('pObra').value) || 'PRESUPUESTO DE OBRA'}</div>
+    ${CFG.coverImgUrl ? `<img src="${CFG.coverImgUrl}" class="cover-img"/>` : ''}
+    <div class="cover-info">
+      <p><strong>Mandante:</strong> ${esc(document.getElementById('pMandante').value)}</p>
+      <p><strong>Ubicación:</strong> ${esc(document.getElementById('pUbicacion').value)}</p>
+      <p><strong>Profesional:</strong> ${esc(document.getElementById('pProfesional').value)}</p>
+      <p><strong>Fecha:</strong> ${document.getElementById('pFecha').value}</p>
+    </div>
+  `;
+  document.getElementById('cover-preview').innerHTML = html;
+}
+
+/* ── CONFIG ── */
+function openConfig(){
+  document.getElementById('ov').style.display='block';
+  document.getElementById('mc').innerHTML=`<div class="modal">
+    <div class="mh"><h3>Configuración ⚙️</h3><button class="btn-s" onclick="closeMod()">✕</button></div>
+    <div class="mb">
+      <div class="ls-grid" style="grid-template-columns:1fr 1fr">
+        <div class="li"><label>Moneda</label>
+          <select id="cfg-currency" onchange="CFG.currency=this.value;rc();rb();renderGG();markUnsaved()">
+            <option value="CLP" ${CFG.currency==='CLP'?'selected':''}>Peso Chileno ($)</option>
+            <option value="USD" ${CFG.currency==='USD'?'selected':''}>Dólar (US$)</option>
+            <option value="UF" ${CFG.currency==='UF'?'selected':''}>UF</option>
+          </select>
+        </div>
+        <div class="li"><label>Paridad (1 UF = $)</label><input type="number" value="${CFG.paridad}" oninput="CFG.paridad=N(this.value);rc();rb();markUnsaved()"/></div>
+        <div class="li"><label>Decimales Cantidad</label><input type="number" value="${CFG.decimalsQty}" oninput="CFG.decimalsQty=N(this.value);rb();renderGG();markUnsaved()"/></div>
+        <div class="li"><label>Decimales Precio</label><input type="number" value="${CFG.decimalsPrice}" oninput="CFG.decimalsPrice=N(this.value);rb();renderGG();markUnsaved()"/></div>
+        <div class="li"><label>Decimales APU</label><input type="number" value="${CFG.decimalsApu}" oninput="CFG.decimalsApu=N(this.value);rb();markUnsaved()"/></div>
+        <div class="li"><label>Formato Papel</label>
+          <select onchange="CFG.formatoPapel=this.value;markUnsaved()">
+            <option value="carta" ${CFG.formatoPapel==='carta'?'selected':''}>Carta</option>
+            <option value="oficio" ${CFG.formatoPapel==='oficio'?'selected':''}>Oficio</option>
+          </select>
+        </div>
+      </div>
+      <hr style="margin:15px 0"/>
+      <div class="li"><label>Nombre Empresa</label><input type="text" value="${CFG.empresaNombre}" oninput="CFG.empresaNombre=this.value;markUnsaved()"/></div>
+      <div class="li"><label>Datos Empresa (Pie de página)</label><input type="text" value="${CFG.empresaDatos}" oninput="CFG.empresaDatos=this.value;markUnsaved()"/></div>
+      <div class="li"><label>Firma Empresa</label><input type="text" value="${CFG.firmaEmpresa}" oninput="CFG.firmaEmpresa=this.value;markUnsaved()"/></div>
+      <div class="li"><label>Firma Propietario</label><input type="text" value="${CFG.firmaPropietario}" oninput="CFG.firmaPropietario=this.value;markUnsaved()"/></div>
+      <div class="li"><label>Logo Empresa (URL)</label><input type="text" value="${CFG.logoDataUrl}" oninput="CFG.logoDataUrl=this.value;updLogoHdr();renderCover();markUnsaved()"/></div>
+      <div style="margin-top:20px;display:flex;gap:10px">
+        <button class="btn-p blue" onclick="exportCSV()">Exportar CSV</button>
+        <button class="btn-p amber" onclick="document.getElementById('importFile').click()">Importar CSV</button>
+        <input type="file" id="importFile" style="display:none" accept=".csv" onchange="importCSV(this)"/>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ── PRINT MENU ── */
+function openPrintMenu(){
+  document.getElementById('ov').style.display='block';
+  document.getElementById('mc').innerHTML=`<div class="modal" style="max-width:400px">
+    <div class="mh"><h3>Opciones de Impresión</h3><button class="btn-s" onclick="closeMod()">✕</button></div>
+    <div class="mb">
+      <button class="btn-p blue" style="width:100%;margin-bottom:10px" onclick="printDoc('cover')">Imprimir Portada</button>
+      <button class="btn-p blue" style="width:100%;margin-bottom:10px" onclick="printDoc('bud')">Imprimir Presupuesto</button>
+      <button class="btn-p blue" style="width:100%;margin-bottom:10px" onclick="printDoc('gg')">Imprimir Gastos Generales</button>
+      <button class="btn-p blue" style="width:100%;margin-bottom:10px" onclick="printDoc('apu')">Imprimir APUs (Continuos)</button>
+      <button class="btn-p blue" style="width:100%;margin-bottom:10px" onclick="printDoc('cub')">Imprimir Cubicaciones</button>
+      <button class="btn-p green" style="width:100%" onclick="printDoc('all')">Imprimir Todo el Proyecto</button>
+    </div>
+  </div>`;
+}
+function printDoc(type){
+  document.querySelectorAll('.pnl').forEach(p=>p.classList.remove('print-on'));
+  if(type==='all') document.querySelectorAll('.pnl').forEach(p=>p.classList.add('print-on'));
+  else document.getElementById('p-'+type).classList.add('print-on');
+  
+  // Agregar pie de página y firmas dinámicamente para impresión
+  let footer = `<div class="print-footer no-print-screen">${CFG.empresaDatos}</div>`;
+  let signatures = `<div class="print-signatures no-print-screen page-break">
+    <div class="sig-box">${CFG.firmaEmpresa}<br/>Empresa</div>
+    <div class="sig-box">${CFG.firmaPropietario}<br/>Propietario</div>
+  </div>`;
+  
+  document.body.insertAdjacentHTML('beforeend', footer + signatures);
+  window.print();
+  document.querySelectorAll('.print-footer, .print-signatures').forEach(el=>el.remove());
+  closeMod();
+}
+
+/* ── CSV ── */
+function exportCSV(){
+  let csv = "Tipo,Item,Descripcion,Unidad,Cantidad,Precio\n";
+  items.forEach(it => {
+    csv += `${it.t},"${it.num}","${it.name}","${it.unit}",${it.qty},${it.price}\n`;
+  });
+  let blob = new Blob([csv], {type:'text/csv'});
+  let url = URL.createObjectURL(blob);
+  let a = document.createElement('a'); a.href=url; a.download='presupuesto.csv'; a.click();
+}
+function importCSV(input){
+  let file = input.files[0]; if(!file) return;
+  let reader = new FileReader();
+  reader.onload = e => {
+    let lines = e.target.result.split('\n');
+    items = [];
+    for(let i=1; i<lines.length; i++){
+      if(!lines[i]) continue;
+      let parts = lines[i].split(',');
+      items.push({id:gid(), t:parts[0], num:parts[1].replace(/"/g,''), name:parts[2].replace(/"/g,''), unit:parts[3].replace(/"/g,''), qty:N(parts[4]), price:N(parts[5]), isApu:false, isCub:false});
+    }
+    rb(); markUnsaved(); alert('Importado');
+  };
+  reader.readAsText(file);
+}
 
 /* ── PROJECT MGMT ── */
 function newProject(){
   if(isDirty && !confirm('Hay cambios sin guardar. ¿Continuar?')) return;
+  pushUndo();
   currentProjectId=null;
   items=[{id:gid(),t:'ch',num:'1.-',name:'',unit:'',qty:0,price:0,isApu:false,isCub:false},{id:gid(),t:'it',num:'1.1',name:'',unit:'',qty:0,price:0,isApu:false,isCub:false}];
   ggItems=[]; apuData={}; tofData={};
-  CFG.coverImgUrl = ''; 
-  ['pObra','pMandante','pUbicacion','pProfesional'].forEach(id=>document.getElementById(id).value='');
+  ['pObra','pMandante','pUbicacion','pProfesional','pCoverImg'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('pFecha').value=new Date().toISOString().split('T')[0];
-  rb(); renderGG(); updBrand(); closeMod();
+  rb(); renderGG(); renderCover(); updBrand(); closeMod();
 }
 function saveProject(){
+  rc(); // Actualizar valores antes de guardar
   let obra=document.getElementById('pObra').value.trim(); if(!obra){alert('Nombre de obra requerido');return;}
   if(!currentProjectId) currentProjectId='proj_'+Date.now();
-  let p={id:currentProjectId,obra,mandante:document.getElementById('pMandante').value,ubicacion:document.getElementById('pUbicacion').value,profesional:document.getElementById('pProfesional').value,fecha:document.getElementById('pFecha').value,items,ggItems,apuData,tofData,pGG:document.getElementById('pGG').value,pUtil:document.getElementById('pUtil').value,pImp:document.getElementById('pImp').value,pIVA:document.getElementById('pIVA').value,ggFijo:document.getElementById('ggFijo').checked,coverImgUrl:CFG.coverImgUrl};
+  let p={id:currentProjectId,obra,mandante:document.getElementById('pMandante').value,ubicacion:document.getElementById('pUbicacion').value,profesional:document.getElementById('pProfesional').value,fecha:document.getElementById('pFecha').value,items,ggItems,apuData,tofData,pGG:document.getElementById('pGG').value,pUtil:document.getElementById('pUtil').value,pImp:document.getElementById('pImp').value,pIVA:document.getElementById('pIVA').value,ggFijo:document.getElementById('ggFijo').checked,CFG};
   lsS('od_proj_'+currentProjectId,p);
   let idx=getIdx(),e=idx.find(x=>x.id===currentProjectId);
   if(e){e.obra=obra;e.savedAt=new Date().toISOString();}else idx.unshift({id:currentProjectId,obra,savedAt:new Date().toISOString()});
-  saveIdx(idx); isDirty=false; alert('Guardado'); syncHdr();
+  saveIdx(idx); isDirty=false; alert('Guardado y Actualizado'); syncHdr();
 }
 function openProjects(){
   let idx=getIdx();
@@ -849,10 +936,8 @@ function openProjects(){
     '<div class="mh"><h3>Mis Proyectos</h3><button class="btn-s" onclick="closeMod()">✕</button></div>' +
     '<div class="mb">' +
       '<button class="btn-p blue" style="width:100%;margin-bottom:15px" onclick="newProject()">+ Crear Nuevo Proyecto</button>';
-  
-  if(idx.length === 0) {
-    html += '<div style="padding:20px;text-align:center;color:#94a3b8">No hay proyectos guardados</div>';
-  } else {
+  if(idx.length === 0) html += '<div style="padding:20px;text-align:center;color:#94a3b8">No hay proyectos guardados</div>';
+  else {
     idx.forEach(p => {
       html += '<div style="padding:10px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center">' +
         '<div onclick="loadP(\''+p.id+'\')" style="cursor:pointer"><strong>'+esc(p.obra)+'</strong><br/><small>'+p.savedAt+'</small></div>' +
@@ -865,14 +950,14 @@ function openProjects(){
 function loadP(id){
   let p=lsL('od_proj_'+id); if(!p)return;
   currentProjectId=id; items=p.items; ggItems=p.ggItems; apuData=p.apuData; tofData=p.tofData;
-  CFG.coverImgUrl = p.coverImgUrl || '';
+  if(p.CFG) CFG=Object.assign(CFG,p.CFG);
   document.getElementById('pObra').value=p.obra; document.getElementById('pMandante').value=p.mandante;
   document.getElementById('pUbicacion').value=p.ubicacion; document.getElementById('pProfesional').value=p.profesional;
   document.getElementById('pFecha').value=p.fecha; document.getElementById('pGG').value=p.pGG;
   document.getElementById('pUtil').value=p.pUtil; document.getElementById('pImp').value=p.pImp;
-  document.getElementById('pIVA').value=p.pIVA;
-  document.getElementById('ggFijo').checked=p.ggFijo;
-  rb(); renderGG(); closeMod(); syncHdr();
+  document.getElementById('pIVA').value=p.pIVA; document.getElementById('ggFijo').checked=p.ggFijo;
+  document.getElementById('pCoverImg').value=CFG.coverImgUrl;
+  rb(); renderGG(); renderCover(); closeMod(); syncHdr();
 }
 function delP(id){if(confirm('¿Eliminar?')){lsD('od_proj_'+id);saveIdx(getIdx().filter(x=>x.id!==id));openProjects();}}
 
@@ -881,84 +966,23 @@ function sw(id,el){
   document.querySelectorAll('.pnl').forEach(p=>p.classList.remove('on'));
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
   document.getElementById('p-'+id).classList.add('on'); el.classList.add('on');
-  if(id==='apu') refreshApuTab();
-  if(id==='cub') refreshCubTab();
 }
 function syncHdr(){document.getElementById('hdrProj').style.display='flex';document.getElementById('hdrProjName').textContent=document.getElementById('pObra').value||'Proyecto';}
 function markUnsaved(){isDirty=true;}
-
-function refreshApuTab(){
-  let grid=document.getElementById('apu-list-grid'),empty=document.getElementById('apu-list-empty');
-  let apus=items.filter(it=>it.t==='it'&&apuData[it.id]);
-  if(!apus.length){grid.style.display='none';empty.style.display='block';}
-  else{
-    grid.style.display='grid';empty.style.display='none';
-    grid.innerHTML=apus.map(it=>`<div class="tot-card" style="cursor:pointer" onclick="openApu('${it.id}')">
-      <div style="font-weight:600;color:var(--navy)">${it.num} ${esc(it.name)}</div>
-      <div style="text-align:right;font-family:var(--mono)">${sym()} ${fmtP(it.price)}</div>
-    </div>`).join('');
-  }
-}
-
-function refreshCubTab(){
-  let grid=document.getElementById('cub-list-grid'),empty=document.getElementById('cub-list-empty');
-  let cubs=items.filter(it=>it.t==='it'&&tofData[it.id]&&tofData[it.id].length);
-  if(!cubs.length){grid.style.display='none';empty.style.display='block';}
-  else{
-    grid.style.display='grid';empty.style.display='none';
-    grid.innerHTML=cubs.map(it=>{
-      let total=tofData[it.id].reduce((x,r)=>x+(N(r.n)*Math.max(1,N(r.a))*Math.max(1,N(r.h))*Math.max(1,N(r.l))),0);
-      return `<div class="tot-card" style="cursor:pointer" onclick="openTof('${it.id}')">
-        <div style="font-weight:600;color:var(--magenta)">${it.num} ${esc(it.name)}</div>
-        <div style="text-align:right;font-family:var(--mono)">${fmtQ(total)} ${esc(it.unit)}</div>
-      </div>`;
-    }).join('');
-  }
-}
-
-function setupAutoSave(){
-  if(autoSaveInterval) clearInterval(autoSaveInterval);
-  if(CFG.autoSave && currentProjectId){
-    autoSaveInterval=setInterval(()=>{
-      if(isDirty) saveProject();
-    },CFG.autoSaveInterval*1000);
-  }
-}
-
-function exportJSON(){
-  let obra=document.getElementById('pObra').value.trim()||'proyecto';
-  let p={items,ggItems,apuData,tofData,pGG:document.getElementById('pGG').value,pUtil:document.getElementById('pUtil').value,pImp:document.getElementById('pImp').value,pIVA:document.getElementById('pIVA').value,ggFijo:document.getElementById('ggFijo').checked,CFG};
-  let blob=new Blob([JSON.stringify(p)],{type:'application/json'});
-  let url=URL.createObjectURL(blob);
-  let a=document.createElement('a');a.href=url;a.download=obra+'.json';a.click();
-}
-function importJSON(input){
-  let file=input.files[0]; if(!file)return;
-  let reader=new FileReader();
-  reader.onload=e=>{
-    try{
-      let p=JSON.parse(e.target.result);
-      items=p.items; ggItems=p.ggItems; apuData=p.apuData; tofData=p.tofData;
-      document.getElementById('pGG').value=p.pGG; document.getElementById('pUtil').value=p.pUtil;
-      document.getElementById('pImp').value=p.pImp; document.getElementById('pIVA').value=p.pIVA;
-      document.getElementById('ggFijo').checked=p.ggFijo;
-      if(p.CFG) CFG=Object.assign(CFG,p.CFG);
-      rb(); renderGG(); markUnsaved(); alert('Importado');
-    }catch(err){alert('Error al importar');}
-  };
-  reader.readAsText(file);
-}
+function updBrand(){document.getElementById('hdrProjName').textContent = document.getElementById('pObra').value || 'Nuevo proyecto'; renderCover();}
+function updLogoHdr(){if(CFG.logoDataUrl) document.getElementById('logoWrap').innerHTML=`<img src="${CFG.logoDataUrl}"/>`;}
 
 function initEvents(){
   window.addEventListener('click', e => {
-    if(!e.target.closest('.float-btn-wrap')) {
-      document.getElementById('sg-dropdown').classList.remove('show');
-    }
+    if(!e.target.closest('.float-btn-wrap')) document.getElementById('sg-dropdown').classList.remove('show');
+  });
+  window.addEventListener('keydown', e => {
+    if(e.ctrlKey && e.key === 'z') { e.preventDefault(); undo(); }
   });
 }
 
 /* ── INIT ── */
-loadCFG(); rb(); renderGG(); initEvents();
+loadCFG(); rb(); renderGG(); renderCover(); initEvents();
 </script>
 </body>
 </html>
