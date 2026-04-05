@@ -225,7 +225,7 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
       </div>
       <div class="hdr-txt">
         <div class="name">Pres<span>AI</span></div>
-        <div class="sub">CONSTRUCCIÓN CIVIL</div>
+        <div class="sub">Software para constructores</div>
       </div>
       <div class="hdr-proj" id="hdrProj" style="display:none">
         <div class="hdr-proj-name" id="hdrProjName">Cargando...</div>
@@ -253,12 +253,12 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
   <main class="content">
     <!-- PANEL: BUDGET -->
     <div id="p-bud" class="pnl on">
-      <div class="proj-bar no-print">
-        <div class="pf pf-full"><label>Nombre de la Obra / Proyecto</label><input id="pObra" placeholder="Ej: Construcción Vivienda Unifamiliar..." oninput="syncHdr();markUnsaved()"/></div>
-        <div class="pf"><label>Mandante / Cliente</label><input id="pMandante" placeholder="Nombre del cliente..." oninput="markUnsaved()"/></div>
-        <div class="pf"><label>Ubicación</label><input id="pUbicacion" placeholder="Ciudad, Comuna..." oninput="markUnsaved()"/></div>
-        <div class="pf"><label>Profesional a cargo</label><input id="pProfesional" placeholder="Nombre del profesional..." oninput="markUnsaved()"/></div>
-        <div class="pf"><label>Fecha</label><input id="pFecha" type="date" oninput="markUnsaved()"/></div>
+      <div class="proj-bar no-print" style="display:none">
+        <input id="pObra" oninput="syncHdr();markUnsaved()"/>
+        <input id="pMandante" oninput="markUnsaved()"/>
+        <input id="pUbicacion" oninput="markUnsaved()"/>
+        <input id="pProfesional" oninput="markUnsaved()"/>
+        <input id="pFecha" type="date" oninput="markUnsaved()"/>
       </div>
 
       <div class="tbl-wrap">
@@ -330,7 +330,7 @@ let autoSaveInterval = null;
 
 const CFG_DEF = {
   currency:'CLP', parity:1, decimalsQty:2, decimalsPrice:0, decimalsBudget:0,
-  companyName:'CONSTRCRITP GERÓNIMO AIRE DEL SUO.', companyTagline:'Construcción Civil · Chile',
+  companyName:'CONSTRCRITP GERÓNIMO AIRE DEL SUO.', companyTagline:'Software para constructores',
   companyRut:'', companyAddress:'', companyPhone:'', companyEmail:'', companyWeb:'',
   repLegal:'', repLegalRut:'', profName:'', profRut:'',
   colorHeader:'#1e3a5f', logoDataUrl:'', coverImgUrl:'',
@@ -362,7 +362,7 @@ function updLogoHdr(){
   if(CFG.logoDataUrl) document.getElementById('logoWrap').innerHTML=`<img src="${CFG.logoDataUrl}"/>`;
 }
 
-function N(v){return parseFloat(v)||0;}
+function N(v){if(typeof v==='string')v=v.replace(/\./g,'').replace(',','.');return parseFloat(v)||0;}
 function sym(){return CFG.currency==='USD'?'US$':CFG.currency==='UF'?'UF':'$';}
 function fmtN(n,d){
   if(CFG.currency==='UF') return n.toLocaleString('es-CL',{minimumFractionDigits:d||2,maximumFractionDigits:d||2});
@@ -841,6 +841,7 @@ function genPrintHtml(){
       '.pageNumber::after{counter-increment:page;content:counter(page)}' +
       '.print-footer{display:flex !important}' +
     '}' +
+    '@media screen{.print-footer{display:none}}' +
   '</style></head><body>';
   
   if(CFG.printCover){
@@ -849,9 +850,9 @@ function genPrintHtml(){
       '<h1 style="font-size:32px;color:'+color+';margin-bottom:10px">'+esc(obra)+'</h1>' +
       '<h2 style="font-size:18px;color:#666;margin-bottom:40px">PRESUPUESTO DE OBRA</h2>' +
       '<div style="font-size:14px;line-height:1.6">' +
-        '<p><strong>Mandante:</strong> '+esc(mandante)+'</p>' +
-        '<p><strong>Ubicación:</strong> '+esc(ubic)+'</p>' +
-        '<p><strong>Fecha:</strong> '+esc(fecha)+'</p>' +
+        (mandante?'<p><strong>Mandante:</strong> '+esc(mandante)+'</p>':'') +
+        (ubic?'<p><strong>Ubicación:</strong> '+esc(ubic)+'</p>':'') +
+        (fecha?'<p><strong>Fecha:</strong> '+esc(fecha)+'</p>':'') +
       '</div>' + 
     '</div>';
   }
@@ -959,6 +960,13 @@ function openSettings(){
   let html = '<div class="modal" style="max-width:700px;max-height:90vh;overflow-y:auto">' +
     '<div class="mh"><h3>⚙️ Configuración PresAI</h3><button class="btn-s" onclick="closeMod()">✕</button></div>' +
     '<div class="mb">' +
+      '<div class="cfg-section"><h4>Datos del Proyecto</h4><div class="cfg-grid">' +
+        '<div class="cfg-field pf-full" style="grid-column:1/-1"><label>Nombre de la Obra / Proyecto</label><input id="cfgObra" value="'+esc(document.getElementById('pObra').value)+'" oninput="document.getElementById(\'pObra\').value=this.value;syncHdr();markUnsaved()"/></div>' +
+        '<div class="cfg-field"><label>Mandante / Cliente</label><input id="cfgMandante" value="'+esc(document.getElementById('pMandante').value)+'" oninput="document.getElementById(\'pMandante\').value=this.value;markUnsaved()"/></div>' +
+        '<div class="cfg-field"><label>Ubicación</label><input id="cfgUbicacion" value="'+esc(document.getElementById('pUbicacion').value)+'" oninput="document.getElementById(\'pUbicacion\').value=this.value;markUnsaved()"/></div>' +
+        '<div class="cfg-field"><label>Profesional a cargo</label><input id="cfgProfesional" value="'+esc(document.getElementById('pProfesional').value)+'" oninput="document.getElementById(\'pProfesional\').value=this.value;markUnsaved()"/></div>' +
+        '<div class="cfg-field"><label>Fecha</label><input type="date" id="cfgFecha" value="'+document.getElementById('pFecha').value+'" oninput="document.getElementById(\'pFecha\').value=this.value;markUnsaved()"/></div>' +
+      '</div></div>' +
       '<div class="cfg-section"><h4>Moneda y Decimales</h4><div class="cfg-grid">' +
         '<div class="cfg-field"><label>Moneda</label><select onchange="CFG.currency=this.value;saveCFG();rb();rc();openSettings();">' +
           '<option value="CLP" '+(CFG.currency==='CLP'?'selected':'')+'>CLP ($)</option>' +
@@ -1037,10 +1045,10 @@ function newProject(){
   currentProjectId=null; isDirty=false;
   items=[{id:gid(),t:'ch',num:'1.-',name:'',unit:'',qty:0,price:0,isApu:false,isCub:false},{id:gid(),t:'it',num:'1.1',name:'',unit:'',qty:0,price:0,isApu:false,isCub:false}];
   ggItems=[]; apuData={}; tofData={};
-  CFG.coverImgUrl = ''; 
+  CFG.coverImgUrl = ''; CFG.logoDataUrl = '';
   ['pObra','pMandante','pUbicacion','pProfesional'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('pFecha').value=new Date().toISOString().split('T')[0];
-  rb(); renderGG(); updBrand(); closeMod();
+  saveCFG(); rb(); renderGG(); updBrand(); updLogoHdr(); closeMod();
 }
 function saveProject(){
   let obra=document.getElementById('pObra').value.trim(); if(!obra){alert('Nombre de obra requerido');return;}
@@ -1064,8 +1072,11 @@ function openProjects(){
   } else {
     idx.forEach(p => {
       html += '<div style="padding:10px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center">' +
-        '<div onclick="loadP(\''+p.id+'\')" style="cursor:pointer"><strong>'+esc(p.obra)+'</strong><br/><small>'+p.savedAt+'</small></div>' +
-        '<button class="bs del" onclick="delP(\''+p.id+'\')">×</button></div>';
+        '<div onclick="loadP(\''+p.id+'\')" style="cursor:pointer;flex:1"><strong>'+esc(p.obra)+'</strong><br/><small>'+p.savedAt+'</small></div>' +
+        '<div style="display:flex;gap:5px">' +
+          '<button class="bs" onclick="exportCSV(\''+p.id+'\')" title="Exportar CSV">CSV</button>' +
+          '<button class="bs del" onclick="delP(\''+p.id+'\')">×</button>' +
+        '</div></div>';
     });
   }
   html += '</div></div>';
@@ -1084,6 +1095,19 @@ function loadP(id){
   rb(); renderGG(); closeMod(); syncHdr();
 }
 function delP(id){if(confirm('¿Eliminar?')){lsD('od_proj_'+id);saveIdx(getIdx().filter(x=>x.id!==id));openProjects();}}
+function exportCSV(id){
+  let p=lsL('od_proj_'+id); if(!p)return;
+  let csv = 'Tipo,Item,Descripcion,Unidad,Cantidad,Precio,Total\n';
+  p.items.forEach(it=>{
+    let tot = N(it.qty)*N(it.price);
+    csv += `"${it.t}","${it.num}","${it.name}","${it.unit}",${it.qty},${it.price},${tot}\n`;
+  });
+  let blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  let link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = `Presupuesto_${p.obra.replace(/\s+/g,'_')}.csv`;
+  link.click();
+}
 
 function closeMod(){document.getElementById('ov').style.display='none';}
 function sw(id,el){
