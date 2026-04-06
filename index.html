@@ -68,6 +68,7 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
 /* ── CONTENT ── */
 .content{flex:1;padding:14px 16px}
 .pnl{display:none}.pnl.on{display:block}
+.hbtn:disabled{opacity:0.3;cursor:not-allowed;filter:grayscale(1)}
 
 /* ── PROJ BAR ── */
 .proj-bar{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:12px;display:grid;grid-template-columns:1fr 1fr;gap:12px 20px}
@@ -251,6 +252,16 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
   </nav>
 
   <main class="content">
+    <!-- WOW SCREEN -->
+    <div id="wow-screen" style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:70vh;text-align:center;color:var(--navy);opacity:0.8">
+      <div style="font-size:48px;font-weight:800;margin-bottom:10px;letter-spacing:-1px">Pres<span style="color:var(--magenta)">AI</span></div>
+      <div style="font-size:18px;font-weight:500;margin-bottom:30px">Software avanzado de presupuesto</div>
+      <div style="display:flex;gap:15px">
+        <button class="btn-p blue" onclick="newProject()" style="padding:12px 24px;font-size:14px">+ Crear Nuevo Proyecto</button>
+        <button class="btn-s" onclick="openProjects()" style="padding:12px 24px;font-size:14px">Ir a Mis Proyectos</button>
+      </div>
+    </div>
+
     <!-- PANEL: BUDGET -->
     <div id="p-bud" class="pnl on">
       <div class="proj-bar no-print" style="display:none">
@@ -356,7 +367,19 @@ function saveCFG(){lsS('od_cfg',CFG);}
 function loadCFG(){let x=lsL('od_cfg');if(x)CFG=Object.assign(CFG,x);applyColor();updBrand();updLogoHdr();setupAutoSave();}
 function applyColor(){document.documentElement.style.setProperty('--navy',CFG.colorHeader);}
 function updBrand(){
-  document.getElementById('hdrProjName').textContent = document.getElementById('pObra').value || (currentProjectId?'Proyecto':'Nuevo proyecto');
+  let obra = document.getElementById('pObra').value;
+  document.getElementById('hdrProjName').textContent = obra || (currentProjectId?'Proyecto':'Nuevo proyecto');
+  let hasProj = !!(currentProjectId || items.length > 0);
+  document.getElementById('wow-screen').style.display = hasProj ? 'none' : 'flex';
+  document.querySelectorAll('.pnl').forEach(p => { if(p.classList.contains('on') && !hasProj) p.classList.remove('on'); });
+  if(hasProj && !document.querySelector('.pnl.on')) document.getElementById('p-bud').classList.add('on');
+  
+  document.querySelectorAll('.hbtn').forEach(btn => {
+    let txt = btn.textContent.trim();
+    if(['Guardar','Vista Previa','Imprimir','Configuración'].some(x=>txt.includes(x))){
+      btn.disabled = !hasProj;
+    }
+  });
 }
 function updLogoHdr(){
   if(CFG.logoDataUrl) document.getElementById('logoWrap').innerHTML=`<img src="${CFG.logoDataUrl}"/>`;
@@ -853,40 +876,44 @@ function genPrintHtml(){
       '.print-footer{display:flex !important}' +
     '}' +
     '@media screen{.print-footer{display:none}}' +
-    '.cover-page{height:99vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;page-break-after:always;break-after:page;padding:20mm;box-sizing:border-box;overflow:hidden;position:relative;z-index:10}' +
+    '.cover-page{height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;page-break-after:always;break-after:page;padding:20mm;box-sizing:border-box;overflow:hidden;margin:0;border:none}' +
+    '.print-footer{position:fixed;bottom:10mm;left:10mm;right:10mm;display:none;justify-content:space-between;font-size:10px;color:#999;border-top:1px solid #eee;padding-top:5px}' +
   '</style></head><body>';
   
   if(CFG.printCover){
-    html += '<div class="cover-page">' +
-      (CFG.coverImgUrl?'<img src="'+CFG.coverImgUrl+'" style="max-width:85%;max-height:45vh;margin-bottom:30px;object-fit:contain"/>':'') +
-      '<h1 style="font-size:32px;color:'+color+';margin-bottom:10px">'+esc(obra)+'</h1>' +
-      '<h2 style="font-size:18px;color:#666;margin-bottom:40px">PRESUPUESTO DE OBRA</h2>' +
-      '<div style="font-size:14px;line-height:1.6">' +
-        (mandante?'<p><strong>Mandante:</strong> '+esc(mandante)+'</p>':'') +
-        (ubic?'<p><strong>Ubicación:</strong> '+esc(ubic)+'</p>':'') +
-        (fecha?'<p><strong>Fecha:</strong> '+esc(fecha)+'</p>':'') +
-      '</div>' + 
-    '</div>';
+    html += `<div class="cover-page">
+      ${CFG.coverImgUrl?'<img src="'+CFG.coverImgUrl+'" style="max-width:85%;max-height:45vh;margin-bottom:30px;object-fit:contain"/>':''}
+      <h1 style="font-size:32px;color:${color};margin-bottom:10px">${esc(obra)}</h1>
+      <h2 style="font-size:18px;color:#666;margin-bottom:40px">PRESUPUESTO DE OBRA</h2>
+      <div style="font-size:14px;line-height:1.6">
+        ${mandante?'<p><strong>Mandante:</strong> '+esc(mandante)+'</p>':''}
+        ${ubic?'<p><strong>Ubicación:</strong> '+esc(ubic)+'</p>':''}
+        ${fecha?'<p><strong>Fecha:</strong> '+esc(fecha)+'</p>':''}
+      </div>
+      <div class="print-footer"><span>${esc(obra)}</span><span>Pág. PAGE_NUM</span></div>
+    </div>`;
   }
 
-  html += '<div style="padding:10mm;padding-bottom:30mm">' + runHdr +
-    '<h3 style="font-size:14px;color:'+color+';border-bottom:2px solid #eee;padding-bottom:5px;margin-bottom:15px">Presupuesto Detallado</h3>' +
-    '<table><thead><tr style="background:#f9f9f9"><th>Ítem</th><th>Descripción</th><th style="text-align:center">Unid</th><th style="text-align:right">Cant.</th><th style="text-align:right">P.Unit.</th><th style="text-align:right">Total</th></tr></thead><tbody>'+trows+'</tbody></table>' +
-    '<div style="width:250px;margin-left:auto;margin-top:20px;font-size:11px">' +
-      '<div style="display:flex;justify-content:space-between;padding:3px 0"><span>Costo Directo</span><span>'+s+' '+fmtB(dc)+'</span></div>' +
-      (!CFG.ggProrrateado?'<div style="display:flex;justify-content:space-between;padding:3px 0"><span>Gastos Generales</span><span>'+s+' '+fmtB(ggV)+'</span></div>':'') +
-      (!CFG.utilProrrateado?'<div style="display:flex;justify-content:space-between;padding:3px 0"><span>Utilidad</span><span>'+s+' '+fmtB(util)+'</span></div>':'') +
-      (!CFG.impProrrateado && pImp>0?'<div style="display:flex;justify-content:space-between;padding:3px 0"><span>Imprevistos</span><span>'+s+' '+fmtB(imp)+'</span></div>':'') +
-      '<div style="display:flex;justify-content:space-between;padding:5px 0;border-top:1px solid #333;font-weight:700;font-size:13px;color:'+color+'"><span>TOTAL NETO</span><span>'+s+' '+fmtB(net)+'</span></div>' +
-      '<div style="display:flex;justify-content:space-between;padding:3px 0"><span>IVA</span><span>'+s+' '+fmtB(iva)+'</span></div>' +
-      '<div style="display:flex;justify-content:space-between;padding:5px 0;border-top:2px solid #333;font-weight:700;font-size:14px;color:'+color+'"><span>TOTAL GENERAL</span><span>'+s+' '+fmtB(grand)+'</span></div>' +
-    '</div>' +
-    '<p style="font-size:9px;font-style:italic;text-align:right;margin-top:5px">'+numToWords(grand)+'</p>' +
-    (ggHtml || apuHtml || cubHtml ? '' : signatures) + '</div>' +
-    ggHtml + apuHtml + cubHtml +
-    (ggHtml || apuHtml || cubHtml ? '<div style="padding:10mm;padding-bottom:30mm;position:relative;min-height:200px">'+signatures+'</div>' : '') +
-    footer +
-  '</body></html>';
+  html += `<div style="padding:10mm;padding-bottom:30mm;position:relative">
+    ${runHdr}
+    <h3 style="font-size:14px;color:${color};border-bottom:2px solid #eee;padding-bottom:5px;margin-bottom:15px">Presupuesto Detallado</h3>
+    <table><thead><tr style="background:#f9f9f9"><th>Ítem</th><th>Descripción</th><th style="text-align:center">Unid</th><th style="text-align:right">Cant.</th><th style="text-align:right">P.Unit.</th><th style="text-align:right">Total</th></tr></thead><tbody>${trows}</tbody></table>
+    <div style="width:250px;margin-left:auto;margin-top:20px;font-size:11px">
+      <div style="display:flex;justify-content:space-between;padding:3px 0"><span>Costo Directo</span><span>${s} ${fmtB(dc)}</span></div>
+      ${!CFG.ggProrrateado?'<div style="display:flex;justify-content:space-between;padding:3px 0"><span>Gastos Generales</span><span>'+s+' '+fmtB(ggV)+'</span></div>':''}
+      ${!CFG.utilProrrateado?'<div style="display:flex;justify-content:space-between;padding:3px 0"><span>Utilidad</span><span>'+s+' '+fmtB(util)+'</span></div>':''}
+      ${!CFG.impProrrateado && pImp>0?'<div style="display:flex;justify-content:space-between;padding:3px 0"><span>Imprevistos</span><span>'+s+' '+fmtB(imp)+'</span></div>':''}
+      <div style="display:flex;justify-content:space-between;padding:5px 0;border-top:1px solid #333;font-weight:700;font-size:13px;color:${color}"><span>TOTAL NETO</span><span>${s} ${fmtB(net)}</span></div>
+      <div style="display:flex;justify-content:space-between;padding:3px 0"><span>IVA</span><span>${s} ${fmtB(iva)}</span></div>
+      <div style="display:flex;justify-content:space-between;padding:5px 0;border-top:2px solid #333;font-weight:700;font-size:14px;color:${color}"><span>TOTAL GENERAL</span><span>${s} ${fmtB(grand)}</span></div>
+    </div>
+    <p style="font-size:9px;font-style:italic;text-align:right;margin-top:5px">${numToWords(grand)}</p>
+    ${ggHtml || apuHtml || cubHtml ? '' : signatures}
+    <div class="print-footer"><span>${esc(obra)}</span><span>Pág. PAGE_NUM</span></div>
+  </div>
+  ${ggHtml} ${apuHtml} ${cubHtml}
+  ${(ggHtml || apuHtml || cubHtml ? '<div style="padding:10mm;padding-bottom:30mm;position:relative;min-height:200px">'+signatures+'<div class="print-footer"><span>'+esc(obra)+'</span><span>Pág. PAGE_NUM</span></div></div>' : '')}
+  </body></html>`;
 
 // Inyectar números de página correctos de forma secuencial
   let pageCounter = 1;
@@ -1055,12 +1082,13 @@ function hCov(i){let r=new FileReader();r.onload=e=>{CFG.coverImgUrl=e.target.re
 function newProject(){
   if(isDirty && !confirm('¿Descartar cambios?')) return;
   currentProjectId=null; isDirty=false;
-  items=[{id:gid(),t:'ch',num:'1.-',name:'',unit:'',qty:0,price:0,isApu:false,isCub:false},{id:gid(),t:'it',num:'1.1',name:'',unit:'',qty:0,price:0,isApu:false,isCub:false}];
+  items=[]; // Vacío total para efecto wow
   ggItems=[]; apuData={}; tofData={};
-  CFG.coverImgUrl = ''; CFG.logoDataUrl = '';
+  CFG.coverImgUrl = ''; 
+  // No borramos Logo ni Guardado Automático por petición del usuario
   ['pObra','pMandante','pUbicacion','pProfesional'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('pFecha').value=new Date().toISOString().split('T')[0];
-  saveCFG(); rb(); renderGG(); updBrand(); updLogoHdr(); closeMod();
+  rb(); renderGG(); updBrand(); closeMod();
 }
 function saveProject(){
   let obra=document.getElementById('pObra').value.trim(); if(!obra){alert('Nombre de obra requerido');return;}
