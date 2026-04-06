@@ -362,7 +362,18 @@ function updLogoHdr(){
   if(CFG.logoDataUrl) document.getElementById('logoWrap').innerHTML=`<img src="${CFG.logoDataUrl}"/>`;
 }
 
-function N(v){if(typeof v==='string')v=v.replace(/\./g,'').replace(',','.');return parseFloat(v)||0;}
+function N(v){
+  if(typeof v==='number') return v;
+  if(!v || typeof v!=='string') return 0;
+  let s = v.trim();
+  if(s.includes(',') && s.includes('.')){
+    if(s.indexOf('.') < s.indexOf(',')) s = s.replace(/\./g,'').replace(',','.');
+    else s = s.replace(/,/g,'');
+  } else {
+    s = s.replace(',','.');
+  }
+  return parseFloat(s)||0;
+}
 function sym(){return CFG.currency==='USD'?'US$':CFG.currency==='UF'?'UF':'$';}
 function fmtN(n,d){
   if(CFG.currency==='UF') return n.toLocaleString('es-CL',{minimumFractionDigits:d||2,maximumFractionDigits:d||2});
@@ -379,8 +390,8 @@ function numToWords(n){
   var u=['','UN','DOS','TRES','CUATRO','CINCO','SEIS','SIETE','OCHO','NUEVE'];
   var d10=['DIEZ','ONCE','DOCE','TRECE','CATORCE','QUINCE','DIECISÉIS','DIECISIETE','DIECIOCHO','DIECINUEVE'];
   var tens=['','','VEINTE','TREINTA','CUARENTA','CINCUENTA','SESENTA','SETENTA','OCHENTA','NOVENTA'];
-  function dec(n){if(n<10)return u[n];if(n<20)return d10[n-10];var t=tens[Math.floor(n/10)];var r=n%10;return r===0?t:(Math.floor(n/10)===2?'VEINTI'+u[r]:t+' Y '+u[r]);}
-  function cen(n){if(n===100)return'CIEN';if(n<100)return dec(n);var c=['','CIENTO','DOSCIENTOS','TRESCIENTOS','CUATROCIENTOS','QUINIENTOS','SEISCIENTOS','SETECIENTOS','OCHOCIENTOS','NOVECIENTOS'];var r=n%100;return c[Math.floor(n/100)]+(r>0?' '+dec(r):'');}
+  function dec(n){if(n<10)return u[n];if(n<20)return d10[n-10];var t=tens[Math.floor(n/10)];var r=n%10;return r===0?t:(Math.floor(n/10)===2?'VEINTI'+u[r]:t+' Y '+(u[r]||''));}
+  function cen(n){if(n===100)return'CIEN';if(n<100)return dec(n);var c=['','CIENTO','DOSCIENTOS','TRESCIENTOS','CUATROCIENTOS','QUINIENTOS','SEISCIENTOS','SETECIENTOS','OCHOCIENTOS','NOVECIENTOS'];var r=n%100;var res=c[Math.floor(n/100)];return r>0?res+' '+dec(r):res;}
   function mil(n){if(n<1000)return cen(n);var m=Math.floor(n/1000),r=n%1000,t=m===1?'MIL':cen(m)+' MIL';return r>0?t+' '+cen(r):t;}
   function millon(n){if(n<1000000)return mil(n);var m=Math.floor(n/1000000),r=n%1000000,t=m===1?'UN MILLÓN':cen(m)+' MILLONES';return r>0?t+' '+mil(r):t;}
   var cur=CFG.currency==='USD'?'DÓLARES':CFG.currency==='UF'?'UF':'PESOS';
@@ -445,7 +456,7 @@ function initEvents(){
   document.getElementById('brows').addEventListener('input',function(e){
     var inp=e.target;if(!inp.dataset||!inp.dataset.field)return;
     var id=inp.dataset.id,f=inp.dataset.field,v=inp.value;
-    if(f==='qty'||f==='price'||f==='tiempoUso') v=N(v.replace(/\./g,'').replace(',','.'));
+    if(f==='qty'||f==='price'||f==='tiempoUso') v=N(v);
     items=items.map(function(x){if(x.id!==id)return x;var o=Object.assign({},x);o[f]=v;return o;});
     var ct=ctotals();
     items.forEach(function(it){
@@ -555,7 +566,7 @@ function renderGG(){
   rc();
 }
 function ugg(id,f,v){
-  if(f==='qty'||f==='price'||f==='tiempoUso') v=N(v.replace(/\./g,'').replace(',','.'));
+  if(f==='qty'||f==='price'||f==='tiempoUso') v=N(v);
   ggItems=ggItems.map(x=>x.id===id?Object.assign(x,{[f]:v}):x);
   let row = document.querySelector(`tr:has(input[oninput*="'${id}'"])`);
   if(row){
@@ -649,7 +660,7 @@ function renderApuEdit(id){
 }
 function aapu(id,si){apuData[id].secs[si].rows.push({desc:'',unit:'',qty:1,price:0});renderApuEdit(id);markUnsaved();}
 function uapu(id,si,ri,f,v){
-  if(f==='qty'||f==='price'||f==='tiempoUso') v=N(v.replace(/\./g,'').replace(',','.'));
+  if(f==='qty'||f==='price'||f==='tiempoUso') v=N(v);
   let a=apuData[id], r=a.secs[si].rows[ri];
   r[f]=v;
   if(f==='desc' && (v.toLowerCase().includes('perdida') || v.toLowerCase().includes('pérdida'))){
@@ -712,7 +723,7 @@ function renderTof(id){
 }
 function atof(id){tofData[id].push({desc:'',n:1,a:1,h:1,l:1});renderTof(id);markUnsaved();}
 function utof(id,ri,f,v){
-  if(f==='n'||f==='a'||f==='l') v=N(v.replace(/\./g,'').replace(',','.'));
+  if(f==='n'||f==='a'||f==='l') v=N(v);
   tofData[id][ri][f]=v;
   let r=tofData[id][ri];
   let subEl = document.getElementById(`tof-sub-${id}-${ri}`);
@@ -842,10 +853,11 @@ function genPrintHtml(){
       '.print-footer{display:flex !important}' +
     '}' +
     '@media screen{.print-footer{display:none}}' +
+    '.cover-page{height:99vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;page-break-after:always;break-after:page;padding:20mm;box-sizing:border-box;overflow:hidden;position:relative;z-index:10}' +
   '</style></head><body>';
   
   if(CFG.printCover){
-    html += '<div style="height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;page-break-after:always;break-after:page;padding:20mm;box-sizing:border-box;padding-bottom:25mm;overflow:hidden">' +
+    html += '<div class="cover-page">' +
       (CFG.coverImgUrl?'<img src="'+CFG.coverImgUrl+'" style="max-width:85%;max-height:45vh;margin-bottom:30px;object-fit:contain"/>':'') +
       '<h1 style="font-size:32px;color:'+color+';margin-bottom:10px">'+esc(obra)+'</h1>' +
       '<h2 style="font-size:18px;color:#666;margin-bottom:40px">PRESUPUESTO DE OBRA</h2>' +
