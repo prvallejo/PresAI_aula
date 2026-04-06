@@ -369,15 +369,17 @@ function applyColor(){document.documentElement.style.setProperty('--navy',CFG.co
 function updBrand(){
   let obra = document.getElementById('pObra').value;
   document.getElementById('hdrProjName').textContent = obra || (currentProjectId?'Proyecto':'Nuevo proyecto');
-  let hasProj = !!(currentProjectId || items.length > 0);
-  document.getElementById('wow-screen').style.display = hasProj ? 'none' : 'flex';
-  document.querySelectorAll('.pnl').forEach(p => { if(p.classList.contains('on') && !hasProj) p.classList.remove('on'); });
-  if(hasProj && !document.querySelector('.pnl.on')) document.getElementById('p-bud').classList.add('on');
   
+  // El efecto wow solo se oculta si hay un proyecto cargado o se ha iniciado uno nuevo
+  // Pero no debe bloquear la interfaz si el usuario decide crear uno nuevo
+  let hasData = !!(currentProjectId || items.length > 0 || obra);
+  document.getElementById('wow-screen').style.display = hasData ? 'none' : 'flex';
+  
+  // Habilitar/Deshabilitar botones según si hay datos
   document.querySelectorAll('.hbtn').forEach(btn => {
     let txt = btn.textContent.trim();
     if(['Guardar','Vista Previa','Imprimir','Configuración'].some(x=>txt.includes(x))){
-      btn.disabled = !hasProj;
+      btn.disabled = !hasData;
     }
   });
 }
@@ -1082,12 +1084,19 @@ function hCov(i){let r=new FileReader();r.onload=e=>{CFG.coverImgUrl=e.target.re
 function newProject(){
   if(isDirty && !confirm('¿Descartar cambios?')) return;
   currentProjectId=null; isDirty=false;
-  items=[]; // Vacío total para efecto wow
+  // Al crear nuevo, inicializamos con una estructura mínima para que updBrand detecte que ya no estamos en el inicio "wow"
+  items=[{id:gid(),t:'ch',num:'1.-',name:'',unit:'',qty:0,price:0,isApu:false,isCub:false}];
   ggItems=[]; apuData={}; tofData={};
   CFG.coverImgUrl = ''; 
   // No borramos Logo ni Guardado Automático por petición del usuario
   ['pObra','pMandante','pUbicacion','pProfesional'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('pFecha').value=new Date().toISOString().split('T')[0];
+  
+  // Ocultar pantalla wow y mostrar panel de presupuesto
+  document.getElementById('wow-screen').style.display = 'none';
+  document.querySelectorAll('.pnl').forEach(p => p.classList.remove('on'));
+  document.getElementById('p-bud').classList.add('on');
+  
   rb(); renderGG(); updBrand(); closeMod();
 }
 function saveProject(){
