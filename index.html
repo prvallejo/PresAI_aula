@@ -80,12 +80,12 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
 
 /* ── BUDGET TABLE ── */
 .tbl-wrap{background:var(--bg);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:12px}
-.tbl-hdr{display:grid;grid-template-columns:50px minmax(120px,1fr) 55px 70px 110px 110px 140px;background:var(--bg2);border-bottom:1px solid var(--border2);padding:0 8px}
+.tbl-hdr{display:grid;grid-template-columns:50px minmax(280px,1fr) 55px 70px 110px 110px 160px;background:var(--bg2);border-bottom:1px solid var(--border2);padding:0 8px}
 .tbl-hdr span{padding:9px 6px;font-size:9px;font-weight:600;color:var(--txt2);text-transform:uppercase;letter-spacing:.6px}
 .tbl-hdr .r{text-align:right}
 .row-ch,.row-it{display:grid;border-bottom:1px solid var(--border);padding:0 8px;align-items:center}
-.row-ch{grid-template-columns:50px minmax(120px,1fr) 55px 70px 110px 110px 140px;background:rgba(30,58,95,.05);border-bottom:1px solid var(--border2)}
-.row-it{grid-template-columns:50px minmax(120px,1fr) 55px 70px 110px 110px 140px}
+.row-ch{grid-template-columns:50px minmax(280px,1fr) 55px 70px 110px 110px 160px;background:rgba(30,58,95,.05);border-bottom:1px solid var(--border2)}
+.row-it{grid-template-columns:50px minmax(280px,1fr) 55px 70px 110px 110px 160px}
 .row-it:hover{background:#f6f8ff}.row-ch:hover{background:rgba(30,58,95,.08)}
 .ri{font-family:var(--ff);font-size:13px;color:var(--txt);background:transparent;border:none;outline:none;width:100%;padding:10px 6px;line-height:1.3}
 .ri::placeholder{color:var(--txt3);font-style:italic}.ri:focus::placeholder{opacity:0}
@@ -270,6 +270,7 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
         <input id="pUbicacion" oninput="markUnsaved()"/>
         <input id="pProfesional" oninput="markUnsaved()"/>
         <input id="pFecha" type="date" oninput="markUnsaved()"/>
+        <input id="pDireccion" oninput="markUnsaved()"/>
       </div>
 
       <div class="tbl-wrap">
@@ -418,7 +419,18 @@ function numToWords(n){
   function dec(n){if(n<10)return u[n];if(n<20)return d10[n-10];var t=tens[Math.floor(n/10)];var r=n%10;return r===0?t:(Math.floor(n/10)===2?'VEINTI'+u[r]:t+' Y '+(u[r]||''));}
   function cen(n){if(n===100)return'CIEN';if(n<100)return dec(n);var c=['','CIENTO','DOSCIENTOS','TRESCIENTOS','CUATROCIENTOS','QUINIENTOS','SEISCIENTOS','SETECIENTOS','OCHOCIENTOS','NOVECIENTOS'];var r=n%100;var res=c[Math.floor(n/100)];return r>0?res+' '+dec(r):res;}
   function mil(n){if(n<1000)return cen(n);var m=Math.floor(n/1000),r=n%1000,t=m===1?'MIL':cen(m)+' MIL';return r>0?t+' '+cen(r):t;}
-  function millon(n){if(n<1000000)return mil(n);var m=Math.floor(n/1000000),r=n%1000000,t=m===1?'UN MILLÓN':cen(m)+' MILLONES';return r>0?t+' '+mil(r):t;}
+  function millon(n){
+    if(n<1000000)return mil(n);
+    let m=Math.floor(n/1000000), r=n%1000000;
+    if(m<1000){
+      let t=m===1?'UN MILLÓN':cen(m)+' MILLONES';
+      return r>0?t+' '+mil(r):t;
+    } else {
+      let milM=Math.floor(m/1000), restM=m%1000;
+      let t=(milM===1?'MIL':cen(milM)+' MIL')+(restM>0?' '+cen(restM):'')+' MILLONES';
+      return r>0?t+' '+mil(r):t;
+    }
+  }
   var cur=CFG.currency==='USD'?'DÓLARES':CFG.currency==='UF'?'UF':'PESOS';
   return'SON: '+millon(n)+' '+cur+' .-';
 }
@@ -646,7 +658,7 @@ function renderApuEdit(id){
     let st=rows.reduce((x,r)=>x+N(r.qty)*N(r.price),0);
     html+=`<div class="sec-wrap">
       <div class="sec-hdr s-${cls[si]}"><span class="sl">${t}</span><span class="st" id="st-${id}-${si}">${sym()} ${fmtP(st)}</span></div>
-      <table class="at"><thead><tr><th>Descripción</th><th>Unid</th><th class="r">Rend.</th><th class="r">P.U.</th><th class="r">Subtotal</th><th></th></tr></thead><tbody>`;
+      <table class="at"><thead><tr><th style="width:280px">Descripción</th><th style="width:60px">Unid</th><th class="r" style="width:80px">Rend.</th><th class="r" style="width:100px">P.U.</th><th class="r">Subtotal</th><th></th></tr></thead><tbody>`;
     rows.forEach((r,ri)=>html+=`<tr>
       <td><input value="${esc(r.desc)}" oninput="uapu('${id}',${si},${ri},'desc',this.value)"/></td>
       <td><select style="width:65px" onchange="uapu('${id}',${si},${ri},'unit',this.value)">
@@ -878,10 +890,11 @@ function genPrintHtml(){
       '.print-footer{display:flex !important}' +
     '}' +
     '@media screen{.print-footer{display:none}}' +
-    '.cover-page{height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;page-break-after:always;break-after:page;padding:20mm;box-sizing:border-box;overflow:hidden;margin:0;border:none}' +
-    '.print-footer{position:fixed;bottom:10mm;left:10mm;right:10mm;display:none;justify-content:space-between;font-size:10px;color:#999;border-top:1px solid #eee;padding-top:5px}' +
+    '.cover-page{height:98vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;page-break-after:always;break-after:page;padding:20mm;box-sizing:border-box;overflow:hidden;margin:0;border:none;position:relative}' +
+    '.print-footer{position:fixed;bottom:5mm;left:10mm;right:10mm;display:none;justify-content:space-between;font-size:9px;color:#aaa;border-top:1px solid #eee;padding-top:3px}' +
   '</style></head><body>';
   
+  let mandante=document.getElementById('pMandante').value, ubic=document.getElementById('pUbicacion').value, fecha=document.getElementById('pFecha').value, dir=document.getElementById('pDireccion').value;
   if(CFG.printCover){
     html += `<div class="cover-page">
       ${CFG.coverImgUrl?'<img src="'+CFG.coverImgUrl+'" style="max-width:85%;max-height:45vh;margin-bottom:30px;object-fit:contain"/>':''}
@@ -889,6 +902,7 @@ function genPrintHtml(){
       <h2 style="font-size:18px;color:#666;margin-bottom:40px">PRESUPUESTO DE OBRA</h2>
       <div style="font-size:14px;line-height:1.6">
         ${mandante?'<p><strong>Mandante:</strong> '+esc(mandante)+'</p>':''}
+        ${dir?'<p><strong>Dirección:</strong> '+esc(dir)+'</p>':''}
         ${ubic?'<p><strong>Ubicación:</strong> '+esc(ubic)+'</p>':''}
         ${fecha?'<p><strong>Fecha:</strong> '+esc(fecha)+'</p>':''}
       </div>
@@ -896,7 +910,7 @@ function genPrintHtml(){
     </div>`;
   }
 
-  html += `<div style="padding:10mm;padding-bottom:30mm;position:relative">
+  html += `<div style="padding:10mm;padding-bottom:30mm;position:relative;page-break-after:auto">
     ${runHdr}
     <h3 style="font-size:14px;color:${color};border-bottom:2px solid #eee;padding-bottom:5px;margin-bottom:15px">Presupuesto Detallado</h3>
     <table><thead><tr style="background:#f9f9f9"><th>Ítem</th><th>Descripción</th><th style="text-align:center">Unid</th><th style="text-align:right">Cant.</th><th style="text-align:right">P.Unit.</th><th style="text-align:right">Total</th></tr></thead><tbody>${trows}</tbody></table>
@@ -914,7 +928,7 @@ function genPrintHtml(){
     <div class="print-footer"><span>${esc(obra)}</span><span>Pág. PAGE_NUM</span></div>
   </div>
   ${ggHtml} ${apuHtml} ${cubHtml}
-  ${(ggHtml || apuHtml || cubHtml ? '<div style="padding:10mm;padding-bottom:30mm;position:relative;min-height:200px">'+signatures+'<div class="print-footer"><span>'+esc(obra)+'</span><span>Pág. PAGE_NUM</span></div></div>' : '')}
+  ${(ggHtml || apuHtml || cubHtml ? '<div style="padding:10mm;padding-bottom:30mm;position:relative;min-height:200px;page-break-before:always">'+signatures+'<div class="print-footer"><span>'+esc(obra)+'</span><span>Pág. PAGE_NUM</span></div></div>' : '')}
   </body></html>`;
 
 // Inyectar números de página correctos de forma secuencial
@@ -1004,6 +1018,7 @@ function openSettings(){
       '<div class="cfg-section"><h4>Datos del Proyecto</h4><div class="cfg-grid">' +
         '<div class="cfg-field pf-full" style="grid-column:1/-1"><label>Nombre de la Obra / Proyecto</label><input id="cfgObra" value="'+esc(document.getElementById('pObra').value)+'" oninput="document.getElementById(\'pObra\').value=this.value;syncHdr();markUnsaved()"/></div>' +
         '<div class="cfg-field"><label>Mandante / Cliente</label><input id="cfgMandante" value="'+esc(document.getElementById('pMandante').value)+'" oninput="document.getElementById(\'pMandante\').value=this.value;markUnsaved()"/></div>' +
+        '<div class="cfg-field"><label>Dirección</label><input id="cfgDireccion" value="'+esc(document.getElementById('pDireccion').value)+'" oninput="document.getElementById(\'pDireccion\').value=this.value;markUnsaved()"/></div>' +
         '<div class="cfg-field"><label>Ubicación</label><input id="cfgUbicacion" value="'+esc(document.getElementById('pUbicacion').value)+'" oninput="document.getElementById(\'pUbicacion\').value=this.value;markUnsaved()"/></div>' +
         '<div class="cfg-field"><label>Profesional a cargo</label><input id="cfgProfesional" value="'+esc(document.getElementById('pProfesional').value)+'" oninput="document.getElementById(\'pProfesional\').value=this.value;markUnsaved()"/></div>' +
         '<div class="cfg-field"><label>Fecha</label><input type="date" id="cfgFecha" value="'+document.getElementById('pFecha').value+'" oninput="document.getElementById(\'pFecha\').value=this.value;markUnsaved()"/></div>' +
@@ -1045,15 +1060,26 @@ function openSettings(){
         '<div class="cfg-field"><label>Rep. Legal</label><input value="'+esc(CFG.repLegal)+'" oninput="CFG.repLegal=this.value;saveCFG()"/></div>' +
         '<div class="cfg-field"><label>Profesional</label><input value="'+esc(CFG.profName)+'" oninput="CFG.profName=this.value;saveCFG()"/></div>' +
       '</div></div>' +
-      '<div class="cfg-section"><h4>Impresión</h4><div class="chk-opts">' +
-        '<label class="chk-opt"><input type="checkbox" '+(CFG.printCover?'checked':'')+' onchange="CFG.printCover=this.checked;saveCFG()"> Portada</label>' +
-        '<label class="chk-opt"><input type="checkbox" '+(CFG.printApu?'checked':'')+' onchange="CFG.printApu=this.checked;saveCFG()"> APUs</label>' +
-        '<label class="chk-opt"><input type="checkbox" '+(CFG.printCub?'checked':'')+' onchange="CFG.printCub=this.checked;saveCFG()"> Cubicaciones</label>' +
-        '<label class="chk-opt"><input type="checkbox" '+(CFG.printGG?'checked':'')+' onchange="CFG.printGG=this.checked;saveCFG()"> Gastos Generales en Informe</label>' +
-      '</div>' +
-        '<div class="cfg-grid" style="margin-top:10px">' +
-          '<label class="chk-opt"><input type="checkbox" '+(CFG.apuPerPage?'checked':'')+' onchange="CFG.apuPerPage=this.checked;saveCFG()"> APU por hoja (si no, seguidos)</label>' +
-          '<label class="chk-opt"><input type="checkbox" '+(CFG.cubPerPage?'checked':'')+' onchange="CFG.cubPerPage=this.checked;saveCFG()"> Cubicaciones por hoja</label>' +
+      '<div class="cfg-section"><h4>Impresión</h4>' +
+        '<div class="chk-opts">' +
+          '<label class="chk-opt"><input type="checkbox" '+(CFG.printCover?'checked':'')+' onchange="CFG.printCover=this.checked;saveCFG()"> Portada</label>' +
+          '<label class="chk-opt"><input type="checkbox" '+(CFG.printGG?'checked':'')+' onchange="CFG.printGG=this.checked;saveCFG()"> Gastos Generales</label>' +
+        '</div>' +
+        '<div style="margin-top:10px;display:flex;flex-direction:column;gap:8px">' +
+          '<div style="display:flex;align-items:center;gap:15px">' +
+            '<label class="chk-opt"><input type="checkbox" '+(CFG.printApu?'checked':'')+' onchange="CFG.printApu=this.checked;saveCFG();openSettings()"> APUs</label>' +
+            (CFG.printApu ? 
+              '<label style="font-size:11px"><input type="radio" name="apuMode" '+(CFG.apuPerPage?'':'checked')+' onchange="CFG.apuPerPage=false;saveCFG()"> Continuo</label>' +
+              '<label style="font-size:11px"><input type="radio" name="apuMode" '+(CFG.apuPerPage?'checked':'')+' onchange="CFG.apuPerPage=true;saveCFG()"> Por hoja</label>' 
+            : '') +
+          '</div>' +
+          '<div style="display:flex;align-items:center;gap:15px">' +
+            '<label class="chk-opt"><input type="checkbox" '+(CFG.printCub?'checked':'')+' onchange="CFG.printCub=this.checked;saveCFG();openSettings()"> Cubicaciones</label>' +
+            (CFG.printCub ? 
+              '<label style="font-size:11px"><input type="radio" name="cubMode" '+(CFG.cubPerPage?'':'checked')+' onchange="CFG.cubPerPage=false;saveCFG()"> Continuo</label>' +
+              '<label style="font-size:11px"><input type="radio" name="cubMode" '+(CFG.cubPerPage?'checked':'')+' onchange="CFG.cubPerPage=true;saveCFG()"> Por hoja</label>' 
+            : '') +
+          '</div>' +
         '</div>' +
       '</div>' +
       '<div class="cfg-section"><h4>Imagen Portada</h4>' +
@@ -1102,7 +1128,7 @@ function newProject(){
 function saveProject(){
   let obra=document.getElementById('pObra').value.trim(); if(!obra){alert('Nombre de obra requerido');return;}
   if(!currentProjectId) currentProjectId='proj_'+Date.now();
-  let p={id:currentProjectId,obra,mandante:document.getElementById('pMandante').value,ubicacion:document.getElementById('pUbicacion').value,profesional:document.getElementById('pProfesional').value,fecha:document.getElementById('pFecha').value,items,ggItems,apuData,tofData,pGG:document.getElementById('pGG').value,pUtil:document.getElementById('pUtil').value,pImp:document.getElementById('pImp').value,pIVA:document.getElementById('pIVA').value,ggFijo:document.getElementById('ggFijo').checked,coverImgUrl:CFG.coverImgUrl};
+  let p={id:currentProjectId,obra,mandante:document.getElementById('pMandante').value,direccion:document.getElementById('pDireccion').value,ubicacion:document.getElementById('pUbicacion').value,profesional:document.getElementById('pProfesional').value,fecha:document.getElementById('pFecha').value,items,ggItems,apuData,tofData,pGG:document.getElementById('pGG').value,pUtil:document.getElementById('pUtil').value,pImp:document.getElementById('pImp').value,pIVA:document.getElementById('pIVA').value,ggFijo:document.getElementById('ggFijo').checked,coverImgUrl:CFG.coverImgUrl};
   lsS('od_proj_'+currentProjectId,p);
   let idx=getIdx(),e=idx.find(x=>x.id===currentProjectId);
   if(e){e.obra=obra;e.savedAt=new Date().toISOString();}else idx.unshift({id:currentProjectId,obra,savedAt:new Date().toISOString()});
@@ -1133,11 +1159,15 @@ function openProjects(){
 }
 function loadP(id){
   let p=lsL('od_proj_'+id); if(!p)return;
-  currentProjectId=id; items=p.items; ggItems=p.ggItems; apuData=p.apuData; tofData=p.tofData;
-  CFG.coverImgUrl = p.coverImgUrl || '';
-  document.getElementById('pObra').value=p.obra; document.getElementById('pMandante').value=p.mandante;
-  document.getElementById('pUbicacion').value=p.ubicacion; document.getElementById('pProfesional').value=p.profesional;
-  document.getElementById('pFecha').value=p.fecha; document.getElementById('pGG').value=p.pGG;
+  currentProjectId=id;
+  items=p.items; ggItems=p.ggItems||[]; apuData=p.apuData||{}; tofData=p.tofData||{};
+  document.getElementById('pObra').value=p.obra;
+  document.getElementById('pMandante').value=p.mandante||'';
+  document.getElementById('pDireccion').value=p.direccion||'';
+  document.getElementById('pUbicacion').value=p.ubicacion||'';
+  document.getElementById('pProfesional').value=p.profesional||'';
+  document.getElementById('pFecha').value=p.fecha||'';
+  document.getElementById('pGG').value=p.pGG;
   document.getElementById('pUtil').value=p.pUtil; document.getElementById('pImp').value=p.pImp;
   document.getElementById('pIVA').value=p.pIVA;
   document.getElementById('ggFijo').checked=p.ggFijo;
@@ -1146,15 +1176,50 @@ function loadP(id){
 function delP(id){if(confirm('¿Eliminar?')){lsD('od_proj_'+id);saveIdx(getIdx().filter(x=>x.id!==id));openProjects();}}
 function exportCSV(id){
   let p=lsL('od_proj_'+id); if(!p)return;
-  let csv = 'Tipo,Item,Descripcion,Unidad,Cantidad,Precio,Total\n';
+  let csv = '--- PRESUPUESTO ---\nTipo,Item,Descripcion,Unidad,Cantidad,Precio,Total\n';
   p.items.forEach(it=>{
     let tot = N(it.qty)*N(it.price);
     csv += `"${it.t}","${it.num}","${it.name}","${it.unit}",${it.qty},${it.price},${tot}\n`;
   });
+  
+  if(p.ggItems && p.ggItems.length){
+    csv += '\n--- GASTOS GENERALES ---\nSubgrupo,Descripcion,Unidad,Cantidad,Tiempo Uso,Precio,Subtotal\n';
+    p.ggItems.forEach(it=>{
+      let tot = N(it.qty)*N(it.tiempoUso)*N(it.price);
+      csv += `"${it.subgrupo}","${it.name}","${it.unit}",${it.qty},${it.tiempoUso},${it.price},${tot}\n`;
+    });
+  }
+  
+  if(p.apuData){
+    csv += '\n--- ANALISIS DE PRECIOS UNITARIOS (APU) ---\nPartida,Seccion,Descripcion,Unidad,Rendimiento,Precio,Subtotal\n';
+    let titles=['Mano de Obra','Materiales','Equipos','Subcontratos'];
+    Object.keys(p.apuData).forEach(itId=>{
+      let it=p.items.find(x=>x.id===itId); if(!it)return;
+      let a=p.apuData[itId];
+      a.secs.forEach((s,si)=>{
+        s.rows.forEach(r=>{
+          let tot = N(r.qty)*N(r.price);
+          csv += `"${it.num} ${it.name}","${titles[si]}","${r.desc}","${r.unit}",${r.qty},${r.price},${tot}\n`;
+        });
+      });
+    });
+  }
+  
+  if(p.tofData){
+    csv += '\n--- CUBICACIONES ---\nPartida,Descripcion,N,A,L,Subtotal\n';
+    Object.keys(p.tofData).forEach(itId=>{
+      let it=p.items.find(x=>x.id===itId); if(!it)return;
+      p.tofData[itId].forEach(r=>{
+        let tot = N(r.n)*Math.max(1,N(r.a))*Math.max(1,N(r.l));
+        csv += `"${it.num} ${it.name}","${r.desc}",${r.n},${r.a},${r.l},${tot}\n`;
+      });
+    });
+  }
+  
   let blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
   let link = document.createElement('a');
   link.href = URL.createObjectURL(blob);
-  link.download = `Presupuesto_${p.obra.replace(/\s+/g,'_')}.csv`;
+  link.download = `PresAI_${p.obra.replace(/\s+/g,'_')}.csv`;
   link.click();
 }
 
