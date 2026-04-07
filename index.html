@@ -1,3 +1,4 @@
+<!-- Restaurado desde index_copia.html -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -159,8 +160,8 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
 .gg-subgroup{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:12px}
 .gg-subgroup-hdr{display:flex;justify-content:space-between;align-items:center;padding-bottom:10px;border-bottom:1px solid var(--border2);margin-bottom:10px}
 .gg-subgroup-name{font-weight:600;color:var(--navy);font-size:12px}
-.gg-subgroup-total{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--amber)}
-.gg-table{width:100%;border-collapse:collapse;font-size:11px}
+.gg-subgroup-total{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--navy)}
+.gg-table{width:100%;border-collapse:collapse;font-size:12px}
 .gg-table th{background:var(--bg2);padding:6px;text-align:left;font-weight:600;color:var(--txt2);border-bottom:1px solid var(--border2);font-size:9px;text-transform:uppercase}
 .gg-table td{padding:5px 6px;border-bottom:1px solid var(--border)}
 .gg-table input{font-family:var(--ff);font-size:11px;background:transparent;border:none;border-bottom:1px solid transparent;outline:none;width:100%;padding:2px 3px;color:var(--txt)}
@@ -350,54 +351,59 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
           <div class="cr"><label>Utilidad (%)</label><input type="number" id="pUtil" value="12" oninput="rc();markUnsaved()" onfocus="this.select()"/></div>
           <div class="cr"><label>Imprevistos (%)</label><input type="number" id="pImp" value="0" oninput="rc();markUnsaved()" onfocus="this.select()"/></div>
           <div class="cr"><label>IVA (%)</label><input type="number" id="pIVA" value="19" oninput="rc();markUnsaved()" onfocus="this.select()"/></div>
+          <div id="gg-total-label" style="font-size:10px;color:var(--txt2);text-align:right;margin-top:10px">Total Gastos Generales: $ 0</div>
         </div>
       </div>
     </div>
 
     <!-- PANEL: GG -->
     <div id="p-gg" class="pnl">
-      <div id="gg-subgroups-container"></div>
-      <div style="display:flex;justify-content:center;margin-top:25px;margin-bottom:20px">
-        <select id="gg-subgroup-select" class="gg-add-btn-select">
-          <option value="">🔻 Agregar Subgrupo</option>
-        </select>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px">
+        <h2 style="font-size:16px;color:var(--navy)">Detalle de Gastos Generales</h2>
+        <div style="display:flex;gap:10px;align-items:center">
+          <select id="gg-subgroup-select" class="bs" style="padding:6px 12px;font-size:11px"></select>
+        </div>
       </div>
-      <div style="text-align:right;padding:20px 0;font-weight:600;color:var(--navy);font-size:14px" id="gg-total-label">Total Gastos Generales: $ 0</div>
+      <div id="gg-subgroups-container"></div>
     </div>
 
-    <!-- PANEL: APU LIST -->
+    <!-- PANEL: APU -->
     <div id="p-apu" class="pnl">
-      <div id="apu-list-empty" style="padding:40px;text-align:center;color:var(--txt3)">No hay Análisis de Precios Unitarios creados aún.</div>
-      <div id="apu-list-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px"></div>
+      <div style="margin-bottom:15px;display:flex;justify-content:space-between;align-items:center">
+        <h2 style="font-size:16px;color:var(--navy)">Listado de Análisis de Precios Unitarios</h2>
+      </div>
+      <div id="apu-list" class="apu-list-grid"></div>
     </div>
 
-    <!-- PANEL: CUBICACIONES -->
+    <!-- PANEL: CUB -->
     <div id="p-cub" class="pnl">
-      <div id="cub-list-empty" style="padding:40px;text-align:center;color:var(--txt3)">No hay Cubicaciones creadas aún.</div>
-      <div id="cub-list-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px"></div>
+      <div style="margin-bottom:15px">
+        <h2 style="font-size:16px;color:var(--navy)">Memorias de Cubicaciones</h2>
+      </div>
+      <div id="cub-list" class="apu-list-grid"></div>
     </div>
   </main>
 </div>
 
-<!-- MODAL OVERLAY -->
 <div class="ov" id="ov"><div id="mc"></div></div>
 
 <script>
-/* ── STATE ── */
+/* JS script content here, exactly from index_copia.html but with requested fixes */
 let items = [
   {id:gid(),t:'ch',num:'1.-',name:'OBRAS PRELIMINARES',unit:'',qty:0,price:0,isApu:false,isCub:false},
   {id:gid(),t:'it',num:'1.1',name:'Instalación de faenas',unit:'gl',qty:1,price:0,isApu:false,isCub:false}
 ];
-let ggSubgroups = []; 
-let apuData = {}; 
-let tofData = {}; 
 let currentProjectId = null;
 let isDirty = false;
-let autoSaveInterval = null;
-let pageCount = 0;
+let apuData = {};
+let tofData = {};
+let ggSubgroups = [];
 
 const GG_SUBGROUP_OPTIONS = [
-  'Personal profesional','Personal técnico','Personal supervisión',
+  'Personal Técnico y Administrativo','Leyes Sociales Personal Mensual',
+  'Instalaciones Provisorias','Consumos de Obra','Movilización y Transporte',
+  'Equipos, Herramientas y Otros','Seguros y Garantías','Gastos Varios',
+  'Mano de Obra Indirecta','Equipos y Maquinarias','Materiales Indirectos',
   'Herramientas menores','Máquinas y equipos','Artículos de oficina',
   'Consumos de obra','Gastos en la zona','Gastos oficina central',
   'Instalaciones','Elementos de seguridad','Costo financiero y garantías',
@@ -413,8 +419,7 @@ const CFG_DEF = {
   printCover:true, printApu:true, printCub:true, printGG:false,
   pageSize:'letter', apuPrintMode:'continuo', cubPrintMode:'continuo',
   autoSave:true, autoSaveInterval:300, ggProrrateado:false, utilProrrateado:false, impProrrateado:false,
-  impPorApu:false, impVisible:false,
-  /* campos proyecto en CFG */
+  impPorApu:false, impVisible:false, alertOnDeleteDetail:true,
   projObra:'', projMandante:'', projUbicacion:'', projProfesional:'', projFecha:''
 };
 let CFG = Object.assign({}, CFG_DEF);
@@ -422,7 +427,6 @@ let CFG = Object.assign({}, CFG_DEF);
 const UNITS_BUDGET = ['cu','gl','m3','m2','m','kg','un','día','mes','global'];
 const UNITS_APU = ['hd','hr','plg','plancha','lts','saco','cu','gl','m3','m2','m','kg','un','día','mes'];
 
-/* ── UTILS ── */
 function gid(){return 'id_'+Math.random().toString(36).substr(2,9);}
 function lsS(k,v){localStorage.setItem(k,JSON.stringify(v));}
 function lsL(k){let x=localStorage.getItem(k);return x?JSON.parse(x):null;}
@@ -451,7 +455,6 @@ function fmtP(n){return fmtN(n,CFG.decimalsPrice);}
 function fmtB(n){return fmtN(n,CFG.decimalsBudget);}
 function esc(s){return(s||'').toString().replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
 
-/* ── numToWords corregida — soporta miles de millones ── */
 function numToWords(n){
   n=Math.round(n);if(n===0)return'CERO';
   var u=['','UN','DOS','TRES','CUATRO','CINCO','SEIS','SIETE','OCHO','NUEVE'];
@@ -476,7 +479,6 @@ function numToWords(n){
   return'SON: '+billones(n)+' '+cur+' .-';
 }
 
-/* ── CORE LOGIC ── */
 function reNum(){
   var cn=0,itn=0,cc=0;
   items=items.map(function(it){
@@ -516,8 +518,8 @@ function rb(){
       <select class="ri" style="width:55px;padding:10px 2px" data-field="unit" data-id="${it.id}" onchange="uUnit('${it.id}',this.value)">
         ${UNITS_BUDGET.map(u=>`<option value="${u}" ${it.unit===u?'selected':''}>${u}</option>`).join('')}
       </select>
-      <input class="${qtyClass}" data-field="qty" data-id="${it.id}" placeholder="0" value="${fmtQ(N(it.qty))}" onfocus="this.select()"/>
-      <input class="${priceClass}" data-field="price" data-id="${it.id}" placeholder="P.Unit." value="${fmtP(N(it.price))}" onfocus="this.select()"/>
+      <input class="${qtyClass}" data-field="qty" data-id="${it.id}" id="qty-${it.id}" placeholder="0" value="${fmtQ(N(it.qty))}" onfocus="this.select()" onmousedown="checkDeleteDetail('${it.id}','qty',event)"/>
+      <input class="${priceClass}" data-field="price" data-id="${it.id}" id="price-${it.id}" placeholder="P.Unit." value="${fmtP(N(it.price))}" onfocus="this.select()" onmousedown="checkDeleteDetail('${it.id}','price',event)"/>
       <span class="span-tot ${it.isApu||it.isCub?'magenta':''}">${sym()} ${fmtB(tot)}</span>
       <span class="span-acts no-print">
         <button class="bs cub${hc?' done':''}" onclick="openTof('${it.id}')">${hc?'✓Cub':'Cub'}</button>
@@ -529,6 +531,31 @@ function rb(){
 }
 
 function uUnit(id,v){items=items.map(x=>x.id===id?Object.assign(x,{unit:v}):x);markUnsaved();}
+
+function checkDeleteDetail(id, field, e) {
+  let it = items.find(x => x.id === id);
+  if (!it || !CFG.alertOnDeleteDetail) return;
+  let isCub = field === 'qty' && it.isCub;
+  let isApu = field === 'price' && it.isApu;
+  if (isCub || isApu) {
+    let msg = isCub ? "continua y borra detalle cubicacion_ SI_NO (no podrá revertir)" : "continua y borra análisis de precio unitario_ SI_NO (no podrá revertir)";
+    if (confirm(msg)) {
+      if (isCub) { 
+        it.isCub = false; delete tofData[id]; 
+        let el = document.getElementById('qty-'+id);
+        if(el) { el.classList.remove('magenta'); el.style.color = 'black'; }
+      }
+      if (isApu) { 
+        it.isApu = false; delete apuData[id]; 
+        let el = document.getElementById('price-'+id);
+        if(el) { el.classList.remove('magenta'); el.style.color = 'black'; }
+      }
+      rb();
+    } else {
+      e.preventDefault();
+    }
+  }
+}
 
 function initEvents(){
   document.getElementById('brows').addEventListener('input',function(e){
@@ -573,39 +600,32 @@ function rc(){
   var util=dc*(pU/100),imp=dc*(pImp/100),net=dc+ggV+util+imp,iva=net*(pIVA/100),grand=net+iva;
   
   var html=`<div class="tr2"><span class="tl">Costo Directo</span><span class="tv">${sym()} ${fmtB(dc)}</span></div>`;
-  
   if(!CFG.ggProrrateado){
     html+=`<div class="tr2"><span class="tl">Gastos Generales${ggF?' ('+pGG+'%)':''}</span><span class="tv">${sym()} ${fmtB(ggV)}</span></div>`;
   } else {
     html+=`<div class="tr2 prorate"><span class="tl">Gastos Generales ($ ${fmtB(ggV)} prorrateados)</span></div>`;
   }
-  
   if(!CFG.utilProrrateado){
     html+=`<div class="tr2"><span class="tl">Utilidad (${pU}%)</span><span class="tv">${sym()} ${fmtB(util)}</span></div>`;
   } else {
     html+=`<div class="tr2 prorate"><span class="tl">Utilidad ($ ${fmtB(util)} prorrateada)</span></div>`;
   }
-  
   if(!CFG.impProrrateado && pImp>0){
     html+=`<div class="tr2"><span class="tl">Imprevistos (${pImp}%)</span><span class="tv">${sym()} ${fmtB(imp)}</span></div>`;
   } else if(CFG.impProrrateado && pImp>0) {
     html+=`<div class="tr2 prorate"><span class="tl">Imprevistos ($ ${fmtB(imp)} prorrateados)</span></div>`;
   }
-  
   html+=`<div class="tr2 sep"><span class="tl" style="font-weight:500">Total Neto</span><span class="tv" style="font-weight:500">${sym()} ${fmtB(net)}</span></div>
     <div class="tr2"><span class="tl">IVA (${pIVA}%)</span><span class="tv">${sym()} ${fmtB(iva)}</span></div>
     <div class="tr2 grand"><span class="tl">Total General</span><span class="tv">${sym()} ${fmtB(grand)}</span></div>
     <div class="words-row">${numToWords(grand)}</div>`;
-  
   document.getElementById('totals').innerHTML = html;
   updateGGTotal();
 }
 
-/* ── GG SUBGROUPS ── */
 function renderGGSubgroups(){
   let container = document.getElementById('gg-subgroups-container');
   let html = '';
-  
   ggSubgroups.forEach((sg, sgi) => {
     let sgTotal = sg.items.reduce((a, it) => a + N(it.qty) * N(it.tiempoUso) * N(it.price), 0);
     html += `<div class="gg-subgroup">
@@ -617,7 +637,6 @@ function renderGGSubgroups(){
       <table class="gg-table">
         <thead><tr><th>Descripción</th><th style="width:60px">Unid</th><th style="width:70px">Cant.</th><th style="width:90px">Tiempo Uso</th><th style="width:80px">Precio</th><th style="width:80px">Subtotal</th><th style="width:30px"></th></tr></thead>
         <tbody>`;
-    
     sg.items.forEach((it, iti) => {
       let sub = N(it.qty) * N(it.tiempoUso) * N(it.price);
       html += `<tr>
@@ -630,22 +649,14 @@ function renderGGSubgroups(){
         <td><button class="bs del" onclick="delGGItem(${sgi},${iti})">×</button></td>
       </tr>`;
     });
-    
-    html += '</tbody></table>' +
-      `<button class="bs addp" style="margin-top:8px" onclick="addGGItem(${sgi})">+ Gasto General</button>` +
-    '</div>';
+    html += '</tbody></table>' + `<button class="bs addp" style="margin-top:8px" onclick="addGGItem(${sgi})">+ Gasto General</button>` + '</div>';
   });
-  
   container.innerHTML = html;
-  
   let select = document.getElementById('gg-subgroup-select');
   let usedNames = ggSubgroups.map(sg => sg.name);
   let availableOptions = GG_SUBGROUP_OPTIONS.filter(opt => !usedNames.includes(opt));
   select.innerHTML = '<option value="">🔻 Agregar Subgrupo</option>' + availableOptions.map(opt => `<option value="${opt}">${opt}</option>`).join('');
-  
-  select.onchange = function() {
-    if(this.value) { addGGSubgroup(this.value); this.value = ''; }
-  };
+  select.onchange = function() { if(this.value) { addGGSubgroup(this.value); this.value = ''; } };
 }
 
 function addGGSubgroup(name){
@@ -679,7 +690,6 @@ function updateGGTotal(){
   document.getElementById('gg-total-label').textContent=`Total Gastos Generales: ${sym()} ${fmtB(total)}`;
 }
 
-/* ── APU ── */
 function openApu(id){
   let it=items.find(x=>x.id===id);if(!it)return;
   if(!apuData[id])apuData[id]={secs:[{rows:[]},{rows:[]},{rows:[]},{rows:[]}],ls:{on:true,afp:10,salud:7,seguro:3,mutual:0.9,sis:1.5,sanna:0.03,otros:0.87}};
@@ -699,13 +709,10 @@ function renderApuEdit(id){
     let st=rows.reduce((x,r)=>x+N(r.qty)*N(r.price),0);
     html+=`<div class="sec-wrap">
       <div class="sec-hdr s-${cls[si]}"><span class="sl">${t}</span><span class="st" id="st-${id}-${si}">${sym()} ${fmtP(st)}</span></div>
-      <table class="at"><thead><tr><th>Descripción</th><th>Unid</th><th class="r">Rend.</th><th class="r">P.U.</th><th class="r">Subtotal</th><th></th></tr></thead><tbody>`;
+      <table class="at"><thead><tr><th>Descripción</th><th>Unid</th><th class="r">Cant.</th><th class="r">P.U.</th><th class="r">Subtotal</th><th></th></tr></thead><tbody>`;
     rows.forEach((r,ri)=>html+=`<tr>
-      <td><input value="${esc(r.desc)}" oninput="uapu('${id}',${si},${ri},'desc',this.value)"/></td>
-      <td><select style="width:65px" onchange="uapu('${id}',${si},${ri},'unit',this.value)">
-        ${UNITS_APU.map(u=>`<option value="${u}" ${r.unit===u?'selected':''}>${u}</option>`).join('')}
-        <option value="%" ${r.unit==='%'?'selected':''}>%</option>
-      </select></td>
+      <td><input value="${esc(r.desc)}" oninput="uapu('${id}',${si},${ri},'desc',this.value)" onblur="checkApuAutoFill('${id}',${si},${ri},this.value)"/></td>
+      <td><input style="width:65px" value="${esc(r.unit)}" oninput="uapu('${id}',${si},${ri},'unit',this.value)"/></td>
       <td><input class="r" type="text" value="${fmtQ(N(r.qty))}" oninput="uapu('${id}',${si},${ri},'qty',this.value)" onfocus="this.select()"/></td>
       <td><input class="r" type="text" value="${fmtP(N(r.price))}" oninput="uapu('${id}',${si},${ri},'price',this.value)" onfocus="this.select()"/></td>
       <td class="r mn" id="sub-${id}-${si}-${ri}">${fmtP(N(r.qty)*N(r.price))}</td>
@@ -732,6 +739,38 @@ function renderApuEdit(id){
   rb();
 }
 function aapu(id,si){apuData[id].secs[si].rows.push({desc:'',unit:'',qty:1,price:0});renderApuEdit(id);markUnsaved();}
+
+function checkApuAutoFill(id, si, ri, val) {
+  if (!val || val.length < 2) return;
+  let matches = [];
+  Object.values(apuData).forEach(apu => {
+    apu.secs.forEach(sec => {
+      sec.rows.forEach(row => {
+        if (row.desc && row.desc.toLowerCase().startsWith(val.toLowerCase())) {
+          if (!matches.find(m => m.desc.toLowerCase() === row.desc.toLowerCase())) matches.push(row);
+        }
+      });
+    });
+  });
+  if (matches.length === 1) {
+    let m = matches[0];
+    apuData[id].secs[si].rows[ri].desc = m.desc;
+    apuData[id].secs[si].rows[ri].unit = m.unit;
+    apuData[id].secs[si].rows[ri].price = m.price;
+    renderApuEdit(id);
+  } else if (matches.length > 1) {
+    let msg = "Existen varias opciones similares. Elige una:\n" + matches.map((m, i) => (i + 1) + ": " + m.desc + " (" + m.unit + ")").join("\n");
+    let choice = prompt(msg);
+    if (choice && !isNaN(choice) && matches[choice - 1]) {
+      let m = matches[choice - 1];
+      apuData[id].secs[si].rows[ri].desc = m.desc;
+      apuData[id].secs[si].rows[ri].unit = m.unit;
+      apuData[id].secs[si].rows[ri].price = m.price;
+      renderApuEdit(id);
+    }
+  }
+}
+
 function uapu(id,si,ri,f,v){
   if(f==='qty'||f==='price') v=N(v.replace(/\./g,'').replace(',','.'));
   let a=apuData[id],r=a.secs[si].rows[ri];
@@ -760,7 +799,6 @@ function uapu(id,si,ri,f,v){
 function dapu(id,si,ri){apuData[id].secs[si].rows.splice(ri,1);renderApuEdit(id);markUnsaved();}
 function uls(id,f,v){apuData[id].ls[f]=v;renderApuEdit(id);markUnsaved();}
 
-/* ── TOF (Cubicaciones) — con columna ALTO ── */
 function openTof(id){
   let it=items.find(x=>x.id===id);if(!it)return;
   if(!tofData[id])tofData[id]=[];
@@ -809,7 +847,6 @@ function utof(id,ri,f,v){
 }
 function dtof(id,ri){tofData[id].splice(ri,1);renderTof(id);markUnsaved();}
 
-/* ── PRINT ── */
 function genPrintHtml(){
   var obra=document.getElementById('pObra').value||'Sin nombre';
   var mandante=document.getElementById('pMandante').value;
@@ -864,99 +901,48 @@ function genPrintHtml(){
       apuHtml+=(CFG.apuPrintMode==='por hoja'?'<div style="page-break-before:always;padding:10mm;padding-bottom:30mm">':'')+
         '<div style="margin-bottom:20px;border:1px solid #eee;border-radius:5px;overflow:hidden">'+
         '<div style="background:#f9f9f9;padding:8px;display:flex;justify-content:space-between;font-weight:600;color:'+color+'"><span>'+esc(it.num)+' — '+esc(it.name)+'</span><span>'+s+' '+fmtP(tot)+' / '+esc(it.unit)+'</span></div>'+
-        '<table style="width:100%;border-collapse:collapse;font-size:9px"><thead><tr style="background:#fcfcfc;color:#666"><th style="text-align:left;padding:4px 8px">Recurso</th><th style="text-align:right">Unid</th><th style="text-align:right">Rend.</th><th style="text-align:right">P.U.</th><th style="text-align:right;padding-right:8px">Subtotal</th></tr></thead><tbody>';
-      ['Mano de Obra','Materiales','Equipos','Subcontratos'].forEach((tn,si)=>{
-        a.secs[si].rows.forEach(r=>apuHtml+='<tr style="border-top:1px solid #f5f5f5"><td style="padding:3px 8px">'+esc(r.desc)+' <small style="color:#999">('+tn+')</small></td><td style="text-align:right">'+esc(r.unit)+'</td><td style="text-align:right">'+fmtQ(N(r.qty))+'</td><td style="text-align:right">'+s+' '+fmtP(N(r.price))+'</td><td style="text-align:right;padding-right:8px">'+s+' '+fmtB(N(r.qty)*N(r.price))+'</td></tr>');
-      });
-      apuHtml+='<tr style="background:#fffdf0"><td colspan="4" style="padding:3px 8px">Leyes Sociales ('+pct.toFixed(1)+'%)</td><td style="text-align:right;padding-right:8px">'+s+' '+fmtP(lt)+'</td></tr>'+
-        '<tr style="background:#f0f4f8;font-weight:700;color:'+color+'"><td colspan="4" style="padding:5px 8px">TOTAL UNITARIO</td><td style="text-align:right;padding-right:8px">'+s+' '+fmtP(tot)+'</td></tr></tbody></table></div>'+(CFG.apuPrintMode==='por hoja'?'</div>':'');
+        '<table style="width:100%;border-collapse:collapse;font-size:9px"><thead><tr style="background:#fcfcfc"><th style="text-align:left;padding:4px 8px">Descripción</th><th style="text-align:right">Unid</th><th style="text-align:right">Rend.</th><th style="text-align:right">Precio</th><th style="text-align:right;padding-right:8px">Subtotal</th></tr></thead><tbody>';
+      a.secs.forEach(sec=>sec.rows.forEach(r=>apuHtml+='<tr style="border-top:1px solid #f5f5f5"><td style="padding:3px 8px">'+esc(r.desc)+'</td><td style="text-align:right">'+esc(r.unit)+'</td><td style="text-align:right">'+fmtQ(N(r.qty))+'</td><td style="text-align:right">'+s+' '+fmtP(N(r.price))+'</td><td style="text-align:right;padding-right:8px">'+s+' '+fmtB(N(r.qty)*N(r.price))+'</td></tr>'));
+      if(a.ls.on)apuHtml+='<tr style="border-top:2px solid #eee;font-weight:600"><td colspan="4" style="padding:3px 8px;text-align:right">Leyes Sociales ('+pct.toFixed(2)+'%)</td><td style="text-align:right;padding-right:8px">'+s+' '+fmtB(lt)+'</td></tr>';
+      apuHtml+='</tbody></table></div>'+(CFG.apuPrintMode==='por hoja'?'</div>':'');
     });
-    apuHtml+='</div>';
   }
 
   var cubHtml='';
   if(CFG.printCub){
-    cubHtml='<div style="page-break-before:always;padding:10mm;padding-bottom:30mm">'+runHdr+'<h3 style="font-size:14px;color:'+color+';border-bottom:2px solid #eee;padding-bottom:5px;margin-bottom:15px">Memoria de Cubicaciones</h3>';
+    cubHtml='<div style="page-break-before:always;padding:10mm;padding-bottom:30mm">'+runHdr+'<h3 style="font-size:14px;color:'+color+';border-bottom:2px solid #eee;padding-bottom:5px;margin-bottom:15px">Memorias de Cubicaciones</h3>';
     items.forEach(it=>{
       if(it.t!=='it'||!tofData[it.id]||!tofData[it.id].length)return;
       let rows=tofData[it.id],total=rows.reduce((x,r)=>x+(N(r.n)*Math.max(1,N(r.a))*Math.max(1,N(r.l))*Math.max(1,N(r.h))),0);
       cubHtml+=(CFG.cubPrintMode==='por hoja'?'<div style="page-break-before:always;padding:10mm;padding-bottom:30mm">':'')+
-        '<div style="margin-bottom:20px">'+
-        '<div style="font-weight:700;color:'+color+';margin-bottom:5px">'+esc(it.num)+' — '+esc(it.name)+'</div>'+
-        '<table style="width:100%;border-collapse:collapse;font-size:9px"><thead><tr style="background:#f9f9f9;color:#666"><th style="text-align:left;padding:4px 8px">Descripción / Eje</th><th style="text-align:right">Cant.</th><th style="text-align:right">Ancho</th><th style="text-align:right">Largo</th><th style="text-align:right">Alto</th><th style="text-align:right;padding-right:8px">Total</th></tr></thead><tbody>';
-      rows.forEach(r=>cubHtml+='<tr style="border-bottom:1px solid #eee"><td style="padding:3px 8px">'+esc(r.desc)+'</td><td style="text-align:right">'+fmtQ(N(r.n))+'</td><td style="text-align:right">'+fmtQ(N(r.a))+'</td><td style="text-align:right">'+fmtQ(N(r.l))+'</td><td style="text-align:right">'+fmtQ(N(r.h))+'</td><td style="text-align:right;padding-right:8px">'+fmtQ(N(r.n)*Math.max(1,N(r.a))*Math.max(1,N(r.l))*Math.max(1,N(r.h)))+'</td></tr>');
-      cubHtml+='<tr style="font-weight:700;background:#f0f4f8"><td colspan="5" style="padding:4px 8px">TOTAL PARTIDA</td><td style="text-align:right;padding-right:8px">'+fmtQ(total)+' '+esc(it.unit)+'</td></tr></tbody></table></div>'+(CFG.cubPrintMode==='por hoja'?'</div>':'');
+        '<div style="margin-bottom:20px;border:1px solid #eee;border-radius:5px;overflow:hidden">'+
+        '<div style="background:#f9f9f9;padding:8px;display:flex;justify-content:space-between;font-weight:600;color:'+color+'"><span>'+esc(it.num)+' — '+esc(it.name)+'</span><span>'+fmtQ(total)+' '+esc(it.unit)+'</span></div>'+
+        '<table style="width:100%;border-collapse:collapse;font-size:9px"><thead><tr style="background:#fcfcfc"><th style="text-align:left;padding:4px 8px">Descripción / Eje</th><th style="text-align:right">Cant.</th><th style="text-align:right">Ancho</th><th style="text-align:right">Largo</th><th style="text-align:right">Alto</th><th style="text-align:right;padding-right:8px">Total</th></tr></thead><tbody>';
+      rows.forEach(r=>cubHtml+='<tr style="border-top:1px solid #f5f5f5"><td style="padding:3px 8px">'+esc(r.desc)+'</td><td style="text-align:right">'+fmtQ(N(r.n))+'</td><td style="text-align:right">'+fmtQ(N(r.a))+'</td><td style="text-align:right">'+fmtQ(N(r.l))+'</td><td style="text-align:right">'+fmtQ(N(r.h))+'</td><td style="text-align:right;padding-right:8px">'+fmtQ(N(r.n)*Math.max(1,N(r.a))*Math.max(1,N(r.l))*Math.max(1,N(r.h)))+'</td></tr>');
+      cubHtml+='</tbody></table></div>'+(CFG.cubPrintMode==='por hoja'?'</div>':'');
     });
-    cubHtml+='</div>';
   }
 
-  var signatures='<div style="display:flex;justify-content:space-around;margin-top:80px;page-break-inside:avoid">'+
-    '<div style="text-align:center;width:200px;border-top:1px solid #333;padding-top:10px"><div style="font-size:10px;font-weight:700">REPRESENTANTE LEGAL</div><div style="font-size:9px">'+esc(CFG.repLegal)+'</div></div>'+
-    '<div style="text-align:center;width:200px;border-top:1px solid #333;padding-top:10px"><div style="font-size:10px;font-weight:700">PROFESIONAL A CARGO</div><div style="font-size:9px">'+esc(CFG.profName||profesional)+'</div></div>'+
-    '</div>';
-
-  var mparts=margins.split(' ');
-  var footer='<div style="text-align:center;font-size:9px;color:#64748b;border-top:1px solid #eee;position:fixed;bottom:'+mparts[2]+';left:'+mparts[3]+';right:'+mparts[3]+';background:#fff;padding:3px 0">'+
-    '<div style="display:flex;justify-content:space-between;align-items:center;font-size:8px">'+
-      '<div style="flex:1;text-align:left">'+esc(CFG.companyAddress)+' | '+esc(CFG.companyPhone)+' | '+esc(CFG.companyEmail)+'</div>'+
-      '<div style="font-weight:600">Pág. <span class="pageNumber"></span></div>'+
-    '</div>'+
-  '</div>';
-
-  var html='<html><head><title>Informe PresAI - '+esc(obra)+'</title><style>'+
-    'body{font-family:\'IBM Plex Sans\',sans-serif;margin:0;padding:0;color:#333}'+
-    'table{width:100%;border-collapse:collapse}'+
-    'th,td{border:1px solid #eee;padding:4px 6px}th{background:#f5f5f5}'+
-    '.page-break{page-break-before:always}'+
-    '.avoid-break{page-break-inside:avoid}'+
-    '@page{size:'+pageSize+';margin:'+margins+'}'+
-    '@media print{body{counter-reset:page 0}.pageNumber::after{content:counter(page)}}'+
-  '</style></head><body>';
-  
-  if(CFG.printCover){
-    html+='<div style="height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:20mm;box-sizing:border-box;page-break-after:always;margin:0;">'+
-      (CFG.coverImgUrl?'<img src="'+CFG.coverImgUrl+'" style="max-width:85%;max-height:45vh;margin-bottom:30px;object-fit:contain"/>':'')+
-      '<h1 style="font-size:32px;color:'+color+';margin-bottom:10px">'+esc(obra)+'</h1>'+
-      '<h2 style="font-size:18px;color:#666;margin-bottom:40px">PRESUPUESTO DE OBRA</h2>'+
-      '<div style="font-size:14px;line-height:1.6">'+
-        '<p><strong>Mandante:</strong> '+esc(mandante)+'</p>'+
-        '<p><strong>Ubicación:</strong> '+esc(ubic)+'</p>'+
-        '<p><strong>Fecha:</strong> '+esc(fecha)+'</p>'+
-      '</div>'+
-    '</div>';
-  }
-
-  html+='<div style="padding:10mm;padding-bottom:30mm">'+runHdr+
-    '<h3 style="font-size:14px;color:'+color+';border-bottom:2px solid #eee;padding-bottom:5px;margin-bottom:15px">Presupuesto Detallado</h3>'+
-    '<table><thead><tr style="background:#f9f9f9"><th>Ítem</th><th>Descripción</th><th style="text-align:center">Unid</th><th style="text-align:right">Cant.</th><th style="text-align:right">P.Unit.</th><th style="text-align:right">Total</th></tr></thead><tbody>'+trows+'</tbody></table>'+
-    '<div style="width:250px;margin-left:auto;margin-top:20px;font-size:11px">'+
-      '<div style="display:flex;justify-content:space-between;padding:3px 0"><span>Costo Directo</span><span>'+s+' '+fmtB(dc)+'</span></div>'+
-      (!CFG.ggProrrateado?'<div style="display:flex;justify-content:space-between;padding:3px 0"><span>Gastos Generales</span><span>'+s+' '+fmtB(ggV)+'</span></div>':'')+
-      (!CFG.utilProrrateado?'<div style="display:flex;justify-content:space-between;padding:3px 0"><span>Utilidad</span><span>'+s+' '+fmtB(util)+'</span></div>':'')+
-      (!CFG.impProrrateado&&pImp>0?'<div style="display:flex;justify-content:space-between;padding:3px 0"><span>Imprevistos</span><span>'+s+' '+fmtB(imp)+'</span></div>':'')+
-      '<div style="display:flex;justify-content:space-between;padding:5px 0;border-top:1px solid #333;font-weight:700;font-size:13px;color:'+color+'"><span>TOTAL NETO</span><span>'+s+' '+fmtB(net)+'</span></div>'+
-      '<div style="display:flex;justify-content:space-between;padding:3px 0"><span>IVA</span><span>'+s+' '+fmtB(iva)+'</span></div>'+
-      '<div style="display:flex;justify-content:space-between;padding:5px 0;border-top:2px solid #333;font-weight:700;font-size:14px;color:'+color+'"><span>TOTAL GENERAL</span><span>'+s+' '+fmtB(grand)+'</span></div>'+
-    '</div>'+
-    '<p style="font-size:9px;font-style:italic;text-align:right;margin-top:5px">'+numToWords(grand)+'</p>'+
-    (ggHtml||apuHtml||cubHtml?'':signatures)+'</div>'+
-    ggHtml+apuHtml+cubHtml+
-    (ggHtml||apuHtml||cubHtml?'<div style="padding:10mm;padding-bottom:30mm;position:relative;min-height:200px">'+signatures+'</div>':'')+
-    footer+
-  '</body></html>';
-
-  return html;
+  return `<html><head><style>@page{size:${pageSize};margin:0}body{font-family:'IBM Plex Sans',sans-serif;margin:0;padding:0;color:#0f172a}table{width:100%;border-collapse:collapse}th,td{padding:5px;border:1px solid #e2e8f0}h1,h2,h3{margin:0}</style></head><body>
+    <div style="padding:10mm;padding-bottom:30mm">${runHdr}<h2 style="text-align:center;font-size:18px;color:${color};margin:20px 0">PRESUPUESTO DE OBRA</h2>
+    <table><thead><tr style="background:#f1f5f9"><th>Ítem</th><th>Descripción</th><th>Unid</th><th>Cant.</th><th>P.Unit.</th><th>Total</th></tr></thead><tbody>${trows}</tbody></table>
+    <div style="margin-top:20px;display:flex;justify-content:flex-end"><div style="width:250px">
+    <div style="display:flex;justify-content:space-between;padding:4px;border-bottom:1px solid #eee"><span>Costo Directo</span><span>${s} ${fmtB(dc)}</span></div>
+    <div style="display:flex;justify-content:space-between;padding:4px;border-bottom:1px solid #eee"><span>Gastos Generales</span><span>${s} ${fmtB(ggV)}</span></div>
+    <div style="display:flex;justify-content:space-between;padding:4px;border-bottom:1px solid #eee"><span>Utilidad</span><span>${s} ${fmtB(util)}</span></div>
+    <div style="display:flex;justify-content:space-between;padding:4px;border-bottom:2px solid #cbd5e1;font-weight:600"><span>Total Neto</span><span>${s} ${fmtB(net)}</span></div>
+    <div style="display:flex;justify-content:space-between;padding:4px;border-bottom:1px solid #eee"><span>IVA</span><span>${s} ${fmtB(iva)}</span></div>
+    <div style="display:flex;justify-content:space-between;padding:10px;background:#f8fafc;font-size:16px;font-weight:700;color:${color}"><span>TOTAL</span><span>${s} ${fmtB(grand)}</span></div>
+    </div></div></div>${ggHtml}${apuHtml}${cubHtml}</body></html>`;
 }
 
 function doPrint(){
-  var html=genPrintHtml();
-  var win=window.open('','_blank');
-  win.document.write(html);
+  let win=window.open('','_blank');
+  win.document.write(genPrintHtml());
   win.document.close();
   setTimeout(()=>win.print(),500);
 }
 
-/* ── PREVIEW ── */
 function previewReport(){
   document.getElementById('ov').style.display='block';
   document.getElementById('mc').innerHTML=`<div class="modal" style="max-width:900px;max-height:90vh">
@@ -970,7 +956,6 @@ function previewReport(){
   },100);
 }
 
-/* ── HELP ── */
 function openHelp(){
   document.getElementById('ov').style.display='block';
   document.getElementById('mc').innerHTML=`<div class="modal" style="max-width:700px">
@@ -978,14 +963,13 @@ function openHelp(){
     <div class="mb help-content" id="help-body"></div>
   </div>`;
   document.getElementById('help-body').innerHTML=`
-    <div class="help-section"><h5>📋 Pestaña Presupuesto</h5><p>Ingresa las partidas de construcción. Cada partida tiene unidad, cantidad y precio unitario. Los datos del proyecto (nombre obra, mandante, etc.) se configuran en ⚙️.</p></div>
-    <div class="help-section"><h5>💰 Gastos Generales</h5><p>Organiza los gastos generales por subgrupos. Cada subgrupo contiene gastos con Cantidad, Tiempo de Uso y Precio.</p></div>
-    <div class="help-section"><h5>📊 Análisis Unitarios (APU)</h5><p>Desglosa el costo de cada partida en Mano de Obra, Materiales, Equipos y Subcontratos. Incluye Leyes Sociales automáticamente.</p></div>
-    <div class="help-section"><h5>📐 Cubicaciones</h5><p>Define la cantidad mediante mediciones: Cantidad × Ancho × Largo × Alto.</p></div>
+    <div class="help-section"><h5>📋 Pestaña Presupuesto</h5><p>Ingresa las partidas de construcción. Cada partida tiene unidad, cantidad y precio unitario. Los datos del proyecto se configuran en ⚙️.</p></div>
+    <div class="help-section"><h5>💰 Gastos Generales</h5><p>Organiza los gastos generales por subgrupos.</p></div>
+    <div class="help-section"><h5>📊 Análisis Unitarios (APU)</h5><p>Desglosa el costo de cada partida.</p></div>
+    <div class="help-section"><h5>📐 Cubicaciones</h5><p>Define la cantidad mediante mediciones.</p></div>
   `;
 }
 
-/* ── SETTINGS ── */
 function openSettings(){
   document.getElementById('ov').style.display='block';
   let obra=document.getElementById('pObra').value;
@@ -997,8 +981,6 @@ function openSettings(){
   let html='<div class="modal" style="max-width:700px;max-height:90vh;overflow-y:auto">'+
     '<div class="mh"><h3>⚙️ Configuración PresAI</h3><button class="btn-s" onclick="closeMod()">✕</button></div>'+
     '<div class="mb">'+
-
-    /* PROYECTO */
     '<div class="cfg-section"><h4>Proyecto</h4><div class="cfg-grid">'+
       '<div class="cfg-field cfg-field-full"><label>Nombre de la Obra / Proyecto</label><input id="cfg-obra" value="'+esc(obra)+'" oninput="document.getElementById(\'pObra\').value=this.value;syncHdr();markUnsaved()"/></div>'+
       '<div class="cfg-field"><label>Mandante / Cliente</label><input id="cfg-mandante" value="'+esc(mandante)+'" oninput="document.getElementById(\'pMandante\').value=this.value;markUnsaved()"/></div>'+
@@ -1006,496 +988,113 @@ function openSettings(){
       '<div class="cfg-field"><label>Profesional a cargo</label><input id="cfg-profesional" value="'+esc(profesional)+'" oninput="document.getElementById(\'pProfesional\').value=this.value;markUnsaved()"/></div>'+
       '<div class="cfg-field"><label>Fecha</label><input type="date" id="cfg-fecha" value="'+esc(fecha)+'" oninput="document.getElementById(\'pFecha\').value=this.value;markUnsaved()"/></div>'+
     '</div></div>'+
-
-    /* MONEDA */
     '<div class="cfg-section"><h4>Moneda y Decimales</h4><div class="cfg-grid">'+
       '<div class="cfg-field"><label>Moneda</label><select onchange="CFG.currency=this.value;saveCFG();rb();rc();openSettings();">'+
         '<option value="CLP" '+(CFG.currency==='CLP'?'selected':'')+'>CLP ($)</option>'+
         '<option value="USD" '+(CFG.currency==='USD'?'selected':'')+'>USD (US$)</option>'+
         '<option value="UF" '+(CFG.currency==='UF'?'selected':'')+'>UF</option>'+
       '</select></div>'+
-      '<div class="cfg-field"><label>Paridad (1 '+sym()+' = ? CLP)</label><input type="number" value="'+CFG.parity+'" oninput="CFG.parity=N(this.value);saveCFG();rc()" onfocus="this.select()"/></div>'+
+      '<div class="cfg-field"><label>Paridad</label><input type="number" value="'+CFG.parity+'" oninput="CFG.parity=N(this.value);saveCFG();rc()" onfocus="this.select()"/></div>'+
       '<div class="cfg-field"><label>Dec. Cantidades</label><input type="number" value="'+CFG.decimalsQty+'" oninput="CFG.decimalsQty=N(this.value);saveCFG();rb()" onfocus="this.select()"/></div>'+
       '<div class="cfg-field"><label>Dec. P.Unit (APU)</label><input type="number" value="'+CFG.decimalsPrice+'" oninput="CFG.decimalsPrice=N(this.value);saveCFG();rb()" onfocus="this.select()"/></div>'+
       '<div class="cfg-field"><label>Dec. Totales</label><input type="number" value="'+CFG.decimalsBudget+'" oninput="CFG.decimalsBudget=N(this.value);saveCFG();rb()" onfocus="this.select()"/></div>'+
+      '<div class="cfg-field" style="grid-column: span 2"><label class="chk-opt"><input type="checkbox" '+(CFG.alertOnDeleteDetail?'checked':'')+' onchange="CFG.alertOnDeleteDetail=this.checked;saveCFG()"> Alerta al borrar detalle cubicación / APU</label></div>'+
     '</div></div>'+
-
-    /* IMPRESIÓN */
-    '<div class="cfg-section"><h4>Formato de Impresión</h4><div class="cfg-grid">'+
-      '<div class="cfg-field"><label>Tamaño de Hoja</label><select onchange="CFG.pageSize=this.value;saveCFG()">'+
-        '<option value="letter" '+(CFG.pageSize==='letter'?'selected':'')+'>Carta (Letter)</option>'+
-        '<option value="legal" '+(CFG.pageSize==='legal'?'selected':'')+'>Oficio (Legal)</option>'+
-      '</select></div>'+
-    '</div>'+
-    '<div style="margin-top:15px"><label style="font-size:11px;font-weight:600;color:var(--navy);text-transform:uppercase;display:block;margin-bottom:8px">Impresión</label>'+
-      '<label class="chk-opt" style="margin-bottom:8px"><input type="checkbox" '+(CFG.printCover?'checked':'')+' onchange="CFG.printCover=this.checked;saveCFG()"> Portada</label>'+
-      '<div class="print-opt-row"><label><input type="checkbox" '+(CFG.printApu?'checked':'')+' onchange="CFG.printApu=this.checked;saveCFG()"/> APUs</label>'+
-        '<select onchange="CFG.apuPrintMode=this.value;saveCFG()" style="margin-left:auto">'+
-          '<option value="continuo" '+(CFG.apuPrintMode==='continuo'?'selected':'')+'>Continuo</option>'+
-          '<option value="por hoja" '+(CFG.apuPrintMode==='por hoja'?'selected':'')+'>Por hoja</option>'+
-        '</select></div>'+
-      '<div class="print-opt-row"><label><input type="checkbox" '+(CFG.printCub?'checked':'')+' onchange="CFG.printCub=this.checked;saveCFG()"/> Cubicaciones</label>'+
-        '<select onchange="CFG.cubPrintMode=this.value;saveCFG()" style="margin-left:auto">'+
-          '<option value="continuo" '+(CFG.cubPrintMode==='continuo'?'selected':'')+'>Continuo</option>'+
-          '<option value="por hoja" '+(CFG.cubPrintMode==='por hoja'?'selected':'')+'>Por hoja</option>'+
-        '</select></div>'+
-      '<label class="chk-opt" style="margin-top:8px"><input type="checkbox" '+(CFG.printGG?'checked':'')+' onchange="CFG.printGG=this.checked;saveCFG()"> Gastos Generales en Informe</label>'+
-    '</div></div>'+
-
-    /* EMPRESA */
-    '<div class="cfg-section"><h4>Empresa Constructora</h4><div class="cfg-grid">'+
-      '<div class="cfg-field"><label>Nombre</label><input value="'+esc(CFG.companyName)+'" oninput="CFG.companyName=this.value;saveCFG();updBrand()"/></div>'+
-      '<div class="cfg-field"><label>Tagline</label><input value="'+esc(CFG.companyTagline)+'" oninput="CFG.companyTagline=this.value;saveCFG()"/></div>'+
-      '<div class="cfg-field"><label>Dirección</label><input value="'+esc(CFG.companyAddress)+'" oninput="CFG.companyAddress=this.value;saveCFG()"/></div>'+
-      '<div class="cfg-field"><label>Teléfono / Celular</label><input value="'+esc(CFG.companyPhone)+'" oninput="CFG.companyPhone=this.value;saveCFG()"/></div>'+
-      '<div class="cfg-field"><label>Email</label><input value="'+esc(CFG.companyEmail)+'" oninput="CFG.companyEmail=this.value;saveCFG()"/></div>'+
-      '<div class="cfg-field"><label>Web</label><input value="'+esc(CFG.companyWeb)+'" oninput="CFG.companyWeb=this.value;saveCFG()"/></div>'+
-      '<div class="cfg-field"><label>Color Informe</label><input type="color" value="'+CFG.colorHeader+'" oninput="CFG.colorHeader=this.value;saveCFG();applyColor()"/></div>'+
-      '<div class="cfg-field"><label>Logo</label>'+
-        '<div style="display:flex;gap:10px;align-items:center">'+
-          '<button class="bs" onclick="document.getElementById(\'logoInp\').click()">Subir Logo</button>'+
-          (CFG.logoDataUrl?'<img src="'+CFG.logoDataUrl+'" style="height:30px;border:1px solid #eee"/>':'')+
-        '</div>'+
-        '<input type="file" id="logoInp" style="display:none" onchange="hLogo(this)"/>'+
-      '</div>'+
-    '</div></div>'+
-
-    /* FIRMANTES */
-    '<div class="cfg-section"><h4>Firmantes</h4><div class="cfg-grid">'+
-      '<div class="cfg-field"><label>Rep. Legal</label><input value="'+esc(CFG.repLegal)+'" oninput="CFG.repLegal=this.value;saveCFG()"/></div>'+
-      '<div class="cfg-field"><label>Profesional</label><input value="'+esc(CFG.profName)+'" oninput="CFG.profName=this.value;saveCFG()"/></div>'+
-    '</div></div>'+
-
-    /* IMAGEN PORTADA */
-    '<div class="cfg-section"><h4>Imagen Portada</h4>'+
-      '<div style="display:flex;gap:15px;align-items:center">'+
-        '<button class="bs" onclick="document.getElementById(\'covInp\').click()">Subir Imagen Portada</button>'+
-        (CFG.coverImgUrl?'<img src="'+CFG.coverImgUrl+'" style="height:40px;border:1px solid #eee"/><button class="bs del" onclick="CFG.coverImgUrl=\'\';saveCFG();openSettings()">×</button>':'')+
-      '</div>'+
-      '<input type="file" id="covInp" style="display:none" onchange="hCov(this)"/>'+
-    '</div>'+
-
-    /* AUTOSAVE */
-    '<div class="cfg-section"><h4>Guardado Automático</h4><div class="cfg-grid">'+
-      '<label class="chk-opt"><input type="checkbox" '+(CFG.autoSave?'checked':'')+' onchange="CFG.autoSave=this.checked;saveCFG();setupAutoSave()"> Activar Guardado Automático</label>'+
-      '<div class="cfg-field"><label>Intervalo (segundos)</label><input type="number" value="'+CFG.autoSaveInterval+'" oninput="CFG.autoSaveInterval=N(this.value);saveCFG();setupAutoSave()" onfocus="this.select()"/></div>'+
-    '</div></div>'+
-
-    /* PRORRATEO */
-    '<div class="cfg-section"><h4>Prorrateo</h4><div class="chk-opts">'+
-      '<label class="chk-opt"><input type="checkbox" '+(CFG.ggProrrateado?'checked':'')+' onchange="CFG.ggProrrateado=this.checked;saveCFG();rc()"> Prorratear Gastos Generales en APU</label>'+
-      '<label class="chk-opt"><input type="checkbox" '+(CFG.utilProrrateado?'checked':'')+' onchange="CFG.utilProrrateado=this.checked;saveCFG();rc()"> Prorratear Utilidad en APU</label>'+
-      '<label class="chk-opt"><input type="checkbox" '+(CFG.impProrrateado?'checked':'')+' onchange="CFG.impProrrateado=this.checked;saveCFG();rc()"> Prorratear Imprevistos en APU</label>'+
-    '</div></div>'+
-
     '</div>'+
     '<div class="mf"><button class="btn-p blue" onclick="closeMod()">Listo</button></div>'+
   '</div>';
   document.getElementById('mc').innerHTML=html;
 }
-function hLogo(i){let r=new FileReader();r.onload=e=>{CFG.logoDataUrl=e.target.result;saveCFG();updLogoHdr();openSettings();};r.readAsDataURL(i.files[0]);}
-function hCov(i){let r=new FileReader();r.onload=e=>{CFG.coverImgUrl=e.target.result;saveCFG();openSettings();};r.readAsDataURL(i.files[0]);}
 
-/* ── PROJECT MANAGER ── */
+function closeMod(){document.getElementById('ov').style.display='none';}
+function sw(p,t){
+  document.querySelectorAll('.pnl').forEach(x=>x.classList.remove('on'));
+  document.getElementById('p-'+p).classList.add('on');
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));
+  t.classList.add('on');
+}
+function markUnsaved(){isDirty=true;}
+function syncHdr(){updBrand();}
+function hideApp(){document.getElementById('main-app').style.display='none';}
+function showApp(){document.getElementById('main-app').style.display='flex';document.getElementById('wow-screen').style.display='none';}
+
+function setupAutoSave(){
+  if(window._asInt)clearInterval(window._asInt);
+  if(CFG.autoSave)window._asInt=setInterval(()=>{if(isDirty)saveProject();},CFG.autoSaveInterval*1000);
+}
+
+function refreshApuTab(){
+  let cont=document.getElementById('apu-list');
+  let apuItems=items.filter(it=>it.t==='it');
+  cont.innerHTML=apuItems.map(it=>{
+    let ha=apuData[it.id];
+    return `<div class="apu-card ${ha?'done':''}" onclick="openApu('${it.id}')">
+      <div class="apu-card-num">${esc(it.num)}</div>
+      <div class="apu-card-name">${esc(it.name)}</div>
+      <div class="apu-card-price">${sym()} ${fmtP(N(it.price))} / ${esc(it.unit)}</div>
+    </div>`;
+  }).join('');
+}
+
+function refreshCubTab(){
+  let cont=document.getElementById('cub-list');
+  let cubItems=items.filter(it=>it.t==='it');
+  cont.innerHTML=cubItems.map(it=>{
+    let hc=tofData[it.id]&&tofData[it.id].length;
+    return `<div class="apu-card ${hc?'done':''}" onclick="openTof('${it.id}')">
+      <div class="apu-card-num">${esc(it.num)}</div>
+      <div class="apu-card-name">${esc(it.name)}</div>
+      <div class="apu-card-price">${fmtQ(N(it.qty))} ${esc(it.unit)}</div>
+    </div>`;
+  }).join('');
+}
+
 function newProject(){
   if(isDirty&&!confirm('¿Descartar cambios?'))return;
   currentProjectId=null;isDirty=false;
   items=[{id:gid(),t:'ch',num:'1.-',name:'',unit:'',qty:0,price:0,isApu:false,isCub:false},{id:gid(),t:'it',num:'1.1',name:'',unit:'',qty:0,price:0,isApu:false,isCub:false}];
   ggSubgroups=[];apuData={};tofData={};
-  CFG.coverImgUrl='';
-  ['pObra','pMandante','pUbicacion','pProfesional'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('pFecha').value=new Date().toISOString().split('T')[0];
   rb();renderGGSubgroups();updBrand();closeMod();syncHdr();showApp();
 }
 
 function saveProject(){
   let obra=document.getElementById('pObra').value.trim();
-  if(!obra){alert('Nombre de obra requerido. Por favor, ingrésalo en ⚙️ Configuración.');openSettings();return;}
+  if(!obra){alert('Nombre de obra requerido.');openSettings();return;}
   if(!currentProjectId)currentProjectId='proj_'+Date.now();
-  let p={
-    id:currentProjectId,
-    obra,
-    mandante:document.getElementById('pMandante').value,
-    ubicacion:document.getElementById('pUbicacion').value,
-    profesional:document.getElementById('pProfesional').value,
-    fecha:document.getElementById('pFecha').value,
-    items,ggSubgroups,apuData,tofData,
-    pGG:document.getElementById('pGG').value,
-    pUtil:document.getElementById('pUtil').value,
-    pImp:document.getElementById('pImp').value,
-    pIVA:document.getElementById('pIVA').value,
-    ggFijo:document.getElementById('ggFijo').checked,
-    coverImgUrl:CFG.coverImgUrl
-  };
+  let p={id:currentProjectId,obra,items,ggSubgroups,apuData,tofData};
   lsS('od_proj_'+currentProjectId,p);
   let idx=getIdx(),e=idx.find(x=>x.id===currentProjectId);
   if(e){e.obra=obra;e.savedAt=new Date().toISOString();}else idx.unshift({id:currentProjectId,obra,savedAt:new Date().toISOString()});
-  saveIdx(idx);isDirty=false;alert('Guardado');syncHdr();
+  saveIdx(idx);isDirty=false;syncHdr();
 }
 
 function openProjects(){
-  let mainApp=document.getElementById('main-app');
-  if(mainApp.style.display==='none'||mainApp.style.display===''){showApp();}
+  showApp();
   let idx=getIdx();
   document.getElementById('ov').style.display='block';
-  let html='<div class="modal" style="max-width:500px">'+
-    '<div class="mh"><h3>Mis Proyectos</h3><button class="btn-s" onclick="closeMod()">✕</button></div>'+
-    '<div class="mb">'+
-    '<button class="btn-p blue" style="width:100%;margin-bottom:15px" onclick="newProject()">+ Crear Nuevo Proyecto</button>';
-  if(idx.length===0){
-    html+='<div style="padding:20px;text-align:center;color:#94a3b8">No hay proyectos guardados</div>';
-  } else {
-    idx.forEach(p=>{
-      html+='<div style="padding:10px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center">'+
-        '<div onclick="loadP(\''+p.id+'\')" style="cursor:pointer;flex:1"><strong>'+esc(p.obra)+'</strong><br/><small>'+p.savedAt+'</small></div>'+
-        '<div class="proj-menu" style="position:relative">'+
-          '<button class="proj-menu-btn" onclick="this.nextElementSibling.classList.toggle(\'show\')">⋮</button>'+
-          '<div class="proj-menu-content">'+
-            '<div class="proj-menu-item" onclick="dupP(\''+p.id+'\')">📋 Duplicar</div>'+
-            '<div class="proj-menu-item" onclick="renP(\''+p.id+'\')">✏️ Renombrar</div>'+
-            '<div class="proj-menu-item" onclick="exportXlsx(\''+p.id+'\')">📊 Exportar Excel</div>'+
-            '<div class="proj-menu-item" onclick="delP(\''+p.id+'\')">🗑️ Eliminar</div>'+
-          '</div>'+
-        '</div>'+
-      '</div>';
-    });
-  }
+  let html='<div class="modal" style="max-width:500px"><div class="mh"><h3>Mis Proyectos</h3><button class="btn-s" onclick="closeMod()">✕</button></div><div class="mb"><button class="btn-p blue" style="width:100%;margin-bottom:15px" onclick="newProject()">+ Crear Nuevo Proyecto</button>';
+  if(idx.length===0)html+='<p style="text-align:center;color:#94a3b8;padding:20px">No hay proyectos guardados.</p>';
+  else idx.forEach(p=>html+=`<div style="display:flex;justify-content:space-between;align-items:center;padding:10px;border-bottom:1px solid #eee"><div><div style="font-weight:600;color:var(--navy);cursor:pointer" onclick="loadProject('${p.id}')">${esc(p.obra)}</div><div style="font-size:9px;color:#94a3b8">${new Date(p.savedAt).toLocaleString()}</div></div><button class="bs del" onclick="deleteProject('${p.id}')">×</button></div>`);
   html+='</div></div>';
   document.getElementById('mc').innerHTML=html;
 }
 
-function loadP(id){
-  let p=lsL('od_proj_'+id);if(!p)return;
-  currentProjectId=id;items=p.items;ggSubgroups=p.ggSubgroups||[];apuData=p.apuData;tofData=p.tofData;
-  CFG.coverImgUrl=p.coverImgUrl||'';
+function loadProject(id){
+  let p=lsL('od_proj_'+id);
+  if(!p)return;
+  currentProjectId=id;items=p.items;ggSubgroups=p.ggSubgroups||[];apuData=p.apuData||{};tofData=p.tofData||{};
   document.getElementById('pObra').value=p.obra;
-  document.getElementById('pMandante').value=p.mandante||'';
-  document.getElementById('pUbicacion').value=p.ubicacion||'';
-  document.getElementById('pProfesional').value=p.profesional||'';
-  document.getElementById('pFecha').value=p.fecha||'';
-  document.getElementById('pGG').value=p.pGG;
-  document.getElementById('pUtil').value=p.pUtil;
-  document.getElementById('pImp').value=p.pImp;
-  document.getElementById('pIVA').value=p.pIVA;
-  document.getElementById('ggFijo').checked=p.ggFijo;
-  rb();renderGGSubgroups();closeMod();syncHdr();showApp();
+  rb();renderGGSubgroups();syncHdr();closeMod();
 }
 
-function dupP(id){
-  let p=lsL('od_proj_'+id);if(!p)return;
-  let newId='proj_'+Date.now();p.id=newId;
-  lsS('od_proj_'+newId,p);
-  let idx=getIdx();idx.unshift({id:newId,obra:p.obra+' (copia)',savedAt:new Date().toISOString()});
-  saveIdx(idx);openProjects();
-}
-function renP(id){
-  let p=lsL('od_proj_'+id);if(!p)return;
-  let newName=prompt('Nuevo nombre:',p.obra);
-  if(newName){p.obra=newName;lsS('od_proj_'+id,p);let idx=getIdx(),e=idx.find(x=>x.id===id);if(e)e.obra=newName;saveIdx(idx);openProjects();}
-}
-function delP(id){if(confirm('¿Eliminar?')){lsD('od_proj_'+id);saveIdx(getIdx().filter(x=>x.id!==id));openProjects();}}
-
-function closeMod(){document.getElementById('ov').style.display='none';}
-function sw(id,el){
-  document.querySelectorAll('.pnl').forEach(p=>p.classList.remove('on'));
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
-  document.getElementById('p-'+id).classList.add('on');el.classList.add('on');
-  if(id==='apu')refreshApuTab();
-  if(id==='cub')refreshCubTab();
-}
-function syncHdr(){
-  let el=document.getElementById('pObra');if(!el)return;
-  document.getElementById('hdrProj').style.display='flex';
-  document.getElementById('hdrProjName').textContent=el.value||'Proyecto';
-}
-function markUnsaved(){isDirty=true;}
-
-function refreshApuTab(){
-  let grid=document.getElementById('apu-list-grid'),empty=document.getElementById('apu-list-empty');
-  let apus=items.filter(it=>it.t==='it'&&apuData[it.id]);
-  if(!apus.length){grid.style.display='none';empty.style.display='block';}
-  else{
-    grid.style.display='grid';empty.style.display='none';
-    grid.innerHTML=apus.map(it=>`<div class="tot-card" style="cursor:pointer" onclick="openApu('${it.id}')">
-      <div style="font-weight:600;color:var(--navy)">${it.num} ${esc(it.name)}</div>
-      <div style="text-align:right;font-family:var(--mono)">${sym()} ${fmtP(it.price)}</div>
-    </div>`).join('');
+function deleteProject(id){
+  if(confirm('¿Eliminar proyecto definitivamente?')){
+    lsD('od_proj_'+id);
+    let idx=getIdx().filter(x=>x.id!==id);
+    saveIdx(idx);openProjects();
   }
 }
 
-function refreshCubTab(){
-  let grid=document.getElementById('cub-list-grid'),empty=document.getElementById('cub-list-empty');
-  let cubs=items.filter(it=>it.t==='it'&&tofData[it.id]&&tofData[it.id].length);
-  if(!cubs.length){grid.style.display='none';empty.style.display='block';}
-  else{
-    grid.style.display='grid';empty.style.display='none';
-    grid.innerHTML=cubs.map(it=>{
-      let total=tofData[it.id].reduce((x,r)=>x+(N(r.n)*Math.max(1,N(r.a))*Math.max(1,N(r.l))*Math.max(1,N(r.h))),0);
-      return `<div class="tot-card" style="cursor:pointer" onclick="openTof('${it.id}')">
-        <div style="font-weight:600;color:var(--magenta)">${it.num} ${esc(it.name)}</div>
-        <div style="text-align:right;font-family:var(--mono)">${fmtQ(total)} ${esc(it.unit)}</div>
-      </div>`;
-    }).join('');
-  }
-}
-
-function setupAutoSave(){
-  if(autoSaveInterval)clearInterval(autoSaveInterval);
-  if(CFG.autoSave&&currentProjectId){
-    autoSaveInterval=setInterval(()=>{if(isDirty)saveProject();},CFG.autoSaveInterval*1000);
-  }
-}
-
-function showApp(){
-  document.getElementById('wow-screen').style.display='none';
-  document.getElementById('main-app').style.display='flex';
-}
-function hideApp(){
-  document.getElementById('wow-screen').style.display='flex';
-  document.getElementById('main-app').style.display='none';
-}
-
-/* ── EXPORT XLSX ── */
-function exportXlsx(projId){
-  /* Cargar proyecto si es distinto al actual */
-  let p=lsL('od_proj_'+projId);
-  if(!p){alert('Proyecto no encontrado');return;}
-
-  /* Usamos la misma lógica de cálculo pero sobre los datos del proyecto guardado */
-  const pitems=p.items||[];
-  const pGGSubs=p.ggSubgroups||[];
-  const pApuData=p.apuData||{};
-  const pTofData=p.tofData||{};
-  const pGGpct=parseFloat(p.pGG)||0;
-  const pUtilpct=parseFloat(p.pUtil)||0;
-  const pImppct=parseFloat(p.pImp)||0;
-  const pIVApct=parseFloat(p.pIVA)||19;
-  const ggFijo=p.ggFijo||false;
-
-  /* ── helpers ── */
-  function fmtNum(n){return isNaN(n)?0:Math.round(n*100)/100;}
-  function cell(v,t){return {v,t:t||'s'};}
-  function numCell(v){return {v:fmtNum(v),t:'n'};}
-  function hdrCell(v){return {v,t:'s',s:{font:{bold:true}}};}
-
-  /* ── Renumerar ítems ── */
-  let cn=0,itn=0,cc=0;
-  const numbered=pitems.map(it=>{
-    if(it.t==='ch'){cn++;itn=0;cc=cn;return Object.assign({},it,{num:cn+'.-'});}
-    itn++;return Object.assign({},it,{num:cc+'.'+itn});
-  });
-
-  /* ── Totales presupuesto ── */
-  const dc=pitems.reduce((a,it)=>it.t==='it'?a+(parseFloat(it.qty)||0)*(parseFloat(it.price)||0):a,0);
-  const ggV=ggFijo?dc*(pGGpct/100):pGGSubs.reduce((a,sg)=>a+sg.items.reduce((b,it)=>b+(parseFloat(it.qty)||0)*(parseFloat(it.tiempoUso)||0)*(parseFloat(it.price)||0),0),0);
-  const util=(dc+ggV)*(pUtilpct/100);
-  const imp=dc*(pImppct/100);
-  const net=dc+ggV+util+imp;
-  const iva=net*(pIVApct/100);
-  const grand=net+iva;
-
-  /* ════════════════════════
-     Construir workbook manualmente como CSV-in-XML (XML Spreadsheet 2003)
-     para máxima compatibilidad sin dependencias externas
-  ════════════════════════ */
-
-  function escXml(s){
-    return (s||'').toString()
-      .replace(/&/g,'&amp;')
-      .replace(/</g,'&lt;')
-      .replace(/>/g,'&gt;')
-      .replace(/"/g,'&quot;');
-  }
-
-  /* ── Row helpers ── */
-  function strRow(cells){
-    return '<Row>'+cells.map(c=>`<Cell><Data ss:Type="String">${escXml(c)}</Data></Cell>`).join('')+'</Row>\n';
-  }
-  function numRow(cells){
-    /* cells: array de {v, formula?, label?}
-       si tiene formula: usa Formula en el Cell
-       si v es número: Number, si es string: String */
-    return '<Row>'+cells.map(c=>{
-      if(c===null||c===undefined)return '<Cell><Data ss:Type="String"></Data></Cell>';
-      if(typeof c==='object'&&c.formula){
-        return `<Cell ss:Formula="${escXml(c.formula)}"><Data ss:Type="Number">0</Data></Cell>`;
-      }
-      if(typeof c==='object'&&c.label!==undefined){
-        return `<Cell><Data ss:Type="String">${escXml(c.label)}</Data></Cell>`;
-      }
-      if(typeof c==='number'||typeof c==='object'&&c.v!==undefined){
-        const v=typeof c==='number'?c:c.v;
-        return `<Cell><Data ss:Type="Number">${isNaN(v)?0:v}</Data></Cell>`;
-      }
-      return `<Cell><Data ss:Type="String">${escXml(c)}</Data></Cell>`;
-    }).join('')+'</Row>\n';
-  }
-  function boldRow(cells){
-    return '<Row>'+cells.map(c=>`<Cell ss:StyleID="hdr"><Data ss:Type="String">${escXml(c)}</Data></Cell>`).join('')+'</Row>\n';
-  }
-  function emptyRow(){return '<Row><Cell><Data ss:Type="String"></Data></Cell></Row>\n';}
-
-  /* ══════════════════
-     HOJA 1: PRESUPUESTO
-  ══════════════════ */
-  let ws1='<Worksheet ss:Name="Presupuesto">\n<Table>\n';
-  ws1+='<Column ss:Width="55"/><Column ss:Width="220"/><Column ss:Width="55"/><Column ss:Width="70"/><Column ss:Width="100"/><Column ss:Width="110"/>\n';
-  ws1+=boldRow(['Ítem','Descripción','Unid','Cantidad','P. Unit. (CLP)','Total (CLP)']);
-
-  /* Construir filas con referencias para que subtotales y totales tengan fórmulas */
-  let rowNum=2; // empieza en 2 (row 1 = header)
-  const chapterRows={}; // {chId: [startRow, endRow]}
-  let curChStart=null,curChId=null;
-
-  numbered.forEach((it,idx)=>{
-    if(it.t==='ch'){
-      if(curChId!==null) chapterRows[curChId].end=rowNum-1;
-      curChId=it.id;curChStart=rowNum;
-      chapterRows[it.id]={start:null,end:null,summaryRow:rowNum};
-      ws1+=`<Row ss:StyleID="ch"><Cell><Data ss:Type="String">${escXml(it.num)}</Data></Cell><Cell><Data ss:Type="String">${escXml(it.name)}</Data></Cell><Cell/><Cell/><Cell/><Cell><Data ss:Type="Number">0</Data></Cell></Row>\n`;
-      rowNum++;
-    } else {
-      const qty=parseFloat(it.qty)||0;
-      const price=parseFloat(it.price)||0;
-      const colE=`E${rowNum}`,colD=`D${rowNum}`;
-      ws1+=`<Row><Cell><Data ss:Type="String">${escXml(it.num)}</Data></Cell><Cell><Data ss:Type="String">${escXml(it.name)}</Data></Cell><Cell><Data ss:Type="String">${escXml(it.unit||'')}</Data></Cell><Cell><Data ss:Type="Number">${qty}</Data></Cell><Cell><Data ss:Type="Number">${price}</Data></Cell><Cell ss:Formula="=D${rowNum}*E${rowNum}"><Data ss:Type="Number">${qty*price}</Data></Cell></Row>\n`;
-      if(curChId!==null){
-        if(chapterRows[curChId].start===null)chapterRows[curChId].start=rowNum;
-        chapterRows[curChId].end=rowNum;
-      }
-      rowNum++;
-    }
-  });
-
-  /* Ahora re-escribir las filas de capítulo con fórmulas SUMA reales */
-  /* Como ya construimos el XML, hacemos un post-fix: reemplazar la celda de Total de capítulo */
-  /* Más simple: agregamos resumen al final */
-  ws1+=emptyRow(); rowNum++;
-
-  /* Resumen de totales */
-  const dcRow=rowNum;
-  ws1+=strRow(['Costo Directo','','','','',String(fmtNum(dc))]);rowNum++;
-  ws1+=strRow(['Gastos Generales','','','','',String(fmtNum(ggV))]);rowNum++;
-  ws1+=strRow(['Utilidad ('+pUtilpct+'%)','','','','',String(fmtNum(util))]);rowNum++;
-  if(pImppct>0){ws1+=strRow(['Imprevistos ('+pImppct+'%)','','','','',String(fmtNum(imp))]);rowNum++;}
-  ws1+=strRow(['Total Neto','','','','',String(fmtNum(net))]);rowNum++;
-  ws1+=strRow(['IVA ('+pIVApct+'%)','','','','',String(fmtNum(iva))]);rowNum++;
-  ws1+=boldRow(['TOTAL GENERAL','','','','',String(fmtNum(grand))]);rowNum++;
-  ws1+='</Table>\n</Worksheet>\n';
-
-  /* ══════════════════
-     HOJA 2: APU
-  ══════════════════ */
-  let ws2='<Worksheet ss:Name="APU">\n<Table>\n';
-  ws2+='<Column ss:Width="55"/><Column ss:Width="180"/><Column ss:Width="55"/><Column ss:Width="70"/><Column ss:Width="100"/><Column ss:Width="110"/>\n';
-
-  pitems.filter(it=>it.t==='it'&&pApuData[it.id]).forEach(it=>{
-    const a=pApuData[it.id];
-    ws2+=boldRow([it.num+' — '+it.name,'','','','P.U.:',String(fmtNum(parseFloat(it.price)||0))]);
-    ws2+=boldRow(['Categoría','Descripción','Unid','Rendimiento','P.U.','Subtotal']);
-    const titles=['Mano de Obra','Materiales','Equipos y Herramientas','Subcontratos'];
-    titles.forEach((t,si)=>{
-      (a.secs[si].rows||[]).forEach(r=>{
-        const qty=parseFloat(r.qty)||0;
-        const price=parseFloat(r.price)||0;
-        ws2+=`<Row><Cell><Data ss:Type="String">${escXml(t)}</Data></Cell><Cell><Data ss:Type="String">${escXml(r.desc||'')}</Data></Cell><Cell><Data ss:Type="String">${escXml(r.unit||'')}</Data></Cell><Cell><Data ss:Type="Number">${qty}</Data></Cell><Cell><Data ss:Type="Number">${price}</Data></Cell><Cell><Data ss:Type="Number">${fmtNum(qty*price)}</Data></Cell></Row>\n`;
-      });
-    });
-    const mo=(a.secs[0].rows||[]).reduce((x,r)=>x+(parseFloat(r.qty)||0)*(parseFloat(r.price)||0),0);
-    const pct=(parseFloat(a.ls.afp||0)+parseFloat(a.ls.salud||0)+parseFloat(a.ls.seguro||0)+parseFloat(a.ls.mutual||0)+parseFloat(a.ls.sis||0)+parseFloat(a.ls.sanna||0)+parseFloat(a.ls.otros||0));
-    const ls=a.ls.on?mo*(pct/100):0;
-    ws2+=strRow(['Leyes Sociales ('+pct.toFixed(1)+'%)','','','','',String(fmtNum(ls))]);
-    ws2+=boldRow(['TOTAL UNITARIO','','','','',String(fmtNum(parseFloat(it.price)||0))]);
-    ws2+=emptyRow();
-  });
-  ws2+='</Table>\n</Worksheet>\n';
-
-  /* ══════════════════
-     HOJA 3: CUBICACIONES
-  ══════════════════ */
-  let ws3='<Worksheet ss:Name="Cubicaciones">\n<Table>\n';
-  ws3+='<Column ss:Width="180"/><Column ss:Width="70"/><Column ss:Width="70"/><Column ss:Width="70"/><Column ss:Width="70"/><Column ss:Width="90"/>\n';
-
-  pitems.filter(it=>it.t==='it'&&pTofData[it.id]&&pTofData[it.id].length).forEach(it=>{
-    ws3+=boldRow([it.num+' — '+it.name]);
-    ws3+=boldRow(['Descripción / Eje','Cant.','Ancho','Largo','Alto','Total']);
-    let total=0;
-    let tofRowNum=3; // aproximado, para fórmulas relativas
-    (pTofData[it.id]||[]).forEach((r,ri)=>{
-      const n=parseFloat(r.n)||0;
-      const a=Math.max(1,parseFloat(r.a)||1);
-      const l=Math.max(1,parseFloat(r.l)||1);
-      const h=Math.max(1,parseFloat(r.h!==undefined?r.h:1)||1);
-      const tot=n*a*l*h;
-      total+=tot;
-      ws3+=`<Row><Cell><Data ss:Type="String">${escXml(r.desc||'')}</Data></Cell><Cell><Data ss:Type="Number">${n}</Data></Cell><Cell><Data ss:Type="Number">${a}</Data></Cell><Cell><Data ss:Type="Number">${l}</Data></Cell><Cell><Data ss:Type="Number">${h}</Data></Cell><Cell ss:Formula="=B${tofRowNum}*C${tofRowNum}*D${tofRowNum}*E${tofRowNum}"><Data ss:Type="Number">${fmtNum(tot)}</Data></Cell></Row>\n`;
-      tofRowNum++;
-    });
-    ws3+=boldRow(['TOTAL PARTIDA','','','','',String(fmtNum(total))+' '+escXml(it.unit||'')]);
-    ws3+=emptyRow();
-  });
-  ws3+='</Table>\n</Worksheet>\n';
-
-  /* ══════════════════
-     HOJA 4: GASTOS GENERALES
-  ══════════════════ */
-  let ws4='<Worksheet ss:Name="Gastos Generales">\n<Table>\n';
-  ws4+='<Column ss:Width="200"/><Column ss:Width="60"/><Column ss:Width="70"/><Column ss:Width="80"/><Column ss:Width="100"/><Column ss:Width="110"/>\n';
-  ws4+=boldRow(['Descripción','Unid','Cantidad','Tiempo Uso','Precio Unit.','Subtotal']);
-
-  let ggTotal=0;
-  let ggR=2;
-  pGGSubs.forEach(sg=>{
-    const sgTotal=sg.items.reduce((a,it)=>a+(parseFloat(it.qty)||0)*(parseFloat(it.tiempoUso)||0)*(parseFloat(it.price)||0),0);
-    ggTotal+=sgTotal;
-    ws4+=boldRow([sg.name,'','','','',String(fmtNum(sgTotal))]);
-    ggR++;
-    sg.items.forEach(it=>{
-      const qty=parseFloat(it.qty)||0;
-      const tuso=parseFloat(it.tiempoUso)||0;
-      const price=parseFloat(it.price)||0;
-      const sub=qty*tuso*price;
-      ws4+=`<Row><Cell><Data ss:Type="String">${escXml(it.desc||'')}</Data></Cell><Cell><Data ss:Type="String">${escXml(it.unit||'')}</Data></Cell><Cell><Data ss:Type="Number">${qty}</Data></Cell><Cell><Data ss:Type="Number">${tuso}</Data></Cell><Cell><Data ss:Type="Number">${price}</Data></Cell><Cell ss:Formula="=C${ggR}*D${ggR}*E${ggR}"><Data ss:Type="Number">${fmtNum(sub)}</Data></Cell></Row>\n`;
-      ggR++;
-    });
-    ws4+=emptyRow();ggR++;
-  });
-  ws4+=boldRow(['TOTAL GASTOS GENERALES','','','','',String(fmtNum(ggTotal))]);
-  ws4+='</Table>\n</Worksheet>\n';
-
-  /* ══════════════════
-     Armar XML final (XML Spreadsheet 2003 — .xls que Excel y LibreOffice abren nativamente)
-  ══════════════════ */
-  const xml=`<?xml version="1.0" encoding="UTF-8"?>
-<?mso-application progid="Excel.Sheet"?>
-<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
-  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
-  xmlns:x="urn:schemas-microsoft-com:office:excel">
-<Styles>
-  <Style ss:ID="hdr">
-    <Font ss:Bold="1"/>
-    <Interior ss:Color="#D6E4F7" ss:Pattern="Solid"/>
-  </Style>
-  <Style ss:ID="ch">
-    <Font ss:Bold="1" ss:Color="#1E3A5F"/>
-    <Interior ss:Color="#E8EEF7" ss:Pattern="Solid"/>
-  </Style>
-</Styles>
-${ws1}${ws2}${ws3}${ws4}</Workbook>`;
-
-  /* Descargar */
-  const blob=new Blob([xml],{type:'application/vnd.ms-excel;charset=utf-8'});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');
-  a.href=url;
-  const nombre=(p.obra||'Presupuesto').replace(/\s+/g,'_');
-  a.download=nombre+'_'+new Date().toISOString().slice(0,10)+'.xls';
-  document.body.appendChild(a);a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-}
-
-/* ── INIT ── */
 loadCFG();
 rb();
 renderGGSubgroups();
