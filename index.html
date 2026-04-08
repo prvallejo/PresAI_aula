@@ -170,134 +170,62 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
 .gg-actions{display:flex;gap:4px;justify-content:flex-end}
 
 /* ── APU ── */
-.sec-wrap{margin-bottom:10px}
-.sec-hdr{display:flex;align-items:center;justify-content:space-between;padding:5px 10px;border-radius:5px;margin-bottom:3px}
-.s-mo{background:#eff6ff;color:#1d4ed8}.s-mat{background:#f0fdf4;color:#15803d}
-.s-eq{background:#fffbeb;color:#92400e}.s-sub{background:#fdf4ff;color:#7e22ce}
-.sec-hdr .sl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
-.sec-hdr .st{font-family:var(--mono);font-size:12px;font-weight:600}
-.at{width:100%;border-collapse:collapse}
-.at th{font-size:9px;font-weight:600;color:var(--txt2);text-transform:uppercase;letter-spacing:.5px;padding:5px;border-bottom:1px solid var(--border2);text-align:left;background:var(--bg2)}
-.at th.r{text-align:right}
-.at td{padding:3px 4px;border-bottom:1px solid var(--border)}
-.at tr:last-child td{border-bottom:none}
-.at input, .at select{font-family:var(--ff);font-size:12px;background:transparent;border:none;border-bottom:1px solid transparent;outline:none;width:100%;color:var(--txt);padding:2px 3px}
-.at input:focus, .at select:focus{border-bottom-color:var(--navy)}
-.at .r{text-align:right;font-family:var(--mono)}.at .mn{font-family:var(--mono);text-align:right;font-size:11px}
-.ls-box{background:rgba(180,83,8,.04);border:1px solid rgba(180,83,8,.2);border-left:4px solid var(--amber);border-radius:0 8px 8px 0;padding:12px 14px;margin-top:10px}
-.ls-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px}
-.ls-title{font-size:10px;font-weight:600;color:var(--amber);text-transform:uppercase;letter-spacing:.5px}
-.ls-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:7px}
-.li{display:flex;flex-direction:column;gap:3px}
-.li label{font-size:9px;color:var(--txt2);font-weight:500}
-.li input{font-family:var(--mono);font-size:12px;border:1px solid var(--border2);border-radius:4px;padding:3px 6px;background:var(--bg);color:var(--txt);text-align:right}
-.li input:focus{outline:none;border-color:var(--amber)}
-.ls-foot{display:flex;justify-content:space-between;align-items:center;padding-top:8px;border-top:1px dashed rgba(180,83,8,.2)}
-.ls-foot .lt{font-size:10px;color:var(--txt2)}
-.ls-foot .lv{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--amber)}
+.apu-list-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.apu-card{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px;cursor:pointer;transition:all .2s}
+.apu-card:hover{border-color:var(--navy);box-shadow:0 4px 12px rgba(0,0,0,.05)}
+.apu-card-hdr{display:flex;justify-content:space-between;margin-bottom:8px}
+.apu-card-num{font-family:var(--mono);font-size:11px;color:var(--txt3)}
+.apu-card-name{font-weight:600;font-size:13px;color:var(--navy);margin-bottom:10px;line-height:1.3}
+.apu-card-tot{font-family:var(--mono);font-size:14px;font-weight:600;color:var(--txt)}
 
-/* ── TOF (Cubicaciones) — ahora con columna ALTO ── */
-.tof-hdr{display:grid;grid-template-columns:1fr 55px 55px 55px 55px 80px 30px;background:var(--bg2);border-bottom:1px solid var(--border2);padding:0 8px}
-.tof-hdr span{padding:8px 4px;font-size:9px;font-weight:600;color:var(--txt2);text-transform:uppercase}
-.tof-row{display:grid;grid-template-columns:1fr 55px 55px 55px 55px 80px 30px;border-bottom:1px solid var(--border);padding:0 8px;align-items:center}
-.tof-row input{font-size:12px;padding:6px 4px;border:none;background:transparent;outline:none;width:100%}
-.tof-row input:focus{background:var(--bg2)}
-.tof-row .r{text-align:right;font-family:var(--mono)}
-.tof-row .st{font-family:var(--mono);font-size:12px;text-align:right;padding:6px 4px;font-weight:500}
+/* ── SETTINGS TABS ── */
+.cfg-tabs{display:flex;gap:10px;border-bottom:1px solid var(--border);margin-bottom:15px}
+.cfg-tab{padding:8px 12px;font-size:11px;font-weight:600;color:var(--txt2);cursor:pointer;border-bottom:2px solid transparent;text-transform:uppercase}
+.cfg-tab.on{color:var(--navy);border-bottom-color:var(--navy)}
 
-/* ── PRINT STYLES ── */
-@media print {
-  @page { size: landscape; margin: 10mm 10mm 20mm 10mm; }
-  body { background: #fff; font-size: 10pt; }
-  .no-print { display: none !important; }
-  .page-break { page-break-before: always; }
-  .avoid-break { page-break-inside: avoid; }
+.cfg-section{margin-bottom:20px}
+.cfg-section h4{font-size:12px;color:var(--navy);margin-bottom:12px;border-bottom:1px solid var(--border);padding-bottom:5px;text-transform:uppercase;letter-spacing:0.5px}
+.cfg-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.cfg-field{display:flex;flex-direction:column;gap:4px}
+.cfg-field-full{grid-column:span 2}
+.cfg-field label{font-size:10px;font-weight:600;color:var(--txt2);text-transform:uppercase}
+.cfg-field input,.cfg-field select{padding:7px 10px;border:1px solid var(--border2);border-radius:6px;font-size:12px;font-family:var(--ff)}
+.cfg-field input:focus{outline:none;border-color:var(--navy)}
+.chk-opt{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--txt);cursor:pointer}
+.print-opt-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+
+@media print{
+  .no-print{display:none!important}
+  body{background:#fff}
+  .app{max-width:none;margin:0}
 }
-
-/* ── CONFIG MODAL ── */
-.cfg-section{margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--border)}
-.cfg-section:last-child{border:none}
-.cfg-section h4{font-size:11px;color:var(--navy);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;font-weight:700}
-.cfg-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 16px}
-.cfg-field-full{grid-column:1/-1}
-.cfg-field label{display:block;font-size:10px;color:var(--txt2);margin-bottom:4px;font-weight:500}
-.cfg-field input,.cfg-field select{width:100%;padding:6px 8px;font-size:12px;border:1px solid var(--border2);border-radius:5px;outline:none;font-family:var(--ff)}
-.cfg-field input:focus{border-color:var(--navy)}
-.chk-opts{display:flex;flex-direction:column;gap:8px}
-.chk-opt{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--txt);cursor:pointer}
-.print-opt-row{display:flex;align-items:center;gap:12px;font-size:11px;margin-bottom:8px}
-.print-opt-row label{margin:0}
-.print-opt-row select{width:120px;padding:4px 6px;font-size:11px;border:1px solid var(--border2);border-radius:4px}
-
-/* ── HELP MODAL ── */
-.help-content{font-size:12px;line-height:1.6;color:var(--txt)}
-.help-section{margin-bottom:16px}
-.help-section h5{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:8px}
-.help-section p{margin-bottom:6px;color:var(--txt2)}
-.help-section ul{margin-left:16px;margin-bottom:8px}
-.help-section li{margin-bottom:4px}
-
-/* ── PREVIEW MODAL ── */
-.preview-frame{width:100%;height:600px;border:1px solid var(--border);border-radius:5px}
-
-/* ── GG ADD SELECT ── */
-.gg-add-select{
-  flex:1;padding:10px 14px;border:2px dashed var(--border2);border-radius:8px;
-  font-family:var(--ff);font-size:13px;font-weight:500;color:var(--navy);background:var(--bg);
-  cursor:pointer;outline:none;transition:all .2s;appearance:none;-webkit-appearance:none;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%231e3a5f' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:right 12px center;padding-right:36px;
-}
-.gg-add-select:hover{border-color:var(--navy);background-color:var(--navy-lt);box-shadow:0 2px 8px rgba(30,58,95,0.12);}
-.gg-add-select:focus{border-color:var(--navy);border-style:solid;box-shadow:0 0 0 3px rgba(30,58,95,0.15);}
-
-.gg-add-btn-select{
-  padding:12px 24px;border:none;border-radius:8px;font-family:var(--ff);font-size:14px;font-weight:600;
-  color:white;background:var(--navy);cursor:pointer;outline:none;transition:all .2s;
-  appearance:none;-webkit-appearance:none;box-shadow:0 4px 12px rgba(30,58,95,0.25);
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:right 12px center;padding-right:36px;
-}
-.gg-add-btn-select:hover{background:linear-gradient(135deg, var(--navy) 0%, #0f2847 100%);box-shadow:0 6px 16px rgba(30,58,95,0.35);transform:translateY(-2px);}
-.gg-add-btn-select:focus{box-shadow:0 0 0 4px rgba(30,58,95,0.2), 0 4px 12px rgba(30,58,95,0.25);}
-.gg-add-btn-select:active{transform:translateY(0);}
-
-/* ── PROJECT MENU ── */
-.proj-menu{position:relative;display:inline-block}
-.proj-menu-btn{background:none;border:none;cursor:pointer;font-size:16px;padding:4px 8px;color:var(--txt2)}
-.proj-menu-btn:hover{color:var(--navy)}
-.proj-menu-content{display:none;position:absolute;right:0;background:var(--bg);border:1px solid var(--border);border-radius:6px;box-shadow:0 4px 12px rgba(0,0,0,0.1);z-index:100;min-width:140px}
-.proj-menu-content.show{display:block}
-.proj-menu-item{padding:8px 12px;cursor:pointer;font-size:11px;color:var(--txt2);border-bottom:1px solid var(--border2)}
-.proj-menu-item:last-child{border:none}
-.proj-menu-item:hover{background:var(--bg2);color:var(--navy)}
 </style>
 </head>
 <body>
 <div id="rotate-warning">
-  <svg viewBox="0 0 24 24"><path d="M23.25 12.77l-2.57-2.57c-.51-.51-1.18-.77-1.85-.77H5.17c-.67 0-1.34.26-1.85.77L.75 12.77c-.51.51-.51 1.34 0 1.85l2.57 2.57c.51.51 1.18.77 1.85.77h13.66c.67 0 1.34-.26 1.85-.77l2.57-2.57c.51-.51.51-1.34 0-1.85zM17.5 15H6.5c-.28 0-.5-.22-.5-.5s.22-.5.5-.5h11c.28 0 .5.22.5.5s-.22.5-.5.5z"/></svg>
-  <h2>Gira tu dispositivo</h2>
-  <p>Para una mejor experiencia en PresAI, por favor usa tu celular o tableta en modo horizontal.</p>
+  <svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6 0 2.97-2.17 5.43-5 5.91v2.02c3.95-.49 7-3.85 7-7.93 0-4.42-3.58-8-8-8zm-5.5 4.5c-.28 0-.5.22-.5.5v3c0 .28.22.5.5.5h3c.28 0 .5-.22.5-.5v-3c0-.28-.22-.5-.5-.5h-3z"/></svg>
+  <h2>Por favor, rota tu dispositivo</h2>
+  <p>PresAI funciona mejor en modo horizontal (landscape).</p>
 </div>
 
-<div id="wow-screen">
+<div id="wow-screen" style="display:none">
   <h1>PresAI</h1>
-  <p>Software avanzado de presupuesto</p>
+  <p>Presupuestos de Obra con Inteligencia y Precisión</p>
   <div class="wow-buttons">
-    <button class="wow-btn primary" onclick="openProjects()">📂 Mis Proyectos</button>
-    <button class="wow-btn secondary" onclick="newProject()">➕ Nuevo Proyecto</button>
+    <button class="wow-btn primary" onclick="startApp()">Comenzar</button>
+    <button class="wow-btn secondary" onclick="openHelp()">Ver Tutorial</button>
   </div>
 </div>
 
-<div class="app" id="main-app" style="display:none">
+<div class="app">
   <header class="hdr no-print">
     <div class="hdr-left">
       <div class="hdr-logo-wrap" id="logoWrap" onclick="openSettings()">
-        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
       </div>
       <div class="hdr-txt">
         <div class="name">Pres<span>AI</span></div>
-        <div class="sub">CONSTRUCCIÓN CIVIL</div>
+        <div class="sub">v1.2.0</div>
       </div>
       <div class="hdr-proj" id="hdrProj" style="display:none">
         <div class="hdr-proj-name" id="hdrProjName">Cargando...</div>
@@ -460,8 +388,12 @@ function N(v){
 }
 function sym(){return CFG.currency==='USD'?'US$':CFG.currency==='UF'?'UF':'$';}
 function fmtN(n,d){
-  if(CFG.currency==='UF') return n.toLocaleString('es-CL',{minimumFractionDigits:d||2,maximumFractionDigits:d||2});
-  return n.toLocaleString('es-CL',{minimumFractionDigits:d||0,maximumFractionDigits:d||0});
+  let sep = CFG.decimalSeparator === 'coma' ? ',' : '.';
+  let thousand = CFG.decimalSeparator === 'coma' ? '.' : ',';
+  
+  let parts = n.toFixed(d || 0).split('.');
+  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousand);
+  return parts.join(sep);
 }
 function fmtQ(n){return fmtN(n,CFG.decimalsQty);}
 function fmtP(n){return fmtN(n,CFG.decimalsPrice);}
@@ -669,197 +601,162 @@ function renderGGSubgroups(){
     sg.items.forEach((it, iti) => {
       let sub = N(it.qty) * N(it.tiempoUso) * N(it.price);
       html += `<tr>
-        <td><input value="${esc(it.desc)}" oninput="uGGItem(${sgi},${iti},'desc',this.value)"/></td>
-        <td><input value="${esc(it.unit)}" oninput="uGGItem(${sgi},${iti},'unit',this.value)"/></td>
-        <td><input class="r" type="text" value="${fmtQ(N(it.qty))}" onkeydown="return validateDecimalInput(event)" oninput="uGGItem(${sgi},${iti},'qty',this.value)" onfocus="this.select()"/></td>
-        <td><input class="r" type="text" value="${fmtQ(N(it.tiempoUso))}" onkeydown="return validateDecimalInput(event)" oninput="uGGItem(${sgi},${iti},'tiempoUso',this.value)" onfocus="this.select()"/></td>
-        <td><input class="r" type="text" value="${fmtP(N(it.price))}" oninput="uGGItem(${sgi},${iti},'price',this.value)" onfocus="this.select()"/></td>
-        <td class="r mono" data-gg-sub="${sgi}-${iti}">${sym()} ${fmtB(sub)}</td>
-        <td><button class="bs del" onclick="delGGItem(${sgi},${iti})">×</button></td>
+        <td><input value="${esc(it.desc)}" oninput="uGG(${sgi},${iti},'desc',this.value)"/></td>
+        <td><input value="${esc(it.unit)}" oninput="uGG(${sgi},${iti},'unit',this.value)"/></td>
+        <td><input class="r" type="text" value="${fmtQ(N(it.qty))}" onkeydown="return validateDecimalInput(event)" oninput="uGG(${sgi},${iti},'qty',this.value)" onfocus="this.select()"/></td>
+        <td><input class="r" type="text" value="${fmtQ(N(it.tiempoUso))}" onkeydown="return validateDecimalInput(event)" oninput="uGG(${sgi},${iti},'tiempoUso',this.value)" onfocus="this.select()"/></td>
+        <td><input class="r" type="text" value="${fmtP(N(it.price))}" onkeydown="return validateDecimalInput(event)" oninput="uGG(${sgi},${iti},'price',this.value)" onfocus="this.select()"/></td>
+        <td class="r" id="gg-sub-${sgi}-${iti}">${fmtB(sub)}</td>
+        <td><button class="bs del" onclick="delGGIt(${sgi},${iti})">×</button></td>
       </tr>`;
     });
-    html += '</tbody></table>' + `<button class="bs addp" style="margin-top:8px" onclick="addGGItem(${sgi})">+ Gasto General</button>` + '</div>';
+    html += `</tbody></table><button class="bs addp" style="margin-top:10px" onclick="addGGIt(${sgi})">+ Fila</button></div>`;
   });
   container.innerHTML = html;
-  let select = document.getElementById('gg-subgroup-select');
-  let usedNames = ggSubgroups.map(sg => sg.name);
-  let availableOptions = GG_SUBGROUP_OPTIONS.filter(opt => !usedNames.includes(opt));
-  select.innerHTML = '<option value="">🔻 Agregar Subgrupo</option>' + availableOptions.map(opt => `<option value="${opt}">${opt}</option>`).join('');
-  select.onchange = function() { if(this.value) { addGGSubgroup(this.value); this.value = ''; } };
 }
 
-function addGGSubgroup(name){
-  ggSubgroups.push({name, items: [{id:gid(),desc:'',unit:'',qty:1,price:0,tiempoUso:1}]});
-  renderGGSubgroups(); rc(); markUnsaved();
+function addGGSubgroup(){
+  let name = document.getElementById('gg-subgroup-select').value;
+  if(!name) return;
+  ggSubgroups.push({name:name, items:[]});
+  renderGGSubgroups();markUnsaved();
 }
-function delGGSubgroup(sgi){
-  if(confirm('¿Eliminar subgrupo?')) { ggSubgroups.splice(sgi,1); renderGGSubgroups(); rc(); markUnsaved(); }
-}
-function addGGItem(sgi){
-  ggSubgroups[sgi].items.push({id:gid(),desc:'',unit:'',qty:1,price:0,tiempoUso:1});
-  renderGGSubgroups(); markUnsaved();
-}
-function uGGItem(sgi,iti,f,v){
-  if(f==='qty'||f==='price'||f==='tiempoUso') v=N(v);
+function delGGSubgroup(i){if(confirm('¿Eliminar subgrupo?')){ggSubgroups.splice(i,1);renderGGSubgroups();rc();markUnsaved();}}
+function addGGIt(i){ggSubgroups[i].items.push({desc:'',unit:'un',qty:1,tiempoUso:1,price:0});renderGGSubgroups();markUnsaved();}
+function delGGIt(sgi,iti){ggSubgroups[sgi].items.splice(iti,1);renderGGSubgroups();rc();markUnsaved();}
+function uGG(sgi,iti,f,v){
+  if(f==='qty'||f==='tiempoUso'||f==='price') v=N(v);
   ggSubgroups[sgi].items[iti][f]=v;
-  let r=ggSubgroups[sgi].items[iti];
-  let sub=N(r.qty)*N(r.tiempoUso)*N(r.price);
-  let subEl=document.querySelector(`[data-gg-sub="${sgi}-${iti}"]`);
-  if(subEl) subEl.textContent=sym()+' '+fmtB(sub);
-  let sgTotal=ggSubgroups[sgi].items.reduce((a,it)=>a+N(it.qty)*N(it.tiempoUso)*N(it.price),0);
-  let sgTotEl=document.querySelector(`[data-gg-total="${sgi}"]`);
-  if(sgTotEl) sgTotEl.textContent=sym()+' '+fmtB(sgTotal);
-  updateGGTotal(); rc(); markUnsaved();
-}
-function delGGItem(sgi,iti){
-  ggSubgroups[sgi].items.splice(iti,1); renderGGSubgroups(); rc(); markUnsaved();
+  let it=ggSubgroups[sgi].items[iti];
+  let sub=N(it.qty)*N(it.tiempoUso)*N(it.price);
+  let subEl=document.getElementById(`gg-sub-${sgi}-${iti}`);
+  if(subEl)subEl.textContent=fmtB(sub);
+  let sgTotal=ggSubgroups[sgi].items.reduce((a,x)=>a+N(x.qty)*N(x.tiempoUso)*N(x.price),0);
+  let sgTotEl=document.querySelector(`.gg-subgroup-total[data-gg-total="${sgi}"]`);
+  if(sgTotEl)sgTotEl.textContent=sym()+' '+fmtB(sgTotal);
+  rc();markUnsaved();
 }
 function updateGGTotal(){
-  let total=ggSubgroups.reduce((a,sg)=>a+sg.items.reduce((b,it)=>b+N(it.qty)*N(it.tiempoUso)*N(it.price),0),0);
-  document.getElementById('gg-total-label').textContent=`Total Gastos Generales: ${sym()} ${fmtB(total)}`;
+  let ggF=document.getElementById('ggFijo').checked;
+  let dc=items.reduce((a,it)=>it.t==='it'?a+N(it.qty)*N(it.price):a,0);
+  let pGG=N(document.getElementById('pGG').value);
+  let ggV=ggF?dc*(pGG/100):ggSubgroups.reduce((a,sg)=>a+sg.items.reduce((b,it)=>b+N(it.qty)*N(it.tiempoUso)*N(it.price),0),0);
+  document.getElementById('gg-total-label').textContent = 'Total Gastos Generales: '+sym()+' '+fmtB(ggV);
+}
+
+function refreshApuTab(){
+  let grid=document.getElementById('apu-list-grid'),empty=document.getElementById('apu-list-empty');
+  let apuItems=items.filter(it=>it.t==='it'&&apuData[it.id]);
+  if(apuItems.length===0){grid.innerHTML='';empty.style.display='block';}
+  else {
+    empty.style.display='none';
+    grid.innerHTML=apuItems.map(it=>{
+      let a=apuData[it.id],mo=a.secs[0].rows.reduce((x,r)=>x+N(r.qty)*N(r.price),0);
+      let pct=N(a.ls.afp)+N(a.ls.salud)+N(a.ls.seguro)+N(a.ls.mutual)+N(a.ls.sis)+N(a.ls.sanna)+N(a.ls.otros);
+      let lt=a.ls.on?mo*(pct/100):0,tot=a.secs.reduce((x,s)=>x+s.rows.reduce((y,r)=>y+N(r.qty)*N(r.price),0),0)+lt;
+      return `<div class="apu-card" onclick="openApu('${it.id}')">
+        <div class="apu-card-hdr"><span class="apu-card-num">${esc(it.num)}</span><span class="bs apu">APU</span></div>
+        <div class="apu-card-name">${esc(it.name)}</div>
+        <div class="apu-card-tot">${sym()} ${fmtP(tot)} / ${esc(it.unit)}</div>
+      </div>`;
+    }).join('');
+  }
 }
 
 function openApu(id){
-  let it=items.find(x=>x.id===id);if(!it)return;
-  if(!apuData[id])apuData[id]={secs:[{rows:[]},{rows:[]},{rows:[]},{rows:[]}],ls:{on:true,afp:10,salud:7,seguro:3,mutual:0.9,sis:1.5,sanna:0.03,otros:0.87}};
+  let it=items.find(x=>x.id===id);
+  if(!apuData[id]) apuData[id]={secs:[{name:'Mano de Obra',rows:[]},{name:'Materiales',rows:[]},{name:'Equipos',rows:[]}],ls:{on:true,afp:10,salud:7,seguro:3,mutual:0.95,sis:1.54,sanna:0.03,otros:0.78}};
   document.getElementById('ov').style.display='block';
-  document.getElementById('mc').innerHTML=`<div class="modal">
-    <div class="mh"><h3>Análisis de Precio Unitario: ${esc(it.name)}</h3><button class="btn-s" onclick="closeMod()">Cerrar</button></div>
-    <div class="mb" id="apu-edit-body"></div>
-    <div class="mf"><button class="btn-p blue" onclick="closeMod()">Guardar y Cerrar</button></div>
-  </div>`;
-  renderApuEdit(id);
+  renderApu(id);
 }
-function renderApuEdit(id){
-  let a=apuData[id],it=items.find(x=>x.id===id);
-  let html='',titles=['Mano de Obra','Materiales','Equipos y Herramientas','Subcontratos'],cls=['mo','mat','eq','sub'];
-  titles.forEach((t,si)=>{
-    let rows=a.secs[si].rows||[];
-    let st=rows.reduce((x,r)=>x+N(r.qty)*N(r.price),0);
-    html+=`<div class="sec-wrap">
-      <div class="sec-hdr s-${cls[si]}"><span class="sl">${t}</span><span class="st" id="st-${id}-${si}">${sym()} ${fmtP(st)}</span></div>
-      <table class="at"><thead><tr><th>Descripción</th><th>Unid</th><th class="r">Cant.</th><th class="r">P.U.</th><th class="r">Subtotal</th><th></th></tr></thead><tbody>`;
-    rows.forEach((r,ri)=>html+=`<tr>
-      <td><input value="${esc(r.desc)}" oninput="uapu('${id}',${si},${ri},'desc',this.value)" onblur="checkApuAutoFill('${id}',${si},${ri},this.value)"/></td>
-      <td><input style="width:65px" value="${esc(r.unit)}" oninput="uapu('${id}',${si},${ri},'unit',this.value)"/></td>
-      <td><input class="r" type="text" value="${fmtQ(N(r.qty))}" onkeydown="return validateDecimalInput(event)" oninput="uapu('${id}',${si},${ri},'qty',this.value)" onfocus="this.select()"/></td>
-      <td><input class="r" type="text" value="${fmtP(N(r.price))}" oninput="uapu('${id}',${si},${ri},'price',this.value)" onfocus="this.select()"/></td>
-      <td class="r mn" id="sub-${id}-${si}-${ri}">${fmtP(N(r.qty)*N(r.price))}</td>
-      <td><button class="bs del" onclick="dapu('${id}',${si},${ri})">×</button></td></tr>`);
-    html+=`</tbody></table><button class="bs addp" style="margin-top:4px" onclick="aapu('${id}',${si})">+ Recurso</button></div>`;
-  });
+function renderApu(id){
+  let it=items.find(x=>x.id===id),a=apuData[id];
   let mo=a.secs[0].rows.reduce((x,r)=>x+N(r.qty)*N(r.price),0);
   let pct=N(a.ls.afp)+N(a.ls.salud)+N(a.ls.seguro)+N(a.ls.mutual)+N(a.ls.sis)+N(a.ls.sanna)+N(a.ls.otros);
-  let lt=a.ls.on?mo*(pct/100):0;
-  html+=`<div class="ls-box"><div class="ls-head"><span class="ls-title">Leyes Sociales</span><input type="checkbox" ${a.ls.on?'checked':''} onchange="apuData['${id}'].ls.on=this.checked;renderApuEdit('${id}')"/></div>
-    <div class="ls-grid">
-      <div class="li"><label>AFP</label><input type="number" value="${a.ls.afp}" oninput="uls('${id}','afp',this.value)" onfocus="this.select()"/></div>
-      <div class="li"><label>Salud</label><input type="number" value="${a.ls.salud}" oninput="uls('${id}','salud',this.value)" onfocus="this.select()"/></div>
-      <div class="li"><label>Seguro</label><input type="number" value="${a.ls.seguro}" oninput="uls('${id}','seguro',this.value)" onfocus="this.select()"/></div>
-      <div class="li"><label>Mutual</label><input type="number" value="${a.ls.mutual}" oninput="uls('${id}','mutual',this.value)" onfocus="this.select()"/></div>
-      <div class="li"><label>SIS</label><input type="number" value="${a.ls.sis}" oninput="uls('${id}','sis',this.value)" onfocus="this.select()"/></div>
-      <div class="li"><label>Otros</label><input type="number" value="${a.ls.otros}" oninput="uls('${id}','otros',this.value)" onfocus="this.select()"/></div>
-    </div><div class="ls-foot"><span class="lt">Total Leyes Sociales (${pct.toFixed(2)}%)</span><span class="lv" id="ls-tot-${id}">${sym()} ${fmtP(lt)}</span></div></div>`;
-  let totalApu=a.secs.reduce((x,s)=>x+s.rows.reduce((y,r)=>y+N(r.qty)*N(r.price),0),0)+lt;
-  html+=`<div style="margin-top:15px;text-align:right;font-size:16px;font-weight:700;color:var(--navy)" id="apu-total-${id}">Precio Unitario Total: ${sym()} ${fmtP(totalApu)}</div>`;
-  document.getElementById('apu-edit-body').innerHTML=html;
-  items.find(x=>x.id===id).price=totalApu;
-  items.find(x=>x.id===id).isApu=true;
-  rb();
-}
-function aapu(id,si){apuData[id].secs[si].rows.push({desc:'',unit:'',qty:1,price:0});renderApuEdit(id);markUnsaved();}
-
-function checkApuAutoFill(id, si, ri, val) {
-  if (!val || val.length < 2) return;
-  let matches = [];
-  Object.values(apuData).forEach(apu => {
-    apu.secs.forEach(sec => {
-      sec.rows.forEach(row => {
-        if (row.desc && row.desc.toLowerCase().startsWith(val.toLowerCase())) {
-          if (!matches.find(m => m.desc.toLowerCase() === row.desc.toLowerCase())) matches.push(row);
-        }
-      });
-    });
+  let lt=a.ls.on?mo*(pct/100):0,tot=a.secs.reduce((x,s)=>x+s.rows.reduce((y,r)=>y+N(r.qty)*N(r.price),0),0)+lt;
+  let html=`<div class="modal" style="max-width:850px">
+    <div class="mh"><h3>Análisis de Precio Unitario <span class="mh-badge">${esc(it.num)}</span></h3><button class="btn-s" onclick="closeMod()">Cerrar</button></div>
+    <div class="mb">
+      <div style="margin-bottom:15px;background:var(--bg2);padding:12px;border-radius:8px;display:flex;justify-content:space-between;align-items:center">
+        <div style="font-weight:600;color:var(--navy);font-size:14px">${esc(it.name)}</div>
+        <div class="pbadge" style="color:var(--navy)">${sym()} ${fmtP(tot)} / ${esc(it.unit)}</div>
+      </div>`;
+  a.secs.forEach((sec,si)=>{
+    html+=`<div class="gg-subgroup"><div class="gg-subgroup-hdr"><span class="gg-subgroup-name">${sec.name}</span></div>
+      <table class="gg-table"><thead><tr><th>Descripción</th><th style="width:60px">Unid</th><th style="width:70px">Rend.</th><th style="width:90px">Precio</th><th style="width:90px">Subtotal</th><th style="width:30px"></th></tr></thead><tbody>`;
+    sec.rows.forEach((r,ri)=>html+=`<tr>
+      <td><input value="${esc(r.desc)}" oninput="uApu('${id}',${si},${ri},'desc',this.value)"/></td>
+      <td><input value="${esc(r.unit)}" oninput="uApu('${id}',${si},${ri},'unit',this.value)"/></td>
+      <td><input class="r" type="text" value="${fmtQ(N(r.qty))}" onkeydown="return validateDecimalInput(event)" oninput="uApu('${id}',${si},${ri},'qty',this.value)" onfocus="this.select()"/></td>
+      <td><input class="r" type="text" value="${fmtP(N(r.price))}" onkeydown="return validateDecimalInput(event)" oninput="uApu('${id}',${si},${ri},'price',this.value)" onfocus="this.select()"/></td>
+      <td class="r">${fmtB(N(r.qty)*N(r.price))}</td>
+      <td><button class="bs del" onclick="dApu('${id}',${si},${ri})">×</button></td></tr>`);
+    html+=`</tbody></table><button class="bs addp" style="margin-top:8px" onclick="aApu('${id}',${si})">+ Fila</button></div>`;
   });
-  if (matches.length === 1) {
-    let m = matches[0];
-    apuData[id].secs[si].rows[ri].desc = m.desc;
-    apuData[id].secs[si].rows[ri].unit = m.unit;
-    apuData[id].secs[si].rows[ri].price = m.price;
-    renderApuEdit(id);
-  } else if (matches.length > 1) {
-    let msg = "Existen varias opciones similares. Elige una:\n" + matches.map((m, i) => (i + 1) + ": " + m.desc + " (" + m.unit + ")").join("\n");
-    let choice = prompt(msg);
-    if (choice && !isNaN(choice) && matches[choice - 1]) {
-      let m = matches[choice - 1];
-      apuData[id].secs[si].rows[ri].desc = m.desc;
-      apuData[id].secs[si].rows[ri].unit = m.unit;
-      apuData[id].secs[si].rows[ri].price = m.price;
-      renderApuEdit(id);
-    }
-  }
+  html+=`<div class="gg-subgroup"><div class="gg-subgroup-hdr"><label class="chk-opt"><input type="checkbox" ${a.ls.on?'checked':''} onchange="apuData['${id}'].ls.on=this.checked;renderApu('${id}')"/> Leyes Sociales (${pct.toFixed(2)}%)</label><span class="gg-subgroup-total">${sym()} ${fmtB(lt)}</span></div>
+    ${a.ls.on?`<div class="cfg-grid" style="grid-template-columns:repeat(4,1fr);gap:8px">
+      <div class="cfg-field"><label>AFP</label><input type="number" value="${a.ls.afp}" oninput="uApuLs('${id}','afp',this.value)"/></div>
+      <div class="cfg-field"><label>Salud</label><input type="number" value="${a.ls.salud}" oninput="uApuLs('${id}','salud',this.value)"/></div>
+      <div class="cfg-field"><label>Seg.Ces.</label><input type="number" value="${a.ls.seguro}" oninput="uApuLs('${id}','seguro',this.value)"/></div>
+      <div class="cfg-field"><label>Mutual</label><input type="number" value="${a.ls.mutual}" oninput="uApuLs('${id}','mutual',this.value)"/></div>
+      <div class="cfg-field"><label>SIS</label><input type="number" value="${a.ls.sis}" oninput="uApuLs('${id}','sis',this.value)"/></div>
+      <div class="cfg-field"><label>SANNA</label><input type="number" value="${a.ls.sanna}" oninput="uApuLs('${id}','sanna',this.value)"/></div>
+      <div class="cfg-field"><label>Otros</label><input type="number" value="${a.ls.otros}" oninput="uApuLs('${id}','otros',this.value)"/></div>
+    </div>`:''}</div></div>
+    <div class="mf"><button class="btn-p blue" onclick="closeMod()">Listo</button></div></div>`;
+  document.getElementById('mc').innerHTML=html;
+  it.price=tot;it.isApu=true;rb();
 }
+function aApu(id,si){apuData[id].secs[si].rows.push({desc:'',unit:'',qty:1,price:0});renderApu(id);markUnsaved();}
+function dApu(id,si,ri){apuData[id].secs[si].rows.splice(ri,1);renderApu(id);markUnsaved();}
+function uApu(id,si,ri,f,v){if(f==='qty'||f==='price')v=N(v);apuData[id].secs[si].rows[ri][f]=v;renderApu(id);markUnsaved();}
+function uApuLs(id,f,v){apuData[id].ls[f]=N(v);renderApu(id);markUnsaved();}
 
-function uapu(id,si,ri,f,v){
-  if(f==='qty'||f==='price') v=N(v);
-  let a=apuData[id],r=a.secs[si].rows[ri];
-  r[f]=v;
-  if(f==='desc'&&(v.toLowerCase().includes('perdida')||v.toLowerCase().includes('pérdida'))){
-    r.unit='%';
-    if(ri>0){let prev=a.secs[si].rows[ri-1];let prevSubtotal=N(prev.qty)*N(prev.price);if(r.qty===0||r.qty===1)r.qty=10;r.price=prevSubtotal/100;}
-    renderApuEdit(id);
+function refreshCubTab(){
+  let grid=document.getElementById('cub-list-grid'),empty=document.getElementById('cub-list-empty');
+  let cubItems=items.filter(it=>it.t==='it'&&tofData[it.id]&&tofData[it.id].length);
+  if(cubItems.length===0){grid.innerHTML='';empty.style.display='block';}
+  else {
+    empty.style.display='none';
+    grid.innerHTML=cubItems.map(it=>{
+      let total=tofData[it.id].reduce((x,r)=>x+(N(r.n)*Math.max(1,N(r.a))*Math.max(1,N(r.l))*Math.max(1,N(r.h))),0);
+      return `<div class="apu-card" onclick="openTof('${it.id}')">
+        <div class="apu-card-hdr"><span class="apu-card-num">${esc(it.num)}</span><span class="bs cub">CUB</span></div>
+        <div class="apu-card-name">${esc(it.name)}</div>
+        <div class="apu-card-tot">${fmtQ(total)} ${esc(it.unit)}</div>
+      </div>`;
+    }).join('');
   }
-  let subEl=document.getElementById(`sub-${id}-${si}-${ri}`);
-  if(subEl)subEl.textContent=fmtP(N(r.qty)*N(r.price));
-  let st=a.secs[si].rows.reduce((x,r)=>x+N(r.qty)*N(r.price),0);
-  let stEl=document.getElementById(`st-${id}-${si}`);
-  if(stEl)stEl.textContent=sym()+' '+fmtP(st);
-  let mo=a.secs[0].rows.reduce((x,r)=>x+N(r.qty)*N(r.price),0);
-  let pct=N(a.ls.afp)+N(a.ls.salud)+N(a.ls.seguro)+N(a.ls.mutual)+N(a.ls.sis)+N(a.ls.sanna)+N(a.ls.otros);
-  let lt=a.ls.on?mo*(pct/100):0;
-  let lsEl=document.getElementById(`ls-tot-${id}`);
-  if(lsEl)lsEl.textContent=sym()+' '+fmtP(lt);
-  let totalApu=a.secs.reduce((x,s)=>x+s.rows.reduce((y,r)=>y+N(r.qty)*N(r.price),0),0)+lt;
-  let totEl=document.getElementById(`apu-total-${id}`);
-  if(totEl)totEl.textContent='Precio Unitario Total: '+sym()+' '+fmtP(totalApu);
-  items.find(x=>x.id===id).price=totalApu;
-  rc();markUnsaved();
 }
-function dapu(id,si,ri){apuData[id].secs[si].rows.splice(ri,1);renderApuEdit(id);markUnsaved();}
-function uls(id,f,v){apuData[id].ls[f]=v;renderApuEdit(id);markUnsaved();}
 
 function openTof(id){
-  let it=items.find(x=>x.id===id);if(!it)return;
-  if(!tofData[id])tofData[id]=[];
+  if(!tofData[id]) tofData[id]=[];
   document.getElementById('ov').style.display='block';
-  document.getElementById('mc').innerHTML=`<div class="modal">
-    <div class="mh"><h3>Memoria de Cubicaciones: ${esc(it.name)}</h3><button class="btn-s" onclick="closeMod()">Cerrar</button></div>
-    <div class="mb" id="tof-body"></div>
-    <div class="mf"><button class="btn-p blue" onclick="closeMod()">Guardar y Cerrar</button></div>
-  </div>`;
   renderTof(id);
 }
 function renderTof(id){
-  let rows=tofData[id],it=items.find(x=>x.id===id);
-  let html=`<div class="tof-hdr"><span>Descripción / Eje</span><span>Cant.</span><span>Ancho</span><span>Largo</span><span>Alto</span><span>Total</span><span></span></div>`;
+  let it=items.find(x=>x.id===id),rows=tofData[id];
+  let html=`<div class="modal" style="max-width:850px">
+    <div class="mh"><h3>Memoria de Cubicaciones: ${esc(it.name)}</h3><button class="btn-s" onclick="closeMod()">Cerrar</button></div>
+    <div class="mb" id="tof-body">`;
+  html+=`<div class="gg-table-wrap"><table class="gg-table"><thead><tr><th>Descripción / Eje</th><th style="width:70px">Cant.</th><th style="width:70px">Ancho</th><th style="width:70px">Largo</th><th style="width:70px">Alto</th><th style="width:90px">Total</th><th style="width:30px"></th></tr></thead><tbody>`;
   rows.forEach((r,ri)=>{
     let tot=N(r.n)*Math.max(1,N(r.a))*Math.max(1,N(r.l))*Math.max(1,N(r.h));
-    html+=`<div class="tof-row">
-      <input value="${esc(r.desc)}" oninput="utof('${id}',${ri},'desc',this.value)"/>
-      <input class="r" type="text" value="${fmtQ(N(r.n))}" onkeydown="return validateDecimalInput(event)" oninput="utof('${id}',${ri},'n',this.value)" onfocus="this.select()"/>
-      <input class="r" type="text" value="${fmtQ(N(r.a))}" onkeydown="return validateDecimalInput(event)" oninput="utof('${id}',${ri},'a',this.value)" onfocus="this.select()"/>
-      <input class="r" type="text" value="${fmtQ(N(r.l))}" onkeydown="return validateDecimalInput(event)" oninput="utof('${id}',${ri},'l',this.value)" onfocus="this.select()"/>
-      <input class="r" type="text" value="${fmtQ(N(r.h))}" onkeydown="return validateDecimalInput(event)" oninput="utof('${id}',${ri},'h',this.value)" onfocus="this.select()"/>
-      <div class="st" id="tof-sub-${id}-${ri}">${fmtQ(tot)}</div>
-      <button class="bs del" onclick="dtof('${id}',${ri})">×</button></div>`;
+    html+=`<tr>
+      <td><input value="${esc(r.desc)}" oninput="utof('${id}',${ri},'desc',this.value)"/></td>
+      <td><input class="r" type="text" value="${fmtQ(N(r.n))}" onkeydown="return validateDecimalInput(event)" oninput="utof('${id}',${ri},'n',this.value)" onfocus="this.select()"/></td>
+      <td><input class="r" type="text" value="${fmtQ(N(r.a))}" onkeydown="return validateDecimalInput(event)" oninput="utof('${id}',${ri},'a',this.value)" onfocus="this.select()"/></td>
+      <td><input class="r" type="text" value="${fmtQ(N(r.l))}" onkeydown="return validateDecimalInput(event)" oninput="utof('${id}',${ri},'l',this.value)" onfocus="this.select()"/></td>
+      <td><input class="r" type="text" value="${fmtQ(N(r.h))}" onkeydown="return validateDecimalInput(event)" oninput="utof('${id}',${ri},'h',this.value)" onfocus="this.select()"/></td>
+      <td class="r" id="tof-sub-${id}-${ri}">${fmtQ(tot)}</td>
+      <td><button class="bs del" onclick="dtof('${id}',${ri})">×</button></td></tr>`;
   });
   let total=rows.reduce((x,r)=>x+(N(r.n)*Math.max(1,N(r.a))*Math.max(1,N(r.l))*Math.max(1,N(r.h))),0);
-  html+=`<button class="bs addp" style="margin:10px" onclick="atof('${id}')">+ Agregar Fila</button>
-    <div style="text-align:right;padding:10px;font-size:15px;font-weight:600;color:var(--navy)" id="tof-total-${id}">Total Cubicidad: ${fmtQ(total)} ${esc(it.unit)}</div>`;
-  document.getElementById('tof-body').innerHTML=html;
-  it.qty=total;
-  it.isCub=true;
-  rb();
+  html+=`</tbody></table></div><button class="bs addp" style="margin-top:10px" onclick="atof('${id}')">+ Agregar Fila</button>
+    <div style="text-align:right;padding:10px;font-size:15px;font-weight:600;color:var(--navy)" id="tof-total-${id}">Total Cubicación: ${fmtQ(total)} ${esc(it.unit)}</div>
+    </div><div class="mf"><button class="btn-p blue" onclick="closeMod()">Listo</button></div></div>`;
+  document.getElementById('mc').innerHTML=html;
+  it.qty=total;it.isCub=true;rb();
 }
 function atof(id){tofData[id].push({desc:'',n:1,a:1,l:1,h:1});renderTof(id);markUnsaved();}
 function utof(id,ri,f,v){
@@ -870,7 +767,7 @@ function utof(id,ri,f,v){
   if(subEl)subEl.textContent=fmtQ(N(r.n)*Math.max(1,N(r.a))*Math.max(1,N(r.l))*Math.max(1,N(r.h)));
   let total=tofData[id].reduce((x,r)=>x+(N(r.n)*Math.max(1,N(r.a))*Math.max(1,N(r.l))*Math.max(1,N(r.h))),0);
   let totEl=document.getElementById(`tof-total-${id}`);
-  if(totEl)totEl.textContent='Total Cubicidad: '+fmtQ(total)+' '+esc(items.find(x=>x.id===id).unit);
+  if(totEl)totEl.textContent='Total Cubicación: '+fmtQ(total)+' '+esc(items.find(x=>x.id===id).unit);
   items.find(x=>x.id===id).qty=total;
   rc();markUnsaved();
 }
@@ -989,6 +886,7 @@ function genPrintHtml(){
     .page-break{page-break-before:always}
     .avoid-break{page-break-inside:avoid}
     @page{size:${pageSize};margin:${margins}}
+    .footer-info{position:fixed;bottom:0;left:0;right:0;height:20mm;display:flex;flex-direction:column;justify-content:center;align-items:center;font-size:8px;color:#94a3b8;border-top:1px solid #eee;background:#fff}
   </style></head><body>
     ${coverHtml}
     <div style="padding:10mm;padding-bottom:30mm">${runHdr}<h2 style="text-align:center;font-size:18px;color:${color};margin:20px 0">PRESUPUESTO DE OBRA</h2>
@@ -1003,7 +901,12 @@ function genPrintHtml(){
     </div></div>
     <p style="font-size:9px;font-style:italic;text-align:right;margin-top:5px">${numToWords(grand)}</p>
     ${signatures}
-    </div>${ggHtml}${apuHtml}${cubHtml}</body></html>`;
+    </div>
+    <div class="footer-info">
+      <div>${esc(CFG.companyName)}</div>
+      <div>${esc(CFG.companyAddress)} · ${esc(CFG.companyPhone)} · ${esc(CFG.companyEmail)}</div>
+    </div>
+    ${ggHtml}${apuHtml}${cubHtml}</body></html>`;
 }
 
 function doPrint(){
@@ -1040,7 +943,7 @@ function openHelp(){
   `;
 }
 
-function openSettings(){
+function openSettings(tabId = 'proj'){
   document.getElementById('ov').style.display='block';
   let obra=document.getElementById('pObra').value;
   let mandante=document.getElementById('pMandante').value;
@@ -1051,19 +954,44 @@ function openSettings(){
   let html='<div class="modal" style="max-width:700px;max-height:90vh;overflow-y:auto">'+
     '<div class="mh"><h3>⚙️ Configuración PresAI</h3><button class="btn-s" onclick="closeMod()">✕</button></div>'+
     '<div class="mb">'+
-    
-    /* PROYECTO */
-    '<div class="cfg-section"><h4>Proyecto</h4><div class="cfg-grid">'+
+    '<div class="cfg-tabs">'+
+      '<div class="cfg-tab '+(tabId==='proj'?'on':'')+'" onclick="openSettings(\'proj\')">Proyecto</div>'+
+      '<div class="cfg-tab '+(tabId==='comp'?'on':'')+'" onclick="openSettings(\'comp\')">Empresa</div>'+
+      '<div class="cfg-tab '+(tabId==='fmt'?'on':'')+'" onclick="openSettings(\'fmt\')">Formato</div>'+
+    '</div>';
+
+  if(tabId === 'proj') {
+    html += '<div class="cfg-section"><h4>Datos del Proyecto</h4><div class="cfg-grid">'+
       '<div class="cfg-field cfg-field-full"><label>Nombre de la Obra / Proyecto</label><input id="cfg-obra" value="'+esc(obra)+'" oninput="document.getElementById(\'pObra\').value=this.value;syncHdr();markUnsaved()"/></div>'+
       '<div class="cfg-field"><label>Mandante / Cliente</label><input id="cfg-mandante" value="'+esc(mandante)+'" oninput="document.getElementById(\'pMandante\').value=this.value;markUnsaved()"/></div>'+
       '<div class="cfg-field"><label>Ubicación</label><input id="cfg-ubicacion" value="'+esc(ubicacion)+'" oninput="document.getElementById(\'pUbicacion\').value=this.value;markUnsaved()"/></div>'+
       '<div class="cfg-field"><label>Profesional a cargo</label><input id="cfg-profesional" value="'+esc(profesional)+'" oninput="document.getElementById(\'pProfesional\').value=this.value;markUnsaved()"/></div>'+
       '<div class="cfg-field"><label>Fecha</label><input type="date" id="cfg-fecha" value="'+esc(fecha)+'" oninput="document.getElementById(\'pFecha\').value=this.value;markUnsaved()"/></div>'+
     '</div></div>'+
-
-    /* MONEDA Y DECIMALES */
-    '<div class="cfg-section"><h4>Moneda y Decimales</h4><div class="cfg-grid">'+
-      '<div class="cfg-field"><label>Moneda</label><select onchange="CFG.currency=this.value;saveCFG();rb();rc();openSettings();">'+
+    '<div class="cfg-section"><h4>Firmantes</h4><div class="cfg-grid">'+
+      '<div class="cfg-field"><label>Rep. Legal</label><input value="'+esc(CFG.repLegal)+'" oninput="CFG.repLegal=this.value;saveCFG()"/></div>'+
+      '<div class="cfg-field"><label>Profesional</label><input value="'+esc(CFG.profName)+'" oninput="CFG.profName=this.value;saveCFG()"/></div>'+
+    '</div></div>';
+  } else if(tabId === 'comp') {
+    html += '<div class="cfg-section"><h4>Empresa Constructora</h4><div class="cfg-grid">'+
+      '<div class="cfg-field"><label>Nombre</label><input value="'+esc(CFG.companyName)+'" oninput="CFG.companyName=this.value;saveCFG();updBrand()"/></div>'+
+      '<div class="cfg-field"><label>Rubro</label><input value="'+esc(CFG.companyTagline)+'" oninput="CFG.companyTagline=this.value;saveCFG()"/></div>'+
+      '<div class="cfg-field"><label>Dirección</label><input value="'+esc(CFG.companyAddress)+'" oninput="CFG.companyAddress=this.value;saveCFG()"/></div>'+
+      '<div class="cfg-field"><label>Teléfono / Celular</label><input value="'+esc(CFG.companyPhone)+'" oninput="CFG.companyPhone=this.value;saveCFG()"/></div>'+
+      '<div class="cfg-field"><label>Email</label><input value="'+esc(CFG.companyEmail)+'" oninput="CFG.companyEmail=this.value;saveCFG()"/></div>'+
+      '<div class="cfg-field"><label>Web (No se imprime)</label><input value="'+esc(CFG.companyWeb)+'" oninput="CFG.companyWeb=this.value;saveCFG()"/></div>'+
+      '<div class="cfg-field"><label>Color Informe</label><input type="color" value="'+CFG.colorHeader+'" oninput="CFG.colorHeader=this.value;saveCFG();applyColor()"/></div>'+
+      '<div class="cfg-field"><label>Logo</label>'+
+        '<div style="display:flex;gap:10px;align-items:center">'+
+          '<button class="bs" onclick="document.getElementById(\'logoInp\').click()">Subir Logo</button>'+
+          (CFG.logoDataUrl?'<img src="'+CFG.logoDataUrl+'" style="height:30px;border:1px solid #eee"/>':'')+
+        '</div>'+
+        '<input type="file" id="logoInp" style="display:none" onchange="hLogo(this)"/>'+
+      '</div>'+
+    '</div></div>';
+  } else if(tabId === 'fmt') {
+    html += '<div class="cfg-section"><h4>Moneda y Decimales</h4><div class="cfg-grid">'+
+      '<div class="cfg-field"><label>Moneda</label><select onchange="CFG.currency=this.value;saveCFG();rb();rc();openSettings(\'fmt\');">'+
         '<option value="CLP" '+(CFG.currency==='CLP'?'selected':'')+'>CLP ($)</option>'+
         '<option value="USD" '+(CFG.currency==='USD'?'selected':'')+'>USD (US$)</option>'+
         '<option value="UF" '+(CFG.currency==='UF'?'selected':'')+'>UF</option>'+
@@ -1072,14 +1000,12 @@ function openSettings(){
       '<div class="cfg-field"><label>Dec. Cantidades</label><input type="number" value="'+CFG.decimalsQty+'" oninput="CFG.decimalsQty=N(this.value);saveCFG();rb()" onfocus="this.select()"/></div>'+
       '<div class="cfg-field"><label>Dec. P.Unit (APU)</label><input type="number" value="'+CFG.decimalsPrice+'" oninput="CFG.decimalsPrice=N(this.value);saveCFG();rb()" onfocus="this.select()"/></div>'+
       '<div class="cfg-field"><label>Dec. Totales</label><input type="number" value="'+CFG.decimalsBudget+'" oninput="CFG.decimalsBudget=N(this.value);saveCFG();rb()" onfocus="this.select()"/></div>'+
-      '<div class="cfg-field"><label>Separador de Decimales</label><select onchange="CFG.decimalSeparator=this.value;saveCFG();openSettings();">'+
+      '<div class="cfg-field"><label>Separador de Decimales</label><select onchange="CFG.decimalSeparator=this.value;saveCFG();rb();openSettings(\'fmt\');">'+
         '<option value="punto" '+(CFG.decimalSeparator==='punto'?'selected':'')+'>Punto (.)</option>'+
         '<option value="coma" '+(CFG.decimalSeparator==='coma'?'selected':'')+'>Coma (,)</option>'+
       '</select></div>'+
       '<div class="cfg-field" style="grid-column: span 2"><label class="chk-opt"><input type="checkbox" '+(CFG.alertOnDeleteDetail?'checked':'')+' onchange="CFG.alertOnDeleteDetail=this.checked;saveCFG()"> Alerta al borrar detalle cubicación / APU</label></div>'+
     '</div></div>'+
-
-    /* IMPRESIÓN */
     '<div class="cfg-section"><h4>Formato de Impresión</h4><div class="cfg-grid">'+
       '<div class="cfg-field"><label>Tamaño de Hoja</label><select onchange="CFG.pageSize=this.value;saveCFG()">'+
         '<option value="letter" '+(CFG.pageSize==='letter'?'selected':'')+'>Carta (Letter)</option>'+
@@ -1100,61 +1026,21 @@ function openSettings(){
         '</select></div>'+
       '<label class="chk-opt" style="margin-top:8px"><input type="checkbox" '+(CFG.printGG?'checked':'')+' onchange="CFG.printGG=this.checked;saveCFG()"> Gastos Generales en Informe</label>'+
     '</div></div>'+
-
-    /* EMPRESA */
-    '<div class="cfg-section"><h4>Empresa Constructora</h4><div class="cfg-grid">'+
-      '<div class="cfg-field"><label>Nombre</label><input value="'+esc(CFG.companyName)+'" oninput="CFG.companyName=this.value;saveCFG();updBrand()"/></div>'+
-      '<div class="cfg-field"><label>Tagline</label><input value="'+esc(CFG.companyTagline)+'" oninput="CFG.companyTagline=this.value;saveCFG()"/></div>'+
-      '<div class="cfg-field"><label>Dirección</label><input value="'+esc(CFG.companyAddress)+'" oninput="CFG.companyAddress=this.value;saveCFG()"/></div>'+
-      '<div class="cfg-field"><label>Teléfono / Celular</label><input value="'+esc(CFG.companyPhone)+'" oninput="CFG.companyPhone=this.value;saveCFG()"/></div>'+
-      '<div class="cfg-field"><label>Email</label><input value="'+esc(CFG.companyEmail)+'" oninput="CFG.companyEmail=this.value;saveCFG()"/></div>'+
-      '<div class="cfg-field"><label>Web</label><input value="'+esc(CFG.companyWeb)+'" oninput="CFG.companyWeb=this.value;saveCFG()"/></div>'+
-      '<div class="cfg-field"><label>Color Informe</label><input type="color" value="'+CFG.colorHeader+'" oninput="CFG.colorHeader=this.value;saveCFG();applyColor()"/></div>'+
-      '<div class="cfg-field"><label>Logo</label>'+
-        '<div style="display:flex;gap:10px;align-items:center">'+
-          '<button class="bs" onclick="document.getElementById(\'logoInp\').click()">Subir Logo</button>'+
-          (CFG.logoDataUrl?'<img src="'+CFG.logoDataUrl+'" style="height:30px;border:1px solid #eee"/>':'')+
-        '</div>'+
-        '<input type="file" id="logoInp" style="display:none" onchange="hLogo(this)"/>'+
-      '</div>'+
-    '</div></div>'+
-
-    /* FIRMANTES */
-    '<div class="cfg-section"><h4>Firmantes</h4><div class="cfg-grid">'+
-      '<div class="cfg-field"><label>Rep. Legal</label><input value="'+esc(CFG.repLegal)+'" oninput="CFG.repLegal=this.value;saveCFG()"/></div>'+
-      '<div class="cfg-field"><label>Profesional</label><input value="'+esc(CFG.profName)+'" oninput="CFG.profName=this.value;saveCFG()"/></div>'+
-    '</div></div>'+
-
-    /* IMAGEN PORTADA */
     '<div class="cfg-section"><h4>Imagen Portada</h4>'+
       '<div style="display:flex;gap:15px;align-items:center">'+
         '<button class="bs" onclick="document.getElementById(\'covInp\').click()">Subir Imagen Portada</button>'+
-        (CFG.coverImgUrl?'<img src="'+CFG.coverImgUrl+'" style="height:40px;border:1px solid #eee"/><button class="bs del" onclick="CFG.coverImgUrl=\'\';saveCFG();openSettings()">×</button>':'')+
+        (CFG.coverImgUrl?'<img src="'+CFG.coverImgUrl+'" style="height:40px;border:1px solid #eee"/><button class="bs del" onclick="CFG.coverImgUrl=\'\';saveCFG();openSettings(\'fmt\')">×</button>':'')+
       '</div>'+
       '<input type="file" id="covInp" style="display:none" onchange="hCov(this)"/>'+
-    '</div>'+
+    '</div>';
+  }
 
-    /* AUTOSAVE */
-    '<div class="cfg-section"><h4>Guardado Automático</h4><div class="cfg-grid">'+
-      '<label class="chk-opt"><input type="checkbox" '+(CFG.autoSave?'checked':'')+' onchange="CFG.autoSave=this.checked;saveCFG();setupAutoSave()"> Activar Guardado Automático</label>'+
-      '<div class="cfg-field"><label>Intervalo (segundos)</label><input type="number" value="'+CFG.autoSaveInterval+'" oninput="CFG.autoSaveInterval=N(this.value);saveCFG();setupAutoSave()" onfocus="this.select()"/></div>'+
-    '</div></div>'+
-
-    /* PRORRATEO */
-    '<div class="cfg-section"><h4>Prorrateo</h4><div class="chk-opts">'+
-      '<label class="chk-opt"><input type="checkbox" '+(CFG.ggProrrateado?'checked':'')+' onchange="CFG.ggProrrateado=this.checked;saveCFG();rc()"> Prorratear Gastos Generales en APU</label>'+
-      '<label class="chk-opt"><input type="checkbox" '+(CFG.utilProrrateado?'checked':'')+' onchange="CFG.utilProrrateado=this.checked;saveCFG();rc()"> Prorratear Utilidad en APU</label>'+
-      '<label class="chk-opt"><input type="checkbox" '+(CFG.impProrrateado?'checked':'')+' onchange="CFG.impProrrateado=this.checked;saveCFG();rc()"> Prorratear Imprevistos en APU</label>'+
-    '</div></div>'+
-
-    '</div>'+
-    '<div class="mf"><button class="btn-p blue" onclick="closeMod()">Listo</button></div>'+
-  '</div>';
+  html += '</div><div class="mf"><button class="btn-p blue" onclick="closeMod()">Listo</button></div></div>';
   document.getElementById('mc').innerHTML=html;
 }
 
-function hLogo(i){let r=new FileReader();r.onload=e=>{CFG.logoDataUrl=e.target.result;saveCFG();updLogoHdr();openSettings();};r.readAsDataURL(i.files[0]);}
-function hCov(i){let r=new FileReader();r.onload=e=>{CFG.coverImgUrl=e.target.result;saveCFG();openSettings();};r.readAsDataURL(i.files[0]);}
+function hLogo(i){let r=new FileReader();r.onload=e=>{CFG.logoDataUrl=e.target.result;saveCFG();updLogoHdr();openSettings('comp');};r.readAsDataURL(i.files[0]);}
+function hCov(i){let r=new FileReader();r.onload=e=>{CFG.coverImgUrl=e.target.result;saveCFG();openSettings('fmt');};r.readAsDataURL(i.files[0]);}
 
 function closeMod(){document.getElementById('ov').style.display='none';}
 function sw(p,t){
@@ -1166,118 +1052,130 @@ function sw(p,t){
   if(p==='cub')refreshCubTab();
 }
 function markUnsaved(){isDirty=true;}
-function syncHdr(){updBrand();}
-function hideApp(){document.getElementById('main-app').style.display='none';document.getElementById('wow-screen').style.display='flex';}
-function showApp(){document.getElementById('main-app').style.display='flex';document.getElementById('wow-screen').style.display='none';}
 
-function setupAutoSave(){
-  if(autoSaveInterval)clearInterval(autoSaveInterval);
-  if(CFG.autoSave&&currentProjectId)autoSaveInterval=setInterval(()=>{if(isDirty)saveProject();},CFG.autoSaveInterval*1000);
+function syncHdr(){
+  let obra = document.getElementById('pObra').value;
+  document.getElementById('hdrProjName').textContent = obra || 'Nuevo proyecto';
+  document.getElementById('hdrProj').style.display = 'flex';
 }
 
-function refreshApuTab(){
-  let grid=document.getElementById('apu-list-grid'),empty=document.getElementById('apu-list-empty');
-  let apus=items.filter(it=>it.t==='it'&&apuData[it.id]);
-  if(!apus.length){grid.style.display='none';empty.style.display='block';}
-  else{
-    grid.style.display='grid';empty.style.display='none';
-    grid.innerHTML=apus.map(it=>`<div class="tot-card" style="cursor:pointer" onclick="openApu('${it.id}')">
-      <div style="font-weight:600;color:var(--navy)">${it.num} ${esc(it.name)}</div>
-      <div style="text-align:right;font-family:var(--mono)">${sym()} ${fmtP(it.price)}</div>
-    </div>`).join('');
-  }
+function startApp(){
+  document.getElementById('wow-screen').style.display='none';
+  loadCFG();
+  rb();
+  initEvents();
 }
 
-function refreshCubTab(){
-  let grid=document.getElementById('cub-list-grid'),empty=document.getElementById('cub-list-empty');
-  let cubs=items.filter(it=>it.t==='it'&&tofData[it.id]&&tofData[it.id].length);
-  if(!cubs.length){grid.style.display='none';empty.style.display='block';}
-  else{
-    grid.style.display='grid';empty.style.display='none';
-    grid.innerHTML=cubs.map(it=>{
-      let total=tofData[it.id].reduce((x,r)=>x+(N(r.n)*Math.max(1,N(r.a))*Math.max(1,N(r.l))*Math.max(1,N(r.h))),0);
-      return `<div class="tot-card" style="cursor:pointer" onclick="openTof('${it.id}')">
-        <div style="font-weight:600;color:var(--magenta)">${it.num} ${esc(it.name)}</div>
-        <div style="text-align:right;font-family:var(--mono)">${fmtQ(total)} ${esc(it.unit)}</div>
+// Proyectos (Mockup para persistencia local)
+function openProjects(){
+  let idx = getIdx();
+  document.getElementById('ov').style.display='block';
+  let html = '<div class="modal" style="max-width:600px"><div class="mh"><h3>Proyectos Guardados</h3><button class="btn-s" onclick="closeMod()">✕</button></div><div class="mb">';
+  if(idx.length===0) html += '<p style="text-align:center;padding:20px;color:var(--txt3)">No hay proyectos guardados en este navegador.</p>';
+  else {
+    html += '<div style="display:flex;flex-direction:column;gap:10px">';
+    idx.forEach(p=>{
+      html += `<div style="display:flex;justify-content:space-between;align-items:center;padding:10px;border:1px solid var(--border);border-radius:8px;background:var(--bg2)">
+        <div><div style="font-weight:600;color:var(--navy)">${esc(p.name)}</div><div style="font-size:10px;color:var(--txt3)">${p.date}</div></div>
+        <div style="display:flex;gap:5px"><button class="bs" onclick="loadProject('${p.id}')">Abrir</button><button class="bs del" onclick="deleteProject('${p.id}')">×</button></div>
       </div>`;
-    }).join('');
+    });
+    html += '</div>';
+  }
+  html += '</div><div class="mf"><button class="btn-s" onclick="closeMod()">Cerrar</button></div></div>';
+  document.getElementById('mc').innerHTML = html;
+}
+
+function saveProject(){
+  let name = document.getElementById('pObra').value || 'Proyecto sin nombre';
+  let id = currentProjectId || gid();
+  let data = {
+    id: id, name: name, date: new Date().toLocaleString(),
+    items: items, apuData: apuData, tofData: tofData, ggSubgroups: ggSubgroups,
+    pGG: document.getElementById('pGG').value,
+    ggFijo: document.getElementById('ggFijo').checked,
+    pUtil: document.getElementById('pUtil').value,
+    pImp: document.getElementById('pImp').value,
+    pIVA: document.getElementById('pIVA').value,
+    pObra: document.getElementById('pObra').value,
+    pMandante: document.getElementById('pMandante').value,
+    pUbicacion: document.getElementById('pUbicacion').value,
+    pProfesional: document.getElementById('pProfesional').value,
+    pFecha: document.getElementById('pFecha').value
+  };
+  lsS('od_proj_'+id, data);
+  let idx = getIdx();
+  if(!idx.find(x=>x.id===id)) {
+    idx.push({id:id, name:name, date:data.date});
+    saveIdx(idx);
+  } else {
+    idx = idx.map(x=>x.id===id?{id:id, name:name, date:data.date}:x);
+    saveIdx(idx);
+  }
+  currentProjectId = id;
+  isDirty = false;
+  syncHdr();
+  alert('Proyecto guardado correctamente.');
+}
+
+function loadProject(id){
+  let data = lsL('od_proj_'+id);
+  if(!data) return;
+  currentProjectId = id;
+  items = data.items;
+  apuData = data.apuData || {};
+  tofData = data.tofData || {};
+  ggSubgroups = data.ggSubgroups || [];
+  document.getElementById('pGG').value = data.pGG || 15;
+  document.getElementById('ggFijo').checked = data.ggFijo || false;
+  document.getElementById('pUtil').value = data.pUtil || 12;
+  document.getElementById('pImp').value = data.pImp || 0;
+  document.getElementById('pIVA').value = data.pIVA || 19;
+  document.getElementById('pObra').value = data.pObra || '';
+  document.getElementById('pMandante').value = data.pMandante || '';
+  document.getElementById('pUbicacion').value = data.pUbicacion || '';
+  document.getElementById('pProfesional').value = data.pProfesional || '';
+  document.getElementById('pFecha').value = data.pFecha || '';
+  closeMod();
+  rb();
+  syncHdr();
+}
+
+function deleteProject(id){
+  if(confirm('¿Eliminar este proyecto permanentemente?')){
+    lsD('od_proj_'+id);
+    let idx = getIdx().filter(x=>x.id!==id);
+    saveIdx(idx);
+    if(currentProjectId===id) newProject();
+    else openProjects();
   }
 }
 
 function newProject(){
-  if(isDirty&&!confirm('¿Descartar cambios?'))return;
-  currentProjectId=null;isDirty=false;
-  items=[{id:gid(),t:'ch',num:'1.-',name:'',unit:'',qty:0,price:0,isApu:false,isCub:false},{id:gid(),t:'it',num:'1.1',name:'',unit:'',qty:0,price:0,isApu:false,isCub:false}];
-  ggSubgroups=[];apuData={};tofData={};
-  ['pObra','pMandante','pUbicacion','pProfesional'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('pFecha').value=new Date().toISOString().split('T')[0];
-  rb();renderGGSubgroups();updBrand();closeMod();syncHdr();showApp();
+  if(isDirty && !confirm('Hay cambios sin guardar. ¿Deseas continuar?')) return;
+  currentProjectId = null;
+  items = [{id:gid(),t:'ch',num:'1.-',name:'OBRAS PRELIMINARES',unit:'',qty:0,price:0,isApu:false,isCub:false}];
+  apuData = {}; tofData = {}; ggSubgroups = [];
+  document.getElementById('pObra').value = '';
+  document.getElementById('pMandante').value = '';
+  document.getElementById('pUbicacion').value = '';
+  document.getElementById('pProfesional').value = '';
+  document.getElementById('pFecha').value = '';
+  rb();
+  document.getElementById('hdrProj').style.display = 'none';
+  isDirty = false;
 }
 
-function saveProject(){
-  let obra=document.getElementById('pObra').value.trim();
-  if(!obra){alert('Nombre de obra requerido. Por favor, ingrésalo en ⚙️ Configuración.');openSettings();return;}
-  if(!currentProjectId)currentProjectId='proj_'+Date.now();
-  let p={
-    id:currentProjectId, obra,
-    mandante:document.getElementById('pMandante').value,
-    ubicacion:document.getElementById('pUbicacion').value,
-    profesional:document.getElementById('pProfesional').value,
-    fecha:document.getElementById('pFecha').value,
-    items,ggSubgroups,apuData,tofData,
-    pGG:document.getElementById('pGG').value,
-    pUtil:document.getElementById('pUtil').value,
-    pImp:document.getElementById('pImp').value,
-    pIVA:document.getElementById('pIVA').value,
-    ggFijo:document.getElementById('ggFijo').checked
-  };
-  lsS('od_proj_'+currentProjectId,p);
-  let idx=getIdx(),e=idx.find(x=>x.id===currentProjectId);
-  if(e){e.obra=obra;e.savedAt=new Date().toISOString();}else idx.unshift({id:currentProjectId,obra,savedAt:new Date().toISOString()});
-  saveIdx(idx);isDirty=false;alert('Guardado');syncHdr();
-}
-
-function openProjects(){
-  showApp();
-  let idx=getIdx();
-  document.getElementById('ov').style.display='block';
-  let html='<div class="modal" style="max-width:500px"><div class="mh"><h3>Mis Proyectos</h3><button class="btn-s" onclick="closeMod()">✕</button></div><div class="mb"><button class="btn-p blue" style="width:100%;margin-bottom:15px" onclick="newProject()">+ Crear Nuevo Proyecto</button>';
-  if(idx.length===0)html+='<p style="text-align:center;color:#94a3b8;padding:20px">No hay proyectos guardados.</p>';
-  else idx.forEach(p=>html+=`<div style="display:flex;justify-content:space-between;align-items:center;padding:10px;border-bottom:1px solid #eee"><div><div style="font-weight:600;color:var(--navy);cursor:pointer" onclick="loadProject('${p.id}')">${esc(p.obra)}</div><div style="font-size:9px;color:#94a3b8">${new Date(p.savedAt).toLocaleString()}</div></div><button class="bs del" onclick="deleteProject('${p.id}')">×</button></div>`);
-  html+='</div></div>';
-  document.getElementById('mc').innerHTML=html;
-}
-
-function loadProject(id){
-  let p=lsL('od_proj_'+id);
-  if(!p)return;
-  currentProjectId=id;items=p.items;ggSubgroups=p.ggSubgroups||[];apuData=p.apuData||{};tofData=p.tofData||{};
-  document.getElementById('pObra').value=p.obra;
-  document.getElementById('pMandante').value=p.mandante||'';
-  document.getElementById('pUbicacion').value=p.ubicacion||'';
-  document.getElementById('pProfesional').value=p.profesional||'';
-  document.getElementById('pFecha').value=p.fecha||'';
-  document.getElementById('pGG').value=p.pGG;
-  document.getElementById('pUtil').value=p.pUtil;
-  document.getElementById('pImp').value=p.pImp;
-  document.getElementById('pIVA').value=p.pIVA;
-  document.getElementById('ggFijo').checked=p.ggFijo;
-  rb();renderGGSubgroups();syncHdr();closeMod();
-}
-
-function deleteProject(id){
-  if(confirm('¿Eliminar proyecto definitivamente?')){
-    lsD('od_proj_'+id);
-    let idx=getIdx().filter(x=>x.id!==id);
-    saveIdx(idx);openProjects();
+function setupAutoSave(){
+  if(autoSaveInterval) clearInterval(autoSaveInterval);
+  if(CFG.autoSave){
+    autoSaveInterval = setInterval(()=>{
+      if(isDirty && currentProjectId) saveProject();
+    }, CFG.autoSaveInterval * 1000);
   }
 }
 
-loadCFG();
-rb();
-renderGGSubgroups();
-initEvents();
-hideApp();
+window.onload = startApp;
 </script>
 </body>
 </html>
