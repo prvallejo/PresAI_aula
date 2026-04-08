@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8"/>
+<script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
 <title>PresAI — Presupuesto de Obra</title>
 <style>
@@ -342,7 +343,7 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
 
       <div class="tbl-wrap">
         <div class="tbl-hdr">
-          <span>Ítem</span><span>Descripción de la Partida</span><span class="r">Unid</span><span class="r">Cant.</span><span class="r">P.Unit. (${sym()})</span><span class="r">Total (${sym()})</span><span></span>
+          <span>Ítem</span><span>Descripción de la Partida</span><span class="r">Unid</span><span class="r">Cant.</span><span class="r" id="hdr-punit">P.Unit.</span><span class="r" id="hdr-total">Total</span><span></span>
         </div>
         <div id="brows"></div>
         <div class="tbl-add no-print">
@@ -385,10 +386,13 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
     <!-- PANEL: NOTAS -->
     <div id="p-notes" class="pnl">
       <div class="tbl-wrap" style="padding:20px">
-        <h3 style="margin-bottom:15px;color:var(--navy)">Notas al Presupuesto</h3>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px">
+          <h3 style="color:var(--navy)">Notas al Presupuesto</h3>
+          <button class="bs addp" onclick="addExtraNote()">+ Agregar Nota</button>
+        </div>
         <div id="notes-list" style="display:flex;flex-direction:column;gap:10px"></div>
         <div style="margin-top:20px;color:var(--txt3);font-size:11px;font-style:italic">
-          * Se genera automáticamente una lista numerada según la cantidad de partidas del presupuesto.
+          * Se genera automáticamente una lista numerada según la cantidad de partidas del presupuesto. Puedes agregar notas adicionales con el botón superior.
         </div>
       </div>
     </div>
@@ -490,8 +494,7 @@ function numToWords(n){
     var b=Math.floor(n/1000000000),r=n%1000000000;
     var t='';
     if(b===1) t='MIL MILLONES';
-    else if(b<1000) t=mil(b)+' MIL MILLONES';
-    else t=billones(b)+' MIL MILLONES';
+    else t=mil(b)+' MILLONES'; // Cambiado para que diga "MIL SEISCIENTOS CINCUENTA Y CINCO MILLONES" como en la captura
     return r>0?t+' '+millon(r):t;
   }
   var cur=CFG.currency==='USD'?'DÓLARES':CFG.currency==='UF'?'UF':'PESOS';
@@ -515,6 +518,9 @@ function ctotals(){
 function rb(){
   reNum();
   var ct=ctotals();
+  var s = sym();
+  document.getElementById('hdr-punit').textContent = 'P.Unit. (' + s + ')';
+  document.getElementById('hdr-total').textContent = 'Total (' + s + ')';
   var cont=document.getElementById('brows');
   cont.innerHTML=items.map(function(it){
     if(it.t==='ch'){
@@ -535,9 +541,7 @@ function rb(){
     return `<div class="row-it" data-id="${it.id}">
       <input class="ri mono" data-field="num" data-id="${it.id}" placeholder="N°" value="${esc(it.num)}" autocomplete="off"/>
       <input class="ri" data-field="name" data-id="${it.id}" placeholder="Descripción..." value="${esc(it.name)}" autocomplete="off"/>
-      <select class="ri" style="width:55px;padding:10px 2px" data-field="unit" data-id="${it.id}" onchange="uUnit('${it.id}',this.value)">
-        ${UNITS_BUDGET.map(u=>`<option value="${u}" ${it.unit===u?'selected':''}>${u}</option>`).join('')}
-      </select>
+      <input class="ri" style="width:55px" data-field="unit" data-id="${it.id}" placeholder="Unid" value="${esc(it.unit)}" autocomplete="off"/>
       <input class="${qtyClass}" data-field="qty" data-id="${it.id}" placeholder="0" value="${fmtQ(N(it.qty))}" onfocus="this.select()" autocomplete="off"/>
       <input class="${priceClass}" data-field="price" data-id="${it.id}" placeholder="P.Unit." value="${fmtP(N(it.price))}" onfocus="this.select()" autocomplete="off"/>
       <span class="span-tot ${it.isApu||it.isCub?'magenta':''}">${sym()} ${fmtB(tot)}</span>
@@ -738,13 +742,10 @@ function renderApuEdit(id){
     let st=rows.reduce((x,r)=>x+N(r.qty)*N(r.price),0);
     html+=`<div class="sec-wrap">
       <div class="sec-hdr s-${cls[si]}"><span class="sl">${t}</span><span class="st" id="st-${id}-${si}">${sym()} ${fmtP(st)}</span></div>
-      <table class="at"><thead><tr><th>Descripción</th><th>Unid</th><th class="r">Rend.</th><th class="r">P.U.</th><th class="r">Subtotal</th><th></th></tr></thead><tbody>`;
+      <table class="at"><thead><tr><th>Descripción</th><th>Unid</th><th class="r">Rend.</th><th class="r">P.U. (${sym()})</th><th class="r">Subtotal (${sym()})</th><th></th></tr></thead><tbody>`;
     rows.forEach((r,ri)=>html+=`<tr>
       <td><input value="${esc(r.desc)}" oninput="uapu('${id}',${si},${ri},'desc',this.value)"/></td>
-      <td><select style="width:65px" onchange="uapu('${id}',${si},${ri},'unit',this.value)">
-        ${UNITS_APU.map(u=>`<option value="${u}" ${r.unit===u?'selected':''}>${u}</option>`).join('')}
-        <option value="%" ${r.unit==='%'?'selected':''}>%</option>
-      </select></td>
+      <td><input style="width:65px" value="${esc(r.unit)}" oninput="uapu('${id}',${si},${ri},'unit',this.value)"/></td>
       <td><input class="r" type="text" value="${fmtQ(N(r.qty))}" oninput="uapu('${id}',${si},${ri},'qty',this.value)" onfocus="this.select()"/></td>
       <td><input class="r" type="text" value="${fmtP(N(r.price))}" oninput="uapu('${id}',${si},${ri},'price',this.value)" onfocus="this.select()"/></td>
       <td class="r mn" id="sub-${id}-${si}-${ri}">${fmtP(N(r.qty)*N(r.price))}</td>
@@ -886,7 +887,7 @@ function genPrintHtml(){
       let sgTotal=sg.items.reduce((a,it)=>a+N(it.qty)*N(it.price),0);
       ggHtml+='<div style="margin-bottom:20px;border:1px solid #eee;border-radius:5px;overflow:hidden"><div style="background:#f9f9f9;padding:8px;font-weight:600;color:'+color+'">'+esc(sg.name)+' - '+s+' '+fmtB(sgTotal)+'</div>'+
         '<table style="width:100%;border-collapse:collapse;font-size:9px"><thead><tr style="background:#fcfcfc"><th style="text-align:left;padding:4px 8px">Descripción</th><th style="text-align:right">Unid</th><th style="text-align:right">Cant.</th><th style="text-align:right">T.Uso</th><th style="text-align:right">Precio ('+s+')</th><th style="text-align:right;padding-right:8px">Subtotal ('+s+')</th></tr></thead><tbody>';
-      sg.items.forEach(it=>ggHtml+='<tr style="border-top:1px solid #f5f5f5"><td style="padding:3px 8px">'+esc(it.desc)+'</td><td style="text-align:right">'+esc(it.unit)+'</td><td style="text-align:right">'+fmtQ(N(it.qty))+'</td><td style="text-align:right">'+fmtQ(N(it.tiempoUso))+'</td><td style="text-align:right">'+s+' '+fmtP(N(it.price))+'</td><td style="text-align:right;padding-right:8px">'+s+' '+fmtB(N(it.qty)*N(it.price))+'</td></tr>');
+      sg.items.forEach(it=>ggHtml+='<tr style="border-top:1px solid #f5f5f5"><td style="padding:3px 8px">'+esc(it.desc)+'</td><td style="text-align:right">'+esc(it.unit)+'</td><td style="text-align:right">'+fmtQ(N(it.qty))+'</td><td style="text-align:right">'+fmtQ(N(it.tiempoUso))+'</td><td style="text-align:right">'+s+' '+fmtP(N(it.price))+'</td><td style="text-align:right;padding-right:8px">'+s+' '+fmtB(N(it.qty)*N(it.tiempoUso)*N(it.price))+'</td></tr>');
       ggHtml+='</tbody></table></div>';
     });
     var totalGG = ggSubgroups.reduce((a, sg) => a + sg.items.reduce((b, it) => b + N(it.qty) * N(it.tiempoUso) * N(it.price), 0), 0);
@@ -939,10 +940,13 @@ function genPrintHtml(){
       '<h3 style="font-size:14px;color:'+color+';border-bottom:2px solid #eee;padding-bottom:5px;margin-bottom:15px">Información Adicional</h3>';
     if(CFG.printPayment && payment) extraInfo += '<p style="font-size:11px;margin-bottom:10px"><strong>Forma de Pago:</strong> '+esc(payment)+'</p>';
     if(CFG.printExecution && execution) extraInfo += '<p style="font-size:11px;margin-bottom:10px"><strong>Plazo de Ejecución:</strong> '+esc(execution)+'</p>';
-    if(CFG.printNotes && CFG.notes && CFG.notes.some(n=>n.trim())){
-      extraInfo += '<div style="margin-top:20px"><h4 style="font-size:12px;color:'+color+';margin-bottom:10px">Notas al Presupuesto:</h4><ol style="font-size:10px;padding-left:20px">';
-      CFG.notes.forEach(n => { if(n.trim()) extraInfo += '<li style="margin-bottom:5px">'+esc(n)+'</li>'; });
-      extraInfo += '</ol></div>';
+    if(CFG.printNotes){
+      let allNotes = (CFG.notes||[]).concat(CFG.extraNotes||[]).filter(n => n.trim());
+      if(allNotes.length > 0){
+        extraInfo += '<div style="margin-top:20px"><h4 style="font-size:12px;color:'+color+';margin-bottom:10px">Notas al Presupuesto:</h4><ol style="font-size:10px;padding-left:20px">';
+        allNotes.forEach(n => { extraInfo += '<li style="margin-bottom:5px">'+esc(n)+'</li>'; });
+        extraInfo += '</ol></div>';
+      }
     }
     extraInfo += '</div>';
   }
@@ -1202,7 +1206,7 @@ function saveProject(){
     fecha:document.getElementById('pFecha').value,
     payment:document.getElementById('pPayment').value,
     execution:document.getElementById('pExecution').value,
-    items,ggSubgroups,apuData,tofData,notes:CFG.notes,
+    items,ggSubgroups,apuData,tofData,notes:CFG.notes,extraNotes:CFG.extraNotes,
     pGG:document.getElementById('pGG').value,
     pUtil:document.getElementById('pUtil').value,
     pImp:document.getElementById('pImp').value,
@@ -1251,6 +1255,7 @@ function loadP(id){
   let p=lsL('od_proj_'+id);if(!p)return;
   currentProjectId=id;items=p.items;ggSubgroups=p.ggSubgroups||[];apuData=p.apuData;tofData=p.tofData;
   CFG.notes=p.notes||[];
+  CFG.extraNotes=p.extraNotes||[];
   CFG.coverImgUrl=p.coverImgUrl||'';
   document.getElementById('pObra').value=p.obra;
   document.getElementById('pMandante').value=p.mandante||'';
@@ -1335,18 +1340,43 @@ function refreshNotesTab(){
   let container = document.getElementById('notes-list');
   let partidas = items.filter(it => it.t === 'it');
   if(!CFG.notes) CFG.notes = [];
+  if(!CFG.extraNotes) CFG.extraNotes = [];
   
-  // Asegurar que el array de notas tenga el mismo tamaño que las partidas
+  // Sincronizar notas de partidas
   while(CFG.notes.length < partidas.length) CFG.notes.push('');
   if(CFG.notes.length > partidas.length) CFG.notes = CFG.notes.slice(0, partidas.length);
 
-  container.innerHTML = CFG.notes.map((note, i) => `
+  let html = CFG.notes.map((note, i) => `
     <div style="display:flex;gap:10px;align-items:center">
       <span style="font-weight:600;color:var(--navy);width:25px">${i+1}.</span>
       <input class="ri" style="border-bottom:1px solid var(--border)" value="${esc(note)}" 
-        oninput="CFG.notes[${i}]=this.value;markUnsaved()" placeholder="Escriba una nota para la partida ${partidas[i].num}..."/>
+        oninput="CFG.notes[${i}]=this.value;markUnsaved()" placeholder="Nota para partida ${partidas[i].num}..."/>
     </div>
   `).join('');
+
+  html += CFG.extraNotes.map((note, i) => `
+    <div style="display:flex;gap:10px;align-items:center">
+      <span style="font-weight:600;color:var(--navy);width:25px">${CFG.notes.length + i + 1}.</span>
+      <input class="ri" style="border-bottom:1px solid var(--border)" value="${esc(note)}" 
+        oninput="CFG.extraNotes[${i}]=this.value;markUnsaved()" placeholder="Nota adicional..."/>
+      <button class="bs del" onclick="delExtraNote(${i})">×</button>
+    </div>
+  `).join('');
+
+  container.innerHTML = html;
+}
+
+function addExtraNote(){
+  if(!CFG.extraNotes) CFG.extraNotes = [];
+  CFG.extraNotes.push('');
+  refreshNotesTab();
+  markUnsaved();
+}
+
+function delExtraNote(i){
+  CFG.extraNotes.splice(i, 1);
+  refreshNotesTab();
+  markUnsaved();
 }
 
 function setupAutoSave(){
@@ -1367,233 +1397,114 @@ function hideApp(){
 
 /* ── EXPORT XLSX ── */
 function exportXlsx(projId){
-  /* Cargar proyecto si es distinto al actual */
   let p=lsL('od_proj_'+projId);
   if(!p){alert('Proyecto no encontrado');return;}
 
-  /* Usamos la misma lógica de cálculo pero sobre los datos del proyecto guardado */
-  const pitems=p.items||[];
-  const pGGSubs=p.ggSubgroups||[];
-  const pApuData=p.apuData||{};
-  const pTofData=p.tofData||{};
-  const pGGpct=parseFloat(p.pGG)||0;
-  const pUtilpct=parseFloat(p.pUtil)||0;
-  const pImppct=parseFloat(p.pImp)||0;
-  const pIVApct=parseFloat(p.pIVA)||19;
-  const ggFijo=p.ggFijo||false;
+  const wb = XLSX.utils.book_new();
+  const pitems = p.items||[];
+  const pGGSubs = p.ggSubgroups||[];
+  const pApuData = p.apuData||{};
+  const pTofData = p.tofData||{};
+  const pGGpct = parseFloat(p.pGG)||0;
+  const pUtilpct = parseFloat(p.pUtil)||0;
+  const pImppct = parseFloat(p.pImp)||0;
+  const pIVApct = parseFloat(p.pIVA)||19;
+  const ggFijo = p.ggFijo||false;
 
-  /* ── helpers ── */
-  function fmtNum(n){return isNaN(n)?0:Math.round(n*100)/100;}
-  function cell(v,t){return {v,t:t||'s'};}
-  function numCell(v){return {v:fmtNum(v),t:'n'};}
-  function hdrCell(v){return {v,t:'s',s:{font:{bold:true}}};}
+  // 1. PORTADA
+  if(CFG.printCover){
+    const wsPortada = XLSX.utils.aoa_to_sheet([
+      ['PROYECTO:', p.obra],
+      ['MANDANTE:', p.mandante],
+      ['UBICACIÓN:', p.ubicacion],
+      ['FECHA:', p.fecha]
+    ]);
+    XLSX.utils.book_append_sheet(wb, wsPortada, "Portada");
+  }
 
-  /* ── Renumerar ítems ── */
-  let cn=0,itn=0,cc=0;
-  const numbered=pitems.map(it=>{
-    if(it.t==='ch'){cn++;itn=0;cc=cn;return Object.assign({},it,{num:cn+'.-'});}
-    itn++;return Object.assign({},it,{num:cc+'.'+itn});
+  // 2. PRESUPUESTO
+  const presData = [['Ítem', 'Descripción', 'Unid', 'Cantidad', 'P. Unit.', 'Total']];
+  let cn=0, itn=0, cc=0;
+  const numbered = pitems.map(it => {
+    if(it.t==='ch'){cn++; itn=0; cc=cn; return Object.assign({}, it, {num: cn+'.-'});}
+    itn++; return Object.assign({}, it, {num: cc+'.'+itn});
   });
 
-  /* ── Totales presupuesto ── */
-  const dc=pitems.reduce((a,it)=>it.t==='it'?a+(parseFloat(it.qty)||0)*(parseFloat(it.price)||0):a,0);
-  const ggV=ggFijo?dc*(pGGpct/100):pGGSubs.reduce((a,sg)=>a+sg.items.reduce((b,it)=>b+(parseFloat(it.qty)||0)*(parseFloat(it.tiempoUso)||0)*(parseFloat(it.price)||0),0),0);
-  const util=(dc+ggV)*(pUtilpct/100);
-  const imp=dc*(pImppct/100);
-  const net=dc+ggV+util+imp;
-  const iva=net*(pIVApct/100);
-  const grand=net+iva;
-
-  /* ════════════════════════
-     Construir workbook manualmente como CSV-in-XML (XML Spreadsheet 2003)
-     para máxima compatibilidad sin dependencias externas
-  ════════════════════════ */
-
-  function escXml(s){
-    return (s||'').toString()
-      .replace(/&/g,'&amp;')
-      .replace(/</g,'&lt;')
-      .replace(/>/g,'&gt;')
-      .replace(/"/g,'&quot;');
-  }
-
-  /* ── Row helpers ── */
-  function strRow(cells){
-    return '<Row>'+cells.map(c=>`<Cell><Data ss:Type="String">${escXml(c)}</Data></Cell>`).join('')+'</Row>\n';
-  }
-  function numRow(cells){
-    /* cells: array de {v, formula?, label?}
-       si tiene formula: usa Formula en el Cell
-       si v es número: Number, si es string: String */
-    return '<Row>'+cells.map(c=>{
-      if(c===null||c===undefined)return '<Cell><Data ss:Type="String"></Data></Cell>';
-      if(typeof c==='object'&&c.formula){
-        return `<Cell ss:Formula="${escXml(c.formula)}"><Data ss:Type="Number">0</Data></Cell>`;
-      }
-      if(typeof c==='object'&&c.label!==undefined){
-        return `<Cell><Data ss:Type="String">${escXml(c.label)}</Data></Cell>`;
-      }
-      if(typeof c==='number'||typeof c==='object'&&c.v!==undefined){
-        const v=typeof c==='number'?c:c.v;
-        return `<Cell><Data ss:Type="Number">${isNaN(v)?0:v}</Data></Cell>`;
-      }
-      return `<Cell><Data ss:Type="String">${escXml(c)}</Data></Cell>`;
-    }).join('')+'</Row>\n';
-  }
-  function boldRow(cells){
-    return '<Row>'+cells.map(c=>`<Cell ss:StyleID="hdr"><Data ss:Type="String">${escXml(c)}</Data></Cell>`).join('')+'</Row>\n';
-  }
-  function emptyRow(){return '<Row><Cell><Data ss:Type="String"></Data></Cell></Row>\n';}
-
-  /* ══════════════════
-     HOJA 0: PORTADA (OPCIONAL)
-  ══════════════════ */
-  let ws0='';
-  if(CFG.printCover){
-    ws0='<Worksheet ss:Name="Portada">\n<Table>\n';
-    ws0+=strRow(['PROYECTO: '+p.obra]);
-    ws0+=strRow(['MANDANTE: '+p.mandante]);
-    ws0+=strRow(['UBICACIÓN: '+p.ubicacion]);
-    ws0+=strRow(['FECHA: '+p.fecha]);
-    ws0+='</Table>\n</Worksheet>\n';
-  }
-
-  /* ══════════════════
-     HOJA 1: PRESUPUESTO (SIEMPRE)
-  ══════════════════ */
-  let ws1='<Worksheet ss:Name="Presupuesto">\n<Table>\n';
-  ws1+='<Column ss:Width="55"/><Column ss:Width="220"/><Column ss:Width="55"/><Column ss:Width="70"/><Column ss:Width="100"/><Column ss:Width="110"/>\n';
-  ws1+=boldRow(['Ítem','Descripción','Unid','Cantidad','P. Unit. (CLP)','Total (CLP)']);
-
-  let rowNum=2;
-  numbered.forEach((it)=>{
+  numbered.forEach(it => {
     if(it.t==='ch'){
-      ws1+=`<Row ss:StyleID="ch"><Cell><Data ss:Type="String">${escXml(it.num)}</Data></Cell><Cell><Data ss:Type="String">${escXml(it.name)}</Data></Cell><Cell/><Cell/><Cell/><Cell><Data ss:Type="Number">0</Data></Cell></Row>\n`;
-      rowNum++;
+      presData.push([it.num, it.name, '', '', '', 0]);
     } else {
-      const qty=parseFloat(it.qty)||0;
-      const price=parseFloat(it.price)||0;
-      ws1+=`<Row><Cell><Data ss:Type="String">${escXml(it.num)}</Data></Cell><Cell><Data ss:Type="String">${escXml(it.name)}</Data></Cell><Cell><Data ss:Type="String">${escXml(it.unit||'')}</Data></Cell><Cell><Data ss:Type="Number">${qty}</Data></Cell><Cell><Data ss:Type="Number">${price}</Data></Cell><Cell ss:Formula="=D${rowNum}*E${rowNum}"><Data ss:Type="Number">${qty*price}</Data></Cell></Row>\n`;
-      rowNum++;
+      presData.push([it.num, it.name, it.unit||'', parseFloat(it.qty)||0, parseFloat(it.price)||0, {f: `D${presData.length+1}*E${presData.length+1}`}]);
     }
   });
 
-  ws1+=emptyRow(); rowNum++;
-  ws1+=strRow(['Costo Directo','','','','',String(fmtNum(dc))]);rowNum++;
-  ws1+=strRow(['Gastos Generales','','','','',String(fmtNum(ggV))]);rowNum++;
-  ws1+=strRow(['Utilidad ('+pUtilpct+'%)','','','','',String(fmtNum(util))]);rowNum++;
-  if(pImppct>0){ws1+=strRow(['Imprevistos ('+pImppct+'%)','','','','',String(fmtNum(imp))]);rowNum++;}
-  ws1+=strRow(['Total Neto','','','','',String(fmtNum(net))]);rowNum++;
-  ws1+=strRow(['IVA ('+pIVApct+'%)','','','','',String(fmtNum(iva))]);rowNum++;
-  ws1+=boldRow(['TOTAL GENERAL','','','','',String(fmtNum(grand))]);rowNum++;
-  ws1+='</Table>\n</Worksheet>\n';
+  const dc = pitems.reduce((a,it)=>it.t==='it'?a+(parseFloat(it.qty)||0)*(parseFloat(it.price)||0):a,0);
+  const ggV = ggFijo?dc*(pGGpct/100):pGGSubs.reduce((a,sg)=>a+sg.items.reduce((b,it)=>b+(parseFloat(it.qty)||0)*(parseFloat(it.tiempoUso)||0)*(parseFloat(it.price)||0),0),0);
+  const util = (dc+ggV)*(pUtilpct/100);
+  const imp = dc*(pImppct/100);
+  const net = dc+ggV+util+imp;
+  const iva = net*(pIVApct/100);
+  const grand = net+iva;
 
-  /* ══════════════════
-     HOJA 2: APU (OPCIONAL)
-  ══════════════════ */
-  let ws2='';
+  presData.push([]);
+  presData.push(['Costo Directo', '', '', '', '', dc]);
+  presData.push(['Gastos Generales', '', '', '', '', ggV]);
+  presData.push([`Utilidad (${pUtilpct}%)`, '', '', '', '', util]);
+  if(pImppct>0) presData.push([`Imprevistos (${pImppct}%)`, '', '', '', '', imp]);
+  presData.push(['Total Neto', '', '', '', '', net]);
+  presData.push([`IVA (${pIVApct}%)`, '', '', '', '', iva]);
+  presData.push(['TOTAL GENERAL', '', '', '', '', grand]);
+
+  const wsPres = XLSX.utils.aoa_to_sheet(presData);
+  XLSX.utils.book_append_sheet(wb, wsPres, "Presupuesto");
+
+  // 3. APU
   if(CFG.printApu){
-    ws2='<Worksheet ss:Name="APU">\n<Table>\n';
-    ws2+='<Column ss:Width="55"/><Column ss:Width="180"/><Column ss:Width="55"/><Column ss:Width="70"/><Column ss:Width="100"/><Column ss:Width="110"/>\n';
+    const apuDataRows = [['Categoría', 'Descripción', 'Unid', 'Rendimiento', 'P.U.', 'Subtotal']];
     pitems.filter(it=>it.t==='it'&&pApuData[it.id]).forEach(it=>{
-      const a=pApuData[it.id];
-      ws2+=boldRow([it.num+' — '+it.name,'','','','P.U.:',String(fmtNum(parseFloat(it.price)||0))]);
-      ws2+=boldRow(['Categoría','Descripción','Unid','Rendimiento','P.U.','Subtotal']);
-      ['Mano de Obra','Materiales','Equipos y Herramientas','Subcontratos'].forEach((t,si)=>{
-        (a.secs[si].rows||[]).forEach(r=>{
-          const qty=parseFloat(r.qty)||0, price=parseFloat(r.price)||0;
-          ws2+=`<Row><Cell><Data ss:Type="String">${escXml(t)}</Data></Cell><Cell><Data ss:Type="String">${escXml(r.desc||'')}</Data></Cell><Cell><Data ss:Type="String">${escXml(r.unit||'')}</Data></Cell><Cell><Data ss:Type="Number">${qty}</Data></Cell><Cell><Data ss:Type="Number">${price}</Data></Cell><Cell><Data ss:Type="Number">${fmtNum(qty*price)}</Data></Cell></Row>\n`;
+      const a = pApuData[it.id];
+      apuDataRows.push([it.num + ' — ' + it.name, '', '', '', 'P.U.:', parseFloat(it.price)||0]);
+      ['Mano de Obra', 'Materiales', 'Equipos', 'Subcontratos'].forEach((t, si) => {
+        (a.secs[si].rows||[]).forEach(r => {
+          apuDataRows.push([t, r.desc||'', r.unit||'', parseFloat(r.qty)||0, parseFloat(r.price)||0, {f: `D${apuDataRows.length+1}*E${apuDataRows.length+1}`}]);
         });
       });
-      const mo=(a.secs[0].rows||[]).reduce((x,r)=>x+(parseFloat(r.qty)||0)*(parseFloat(r.price)||0),0);
-      const pct=(parseFloat(a.ls.afp||0)+parseFloat(a.ls.salud||0)+parseFloat(a.ls.seguro||0)+parseFloat(a.ls.mutual||0)+parseFloat(a.ls.sis||0)+parseFloat(a.ls.sanna||0)+parseFloat(a.ls.otros||0));
-      const ls=a.ls.on?mo*(pct/100):0;
-      ws2+=strRow(['Leyes Sociales ('+pct.toFixed(1)+'%)','','','','',String(fmtNum(ls))]);
-      ws2+=boldRow(['TOTAL UNITARIO','','','','',String(fmtNum(parseFloat(it.price)||0))]);
-      ws2+=emptyRow();
+      apuDataRows.push([]);
     });
-    ws2+='</Table>\n</Worksheet>\n';
+    const wsApu = XLSX.utils.aoa_to_sheet(apuDataRows);
+    XLSX.utils.book_append_sheet(wb, wsApu, "APU");
   }
 
-  /* ══════════════════
-     HOJA 3: CUBICACIONES (OPCIONAL)
-  ══════════════════ */
-  let ws3='';
+  // 4. CUBICACIONES
   if(CFG.printCub){
-    ws3='<Worksheet ss:Name="Cubicaciones">\n<Table>\n';
-    ws3+='<Column ss:Width="180"/><Column ss:Width="70"/><Column ss:Width="70"/><Column ss:Width="70"/><Column ss:Width="70"/><Column ss:Width="90"/>\n';
+    const cubDataRows = [['Descripción / Eje', 'Cant.', 'Ancho', 'Largo', 'Alto', 'Total']];
     pitems.filter(it=>it.t==='it'&&pTofData[it.id]&&pTofData[it.id].length).forEach(it=>{
-      ws3+=boldRow([it.num+' — '+it.name]);
-      ws3+=boldRow(['Descripción / Eje','Cant.','Ancho','Largo','Alto','Total']);
-      let total=0, tofRowNum=3;
-      (pTofData[it.id]||[]).forEach((r)=>{
-        const n=parseFloat(r.n)||0, a=Math.max(1,parseFloat(r.a)||1), l=Math.max(1,parseFloat(r.l)||1), h=Math.max(1,parseFloat(r.h!==undefined?r.h:1)||1);
-        const tot=n*a*l*h; total+=tot;
-        ws3+=`<Row><Cell><Data ss:Type="String">${escXml(r.desc||'')}</Data></Cell><Cell><Data ss:Type="Number">${n}</Data></Cell><Cell><Data ss:Type="Number">${a}</Data></Cell><Cell><Data ss:Type="Number">${l}</Data></Cell><Cell><Data ss:Type="Number">${h}</Data></Cell><Cell ss:Formula="=B${tofRowNum}*C${tofRowNum}*D${tofRowNum}*E${tofRowNum}"><Data ss:Type="Number">${fmtNum(tot)}</Data></Cell></Row>\n`;
-        tofRowNum++;
+      cubDataRows.push([it.num + ' — ' + it.name]);
+      (pTofData[it.id]||[]).forEach(r => {
+        cubDataRows.push([r.desc||'', parseFloat(r.n)||0, parseFloat(r.a)||1, parseFloat(r.l)||1, parseFloat(r.h)||1, {f: `B${cubDataRows.length+1}*C${cubDataRows.length+1}*D${cubDataRows.length+1}*E${cubDataRows.length+1}`}]);
       });
-      ws3+=boldRow(['TOTAL PARTIDA','','','','',String(fmtNum(total))+' '+escXml(it.unit||'')]);
-      ws3+=emptyRow();
+      cubDataRows.push([]);
     });
-    ws3+='</Table>\n</Worksheet>\n';
+    const wsCub = XLSX.utils.aoa_to_sheet(cubDataRows);
+    XLSX.utils.book_append_sheet(wb, wsCub, "Cubicaciones");
   }
 
-  /* ══════════════════
-     HOJA 4: GASTOS GENERALES (OPCIONAL)
-  ══════════════════ */
-  let ws4='';
+  // 5. GASTOS GENERALES
   if(CFG.printGG){
-    ws4='<Worksheet ss:Name="Gastos Generales">\n<Table>\n';
-    ws4+='<Column ss:Width="200"/><Column ss:Width="60"/><Column ss:Width="70"/><Column ss:Width="80"/><Column ss:Width="100"/><Column ss:Width="110"/>\n';
-    ws4+=boldRow(['Descripción','Unid','Cantidad','Tiempo Uso','Precio Unit.','Subtotal']);
-    let ggTotal=0, ggR=2;
-    pGGSubs.forEach(sg=>{
-      const sgTotal=sg.items.reduce((a,it)=>a+(parseFloat(it.qty)||0)*(parseFloat(it.tiempoUso)||0)*(parseFloat(it.price)||0),0);
-      ggTotal+=sgTotal;
-      ws4+=boldRow([sg.name,'','','','',String(fmtNum(sgTotal))]);
-      ggR++;
-      sg.items.forEach(it=>{
-        const qty=parseFloat(it.qty)||0, tuso=parseFloat(it.tiempoUso)||0, price=parseFloat(it.price)||0;
-        const sub=qty*tuso*price;
-        ws4+=`<Row><Cell><Data ss:Type="String">${escXml(it.desc||'')}</Data></Cell><Cell><Data ss:Type="String">${escXml(it.unit||'')}</Data></Cell><Cell><Data ss:Type="Number">${qty}</Data></Cell><Cell><Data ss:Type="Number">${tuso}</Data></Cell><Cell><Data ss:Type="Number">${price}</Data></Cell><Cell ss:Formula="=C${ggR}*D${ggR}*E${ggR}"><Data ss:Type="Number">${fmtNum(sub)}</Data></Cell></Row>\n`;
-        ggR++;
+    const ggDataRows = [['Descripción', 'Unid', 'Cantidad', 'Tiempo Uso', 'Precio Unit.', 'Subtotal']];
+    pGGSubs.forEach(sg => {
+      ggDataRows.push([sg.name]);
+      sg.items.forEach(it => {
+        ggDataRows.push([it.desc||'', it.unit||'', parseFloat(it.qty)||0, parseFloat(it.tiempoUso)||0, parseFloat(it.price)||0, {f: `C${ggDataRows.length+1}*D${ggDataRows.length+1}*E${ggDataRows.length+1}`}]);
       });
-      ws4+=emptyRow();ggR++;
+      ggDataRows.push([]);
     });
-    ws4+=boldRow(['TOTAL GASTOS GENERALES','','','','',String(fmtNum(ggTotal))]);
-    ws4+='</Table>\n</Worksheet>\n';
+    const wsGG = XLSX.utils.aoa_to_sheet(ggDataRows);
+    XLSX.utils.book_append_sheet(wb, wsGG, "Gastos Generales");
   }
 
-  /* ══════════════════
-     Armar XML final (XML Spreadsheet 2003 — .xls que Excel y LibreOffice abren nativamente)
-  ══════════════════ */
-  const xml=`<?xml version="1.0" encoding="UTF-8"?>
-<?mso-application progid="Excel.Sheet"?>
-<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
-  xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
-  xmlns:x="urn:schemas-microsoft-com:office:excel">
-<Styles>
-  <Style ss:ID="hdr">
-    <Font ss:Bold="1"/>
-    <Interior ss:Color="#D6E4F7" ss:Pattern="Solid"/>
-  </Style>
-  <Style ss:ID="ch">
-    <Font ss:Bold="1" ss:Color="#1E3A5F"/>
-    <Interior ss:Color="#E8EEF7" ss:Pattern="Solid"/>
-  </Style>
-</Styles>
-  ${ws0}${ws1}${ws2}${ws3}${ws4}</Workbook>`;
-
-  /* Descargar */
-  const blob=new Blob([xml],{type:'application/vnd.ms-excel;charset=utf-8'});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');
-  a.href=url;
-  const nombre=(p.obra||'Presupuesto').replace(/\s+/g,'_');
-  a.download=nombre+'_'+new Date().toISOString().slice(0,10)+'.xls';
-  document.body.appendChild(a);a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+  const nombre = (p.obra||'Presupuesto').replace(/\s+/g,'_');
+  XLSX.writeFile(wb, nombre + '_' + new Date().toISOString().slice(0,10) + '.xlsx');
 }
 
 /* ── INIT ── */
