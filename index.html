@@ -323,7 +323,9 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
       <div class="tab" id="tab-cub" onclick="sw('cub',this)">Cubicaciones</div>
     </div>
     <div id="gg-quick-add" style="display:none;padding-right:10px">
-      <button class="bs addp" onclick="document.getElementById('gg-subgroup-select').focus();document.getElementById('gg-subgroup-select').click();" style="font-size:11px;padding:6px 10px">+ Agregar Subgrupo</button>
+      <select id="gg-subgroup-select" class="gg-add-btn-select" style="font-size:11px;padding:6px 28px 6px 12px;background-position:right 8px center;background-size:10px;border-radius:6px;box-shadow:none">
+        <option value="">+ Agregar Subgrupo</option>
+      </select>
     </div>
   </nav>
 
@@ -363,11 +365,6 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
     <!-- PANEL: GG -->
     <div id="p-gg" class="pnl">
       <div id="gg-subgroups-container"></div>
-      <div style="display:flex;justify-content:center;margin-top:25px;margin-bottom:20px">
-        <select id="gg-subgroup-select" class="gg-add-btn-select">
-          <option value="">🔻 Agregar Subgrupo</option>
-        </select>
-      </div>
       <div style="text-align:right;padding:20px 0;font-weight:600;color:var(--navy);font-size:14px" id="gg-total-label">Total Gastos Generales: $ 0</div>
     </div>
 
@@ -665,7 +662,7 @@ function renderGGSubgroups(){
   let select = document.getElementById('gg-subgroup-select');
   let usedNames = ggSubgroups.map(sg => sg.name);
   let availableOptions = GG_SUBGROUP_OPTIONS.filter(opt => !usedNames.includes(opt));
-  select.innerHTML = '<option value="">🔻 Agregar Subgrupo</option>' + availableOptions.map(opt => `<option value="${opt}">${opt}</option>`).join('');
+  select.innerHTML = '<option value="">+ Agregar Subgrupo</option>' + availableOptions.map(opt => `<option value="${opt}">${opt}</option>`).join('');
   
   select.onchange = function() {
     if(this.value) { addGGSubgroup(this.value); this.value = ''; }
@@ -1384,44 +1381,39 @@ function exportXlsx(projId){
   function emptyRow(){return '<Row><Cell><Data ss:Type="String"></Data></Cell></Row>\n';}
 
   /* ══════════════════
-     HOJA 1: PRESUPUESTO
+     HOJA 0: PORTADA (OPCIONAL)
+  ══════════════════ */
+  let ws0='';
+  if(CFG.printCover){
+    ws0='<Worksheet ss:Name="Portada">\n<Table>\n';
+    ws0+=strRow(['PROYECTO: '+p.obra]);
+    ws0+=strRow(['MANDANTE: '+p.mandante]);
+    ws0+=strRow(['UBICACIÓN: '+p.ubicacion]);
+    ws0+=strRow(['FECHA: '+p.fecha]);
+    ws0+='</Table>\n</Worksheet>\n';
+  }
+
+  /* ══════════════════
+     HOJA 1: PRESUPUESTO (SIEMPRE)
   ══════════════════ */
   let ws1='<Worksheet ss:Name="Presupuesto">\n<Table>\n';
   ws1+='<Column ss:Width="55"/><Column ss:Width="220"/><Column ss:Width="55"/><Column ss:Width="70"/><Column ss:Width="100"/><Column ss:Width="110"/>\n';
   ws1+=boldRow(['Ítem','Descripción','Unid','Cantidad','P. Unit. (CLP)','Total (CLP)']);
 
-  /* Construir filas con referencias para que subtotales y totales tengan fórmulas */
-  let rowNum=2; // empieza en 2 (row 1 = header)
-  const chapterRows={}; // {chId: [startRow, endRow]}
-  let curChStart=null,curChId=null;
-
-  numbered.forEach((it,idx)=>{
+  let rowNum=2;
+  numbered.forEach((it)=>{
     if(it.t==='ch'){
-      if(curChId!==null) chapterRows[curChId].end=rowNum-1;
-      curChId=it.id;curChStart=rowNum;
-      chapterRows[it.id]={start:null,end:null,summaryRow:rowNum};
       ws1+=`<Row ss:StyleID="ch"><Cell><Data ss:Type="String">${escXml(it.num)}</Data></Cell><Cell><Data ss:Type="String">${escXml(it.name)}</Data></Cell><Cell/><Cell/><Cell/><Cell><Data ss:Type="Number">0</Data></Cell></Row>\n`;
       rowNum++;
     } else {
       const qty=parseFloat(it.qty)||0;
       const price=parseFloat(it.price)||0;
-      const colE=`E${rowNum}`,colD=`D${rowNum}`;
       ws1+=`<Row><Cell><Data ss:Type="String">${escXml(it.num)}</Data></Cell><Cell><Data ss:Type="String">${escXml(it.name)}</Data></Cell><Cell><Data ss:Type="String">${escXml(it.unit||'')}</Data></Cell><Cell><Data ss:Type="Number">${qty}</Data></Cell><Cell><Data ss:Type="Number">${price}</Data></Cell><Cell ss:Formula="=D${rowNum}*E${rowNum}"><Data ss:Type="Number">${qty*price}</Data></Cell></Row>\n`;
-      if(curChId!==null){
-        if(chapterRows[curChId].start===null)chapterRows[curChId].start=rowNum;
-        chapterRows[curChId].end=rowNum;
-      }
       rowNum++;
     }
   });
 
-  /* Ahora re-escribir las filas de capítulo con fórmulas SUMA reales */
-  /* Como ya construimos el XML, hacemos un post-fix: reemplazar la celda de Total de capítulo */
-  /* Más simple: agregamos resumen al final */
   ws1+=emptyRow(); rowNum++;
-
-  /* Resumen de totales */
-  const dcRow=rowNum;
   ws1+=strRow(['Costo Directo','','','','',String(fmtNum(dc))]);rowNum++;
   ws1+=strRow(['Gastos Generales','','','','',String(fmtNum(ggV))]);rowNum++;
   ws1+=strRow(['Utilidad ('+pUtilpct+'%)','','','','',String(fmtNum(util))]);rowNum++;
@@ -1432,84 +1424,80 @@ function exportXlsx(projId){
   ws1+='</Table>\n</Worksheet>\n';
 
   /* ══════════════════
-     HOJA 2: APU
+     HOJA 2: APU (OPCIONAL)
   ══════════════════ */
-  let ws2='<Worksheet ss:Name="APU">\n<Table>\n';
-  ws2+='<Column ss:Width="55"/><Column ss:Width="180"/><Column ss:Width="55"/><Column ss:Width="70"/><Column ss:Width="100"/><Column ss:Width="110"/>\n';
-
-  pitems.filter(it=>it.t==='it'&&pApuData[it.id]).forEach(it=>{
-    const a=pApuData[it.id];
-    ws2+=boldRow([it.num+' — '+it.name,'','','','P.U.:',String(fmtNum(parseFloat(it.price)||0))]);
-    ws2+=boldRow(['Categoría','Descripción','Unid','Rendimiento','P.U.','Subtotal']);
-    const titles=['Mano de Obra','Materiales','Equipos y Herramientas','Subcontratos'];
-    titles.forEach((t,si)=>{
-      (a.secs[si].rows||[]).forEach(r=>{
-        const qty=parseFloat(r.qty)||0;
-        const price=parseFloat(r.price)||0;
-        ws2+=`<Row><Cell><Data ss:Type="String">${escXml(t)}</Data></Cell><Cell><Data ss:Type="String">${escXml(r.desc||'')}</Data></Cell><Cell><Data ss:Type="String">${escXml(r.unit||'')}</Data></Cell><Cell><Data ss:Type="Number">${qty}</Data></Cell><Cell><Data ss:Type="Number">${price}</Data></Cell><Cell><Data ss:Type="Number">${fmtNum(qty*price)}</Data></Cell></Row>\n`;
+  let ws2='';
+  if(CFG.printApu){
+    ws2='<Worksheet ss:Name="APU">\n<Table>\n';
+    ws2+='<Column ss:Width="55"/><Column ss:Width="180"/><Column ss:Width="55"/><Column ss:Width="70"/><Column ss:Width="100"/><Column ss:Width="110"/>\n';
+    pitems.filter(it=>it.t==='it'&&pApuData[it.id]).forEach(it=>{
+      const a=pApuData[it.id];
+      ws2+=boldRow([it.num+' — '+it.name,'','','','P.U.:',String(fmtNum(parseFloat(it.price)||0))]);
+      ws2+=boldRow(['Categoría','Descripción','Unid','Rendimiento','P.U.','Subtotal']);
+      ['Mano de Obra','Materiales','Equipos y Herramientas','Subcontratos'].forEach((t,si)=>{
+        (a.secs[si].rows||[]).forEach(r=>{
+          const qty=parseFloat(r.qty)||0, price=parseFloat(r.price)||0;
+          ws2+=`<Row><Cell><Data ss:Type="String">${escXml(t)}</Data></Cell><Cell><Data ss:Type="String">${escXml(r.desc||'')}</Data></Cell><Cell><Data ss:Type="String">${escXml(r.unit||'')}</Data></Cell><Cell><Data ss:Type="Number">${qty}</Data></Cell><Cell><Data ss:Type="Number">${price}</Data></Cell><Cell><Data ss:Type="Number">${fmtNum(qty*price)}</Data></Cell></Row>\n`;
+        });
       });
+      const mo=(a.secs[0].rows||[]).reduce((x,r)=>x+(parseFloat(r.qty)||0)*(parseFloat(r.price)||0),0);
+      const pct=(parseFloat(a.ls.afp||0)+parseFloat(a.ls.salud||0)+parseFloat(a.ls.seguro||0)+parseFloat(a.ls.mutual||0)+parseFloat(a.ls.sis||0)+parseFloat(a.ls.sanna||0)+parseFloat(a.ls.otros||0));
+      const ls=a.ls.on?mo*(pct/100):0;
+      ws2+=strRow(['Leyes Sociales ('+pct.toFixed(1)+'%)','','','','',String(fmtNum(ls))]);
+      ws2+=boldRow(['TOTAL UNITARIO','','','','',String(fmtNum(parseFloat(it.price)||0))]);
+      ws2+=emptyRow();
     });
-    const mo=(a.secs[0].rows||[]).reduce((x,r)=>x+(parseFloat(r.qty)||0)*(parseFloat(r.price)||0),0);
-    const pct=(parseFloat(a.ls.afp||0)+parseFloat(a.ls.salud||0)+parseFloat(a.ls.seguro||0)+parseFloat(a.ls.mutual||0)+parseFloat(a.ls.sis||0)+parseFloat(a.ls.sanna||0)+parseFloat(a.ls.otros||0));
-    const ls=a.ls.on?mo*(pct/100):0;
-    ws2+=strRow(['Leyes Sociales ('+pct.toFixed(1)+'%)','','','','',String(fmtNum(ls))]);
-    ws2+=boldRow(['TOTAL UNITARIO','','','','',String(fmtNum(parseFloat(it.price)||0))]);
-    ws2+=emptyRow();
-  });
-  ws2+='</Table>\n</Worksheet>\n';
+    ws2+='</Table>\n</Worksheet>\n';
+  }
 
   /* ══════════════════
-     HOJA 3: CUBICACIONES
+     HOJA 3: CUBICACIONES (OPCIONAL)
   ══════════════════ */
-  let ws3='<Worksheet ss:Name="Cubicaciones">\n<Table>\n';
-  ws3+='<Column ss:Width="180"/><Column ss:Width="70"/><Column ss:Width="70"/><Column ss:Width="70"/><Column ss:Width="70"/><Column ss:Width="90"/>\n';
-
-  pitems.filter(it=>it.t==='it'&&pTofData[it.id]&&pTofData[it.id].length).forEach(it=>{
-    ws3+=boldRow([it.num+' — '+it.name]);
-    ws3+=boldRow(['Descripción / Eje','Cant.','Ancho','Largo','Alto','Total']);
-    let total=0;
-    let tofRowNum=3; // aproximado, para fórmulas relativas
-    (pTofData[it.id]||[]).forEach((r,ri)=>{
-      const n=parseFloat(r.n)||0;
-      const a=Math.max(1,parseFloat(r.a)||1);
-      const l=Math.max(1,parseFloat(r.l)||1);
-      const h=Math.max(1,parseFloat(r.h!==undefined?r.h:1)||1);
-      const tot=n*a*l*h;
-      total+=tot;
-      ws3+=`<Row><Cell><Data ss:Type="String">${escXml(r.desc||'')}</Data></Cell><Cell><Data ss:Type="Number">${n}</Data></Cell><Cell><Data ss:Type="Number">${a}</Data></Cell><Cell><Data ss:Type="Number">${l}</Data></Cell><Cell><Data ss:Type="Number">${h}</Data></Cell><Cell ss:Formula="=B${tofRowNum}*C${tofRowNum}*D${tofRowNum}*E${tofRowNum}"><Data ss:Type="Number">${fmtNum(tot)}</Data></Cell></Row>\n`;
-      tofRowNum++;
+  let ws3='';
+  if(CFG.printCub){
+    ws3='<Worksheet ss:Name="Cubicaciones">\n<Table>\n';
+    ws3+='<Column ss:Width="180"/><Column ss:Width="70"/><Column ss:Width="70"/><Column ss:Width="70"/><Column ss:Width="70"/><Column ss:Width="90"/>\n';
+    pitems.filter(it=>it.t==='it'&&pTofData[it.id]&&pTofData[it.id].length).forEach(it=>{
+      ws3+=boldRow([it.num+' — '+it.name]);
+      ws3+=boldRow(['Descripción / Eje','Cant.','Ancho','Largo','Alto','Total']);
+      let total=0, tofRowNum=3;
+      (pTofData[it.id]||[]).forEach((r)=>{
+        const n=parseFloat(r.n)||0, a=Math.max(1,parseFloat(r.a)||1), l=Math.max(1,parseFloat(r.l)||1), h=Math.max(1,parseFloat(r.h!==undefined?r.h:1)||1);
+        const tot=n*a*l*h; total+=tot;
+        ws3+=`<Row><Cell><Data ss:Type="String">${escXml(r.desc||'')}</Data></Cell><Cell><Data ss:Type="Number">${n}</Data></Cell><Cell><Data ss:Type="Number">${a}</Data></Cell><Cell><Data ss:Type="Number">${l}</Data></Cell><Cell><Data ss:Type="Number">${h}</Data></Cell><Cell ss:Formula="=B${tofRowNum}*C${tofRowNum}*D${tofRowNum}*E${tofRowNum}"><Data ss:Type="Number">${fmtNum(tot)}</Data></Cell></Row>\n`;
+        tofRowNum++;
+      });
+      ws3+=boldRow(['TOTAL PARTIDA','','','','',String(fmtNum(total))+' '+escXml(it.unit||'')]);
+      ws3+=emptyRow();
     });
-    ws3+=boldRow(['TOTAL PARTIDA','','','','',String(fmtNum(total))+' '+escXml(it.unit||'')]);
-    ws3+=emptyRow();
-  });
-  ws3+='</Table>\n</Worksheet>\n';
+    ws3+='</Table>\n</Worksheet>\n';
+  }
 
   /* ══════════════════
-     HOJA 4: GASTOS GENERALES
+     HOJA 4: GASTOS GENERALES (OPCIONAL)
   ══════════════════ */
-  let ws4='<Worksheet ss:Name="Gastos Generales">\n<Table>\n';
-  ws4+='<Column ss:Width="200"/><Column ss:Width="60"/><Column ss:Width="70"/><Column ss:Width="80"/><Column ss:Width="100"/><Column ss:Width="110"/>\n';
-  ws4+=boldRow(['Descripción','Unid','Cantidad','Tiempo Uso','Precio Unit.','Subtotal']);
-
-  let ggTotal=0;
-  let ggR=2;
-  pGGSubs.forEach(sg=>{
-    const sgTotal=sg.items.reduce((a,it)=>a+(parseFloat(it.qty)||0)*(parseFloat(it.tiempoUso)||0)*(parseFloat(it.price)||0),0);
-    ggTotal+=sgTotal;
-    ws4+=boldRow([sg.name,'','','','',String(fmtNum(sgTotal))]);
-    ggR++;
-    sg.items.forEach(it=>{
-      const qty=parseFloat(it.qty)||0;
-      const tuso=parseFloat(it.tiempoUso)||0;
-      const price=parseFloat(it.price)||0;
-      const sub=qty*tuso*price;
-      ws4+=`<Row><Cell><Data ss:Type="String">${escXml(it.desc||'')}</Data></Cell><Cell><Data ss:Type="String">${escXml(it.unit||'')}</Data></Cell><Cell><Data ss:Type="Number">${qty}</Data></Cell><Cell><Data ss:Type="Number">${tuso}</Data></Cell><Cell><Data ss:Type="Number">${price}</Data></Cell><Cell ss:Formula="=C${ggR}*D${ggR}*E${ggR}"><Data ss:Type="Number">${fmtNum(sub)}</Data></Cell></Row>\n`;
+  let ws4='';
+  if(CFG.printGG){
+    ws4='<Worksheet ss:Name="Gastos Generales">\n<Table>\n';
+    ws4+='<Column ss:Width="200"/><Column ss:Width="60"/><Column ss:Width="70"/><Column ss:Width="80"/><Column ss:Width="100"/><Column ss:Width="110"/>\n';
+    ws4+=boldRow(['Descripción','Unid','Cantidad','Tiempo Uso','Precio Unit.','Subtotal']);
+    let ggTotal=0, ggR=2;
+    pGGSubs.forEach(sg=>{
+      const sgTotal=sg.items.reduce((a,it)=>a+(parseFloat(it.qty)||0)*(parseFloat(it.tiempoUso)||0)*(parseFloat(it.price)||0),0);
+      ggTotal+=sgTotal;
+      ws4+=boldRow([sg.name,'','','','',String(fmtNum(sgTotal))]);
       ggR++;
+      sg.items.forEach(it=>{
+        const qty=parseFloat(it.qty)||0, tuso=parseFloat(it.tiempoUso)||0, price=parseFloat(it.price)||0;
+        const sub=qty*tuso*price;
+        ws4+=`<Row><Cell><Data ss:Type="String">${escXml(it.desc||'')}</Data></Cell><Cell><Data ss:Type="String">${escXml(it.unit||'')}</Data></Cell><Cell><Data ss:Type="Number">${qty}</Data></Cell><Cell><Data ss:Type="Number">${tuso}</Data></Cell><Cell><Data ss:Type="Number">${price}</Data></Cell><Cell ss:Formula="=C${ggR}*D${ggR}*E${ggR}"><Data ss:Type="Number">${fmtNum(sub)}</Data></Cell></Row>\n`;
+        ggR++;
+      });
+      ws4+=emptyRow();ggR++;
     });
-    ws4+=emptyRow();ggR++;
-  });
-  ws4+=boldRow(['TOTAL GASTOS GENERALES','','','','',String(fmtNum(ggTotal))]);
-  ws4+='</Table>\n</Worksheet>\n';
+    ws4+=boldRow(['TOTAL GASTOS GENERALES','','','','',String(fmtNum(ggTotal))]);
+    ws4+='</Table>\n</Worksheet>\n';
+  }
 
   /* ══════════════════
      Armar XML final (XML Spreadsheet 2003 — .xls que Excel y LibreOffice abren nativamente)
@@ -1529,7 +1517,7 @@ function exportXlsx(projId){
     <Interior ss:Color="#E8EEF7" ss:Pattern="Solid"/>
   </Style>
 </Styles>
-${ws1}${ws2}${ws3}${ws4}</Workbook>`;
+  ${ws0}${ws1}${ws2}${ws3}${ws4}</Workbook>`;
 
   /* Descargar */
   const blob=new Blob([xml],{type:'application/vnd.ms-excel;charset=utf-8'});
