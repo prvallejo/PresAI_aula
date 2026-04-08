@@ -450,7 +450,11 @@ function updLogoHdr(){
 
 function N(v){
   if(typeof v === 'string') {
-    v = v.replace(/\./g,'').replace(',','.');
+    if (CFG.decimalSeparator === 'coma') {
+      v = v.replace(/\./g,'').replace(',', '.');
+    } else {
+      v = v.replace(/,/g,'');
+    }
   }
   return parseFloat(v)||0;
 }
@@ -464,12 +468,12 @@ function fmtP(n){return fmtN(n,CFG.decimalsPrice);}
 function fmtB(n){return fmtN(n,CFG.decimalsBudget);}
 function esc(s){return(s||'').toString().replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
 
-function validateDecimalInput(input) {
-  let val = input.value;
+function validateDecimalInput(e) {
+  let char = String.fromCharCode(e.which || e.keyCode);
   if (CFG.decimalSeparator === 'coma') {
-    if (val.includes('.')) { input.value = ''; return false; }
+    if (char === '.') { e.preventDefault(); return false; }
   } else {
-    if (val.includes(',')) { input.value = ''; return false; }
+    if (char === ',') { e.preventDefault(); return false; }
   }
   return true;
 }
@@ -661,8 +665,8 @@ function renderGGSubgroups(){
       html += `<tr>
         <td><input value="${esc(it.desc)}" oninput="uGGItem(${sgi},${iti},'desc',this.value)"/></td>
         <td><input value="${esc(it.unit)}" oninput="uGGItem(${sgi},${iti},'unit',this.value)"/></td>
-        <td><input class="r" type="text" value="${fmtQ(N(it.qty))}" oninput="if(validateDecimalInput(this)) uGGItem(${sgi},${iti},'qty',this.value)" onfocus="this.select()"/></td>
-        <td><input class="r" type="text" value="${fmtQ(N(it.tiempoUso))}" oninput="if(validateDecimalInput(this)) uGGItem(${sgi},${iti},'tiempoUso',this.value)" onfocus="this.select()"/></td>
+        <td><input class="r" type="text" value="${fmtQ(N(it.qty))}" onkeypress="return validateDecimalInput(event)" oninput="uGGItem(${sgi},${iti},'qty',this.value)" onfocus="this.select()"/></td>
+        <td><input class="r" type="text" value="${fmtQ(N(it.tiempoUso))}" onkeypress="return validateDecimalInput(event)" oninput="uGGItem(${sgi},${iti},'tiempoUso',this.value)" onfocus="this.select()"/></td>
         <td><input class="r" type="text" value="${fmtP(N(it.price))}" oninput="uGGItem(${sgi},${iti},'price',this.value)" onfocus="this.select()"/></td>
         <td class="r mono" data-gg-sub="${sgi}-${iti}">${sym()} ${fmtB(sub)}</td>
         <td><button class="bs del" onclick="delGGItem(${sgi},${iti})">×</button></td>
@@ -732,7 +736,7 @@ function renderApuEdit(id){
     rows.forEach((r,ri)=>html+=`<tr>
       <td><input value="${esc(r.desc)}" oninput="uapu('${id}',${si},${ri},'desc',this.value)" onblur="checkApuAutoFill('${id}',${si},${ri},this.value)"/></td>
       <td><input style="width:65px" value="${esc(r.unit)}" oninput="uapu('${id}',${si},${ri},'unit',this.value)"/></td>
-      <td><input class="r" type="text" value="${fmtQ(N(r.qty))}" oninput="if(validateDecimalInput(this)) uapu('${id}',${si},${ri},'qty',this.value)" onfocus="this.select()"/></td>
+      <td><input class="r" type="text" value="${fmtQ(N(r.qty))}" onkeypress="return validateDecimalInput(event)" oninput="uapu('${id}',${si},${ri},'qty',this.value)" onfocus="this.select()"/></td>
       <td><input class="r" type="text" value="${fmtP(N(r.price))}" oninput="uapu('${id}',${si},${ri},'price',this.value)" onfocus="this.select()"/></td>
       <td class="r mn" id="sub-${id}-${si}-${ri}">${fmtP(N(r.qty)*N(r.price))}</td>
       <td><button class="bs del" onclick="dapu('${id}',${si},${ri})">×</button></td></tr>`);
@@ -836,10 +840,10 @@ function renderTof(id){
     let tot=N(r.n)*Math.max(1,N(r.a))*Math.max(1,N(r.l))*Math.max(1,N(r.h));
     html+=`<div class="tof-row">
       <input value="${esc(r.desc)}" oninput="utof('${id}',${ri},'desc',this.value)"/>
-      <input class="r" type="text" value="${fmtQ(N(r.n))}" oninput="if(validateDecimalInput(this)) utof('${id}',${ri},'n',this.value)" onfocus="this.select()"/>
-      <input class="r" type="text" value="${fmtQ(N(r.a))}" oninput="if(validateDecimalInput(this)) utof('${id}',${ri},'a',this.value)" onfocus="this.select()"/>
-      <input class="r" type="text" value="${fmtQ(N(r.l))}" oninput="if(validateDecimalInput(this)) utof('${id}',${ri},'l',this.value)" onfocus="this.select()"/>
-      <input class="r" type="text" value="${fmtQ(N(r.h))}" oninput="if(validateDecimalInput(this)) utof('${id}',${ri},'h',this.value)" onfocus="this.select()"/>
+      <input class="r" type="text" value="${fmtQ(N(r.n))}" onkeypress="return validateDecimalInput(event)" oninput="utof('${id}',${ri},'n',this.value)" onfocus="this.select()"/>
+      <input class="r" type="text" value="${fmtQ(N(r.a))}" onkeypress="return validateDecimalInput(event)" oninput="utof('${id}',${ri},'a',this.value)" onfocus="this.select()"/>
+      <input class="r" type="text" value="${fmtQ(N(r.l))}" onkeypress="return validateDecimalInput(event)" oninput="utof('${id}',${ri},'l',this.value)" onfocus="this.select()"/>
+      <input class="r" type="text" value="${fmtQ(N(r.h))}" onkeypress="return validateDecimalInput(event)" oninput="utof('${id}',${ri},'h',this.value)" onfocus="this.select()"/>
       <div class="st" id="tof-sub-${id}-${ri}">${fmtQ(tot)}</div>
       <button class="bs del" onclick="dtof('${id}',${ri})">×</button></div>`;
   });
