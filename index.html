@@ -163,8 +163,8 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
 .gg-subgroup-name{font-weight:600;color:var(--navy);font-size:12px}
 .gg-subgroup-total{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--amber)}
 .gg-table{width:100%;border-collapse:collapse;font-size:11px}
-.gg-table th{background:var(--bg2);padding:6px;text-align:left;font-weight:600;color:var(--txt2);border-bottom:1px solid var(--border2);font-size:9px;text-transform:uppercase}
-.gg-table td{padding:5px 6px;border-bottom:1px solid var(--border)}
+.gg-table th{background:var(--bg2);padding:6px;text-align:left;font-weight:600;color:var(--txt2);border-bottom:1px solid var(--border2);font-size:9px;text-transform:uppercase;vertical-align:middle}
+.gg-table td{padding:5px 6px;border-bottom:1px solid var(--border);vertical-align:middle}
 .gg-table input{font-family:var(--ff);font-size:11px;background:transparent;border:none;border-bottom:1px solid transparent;outline:none;width:100%;padding:2px 3px;color:var(--txt)}
 .gg-table input:focus{border-bottom-color:var(--navy)}
 .gg-table .r{text-align:right;font-family:var(--mono)}
@@ -178,9 +178,9 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
 .sec-hdr .sl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
 .sec-hdr .st{font-family:var(--mono);font-size:12px;font-weight:600}
 .at{width:100%;border-collapse:collapse}
-.at th{font-size:9px;font-weight:600;color:var(--txt2);text-transform:uppercase;letter-spacing:.5px;padding:5px;border-bottom:1px solid var(--border2);text-align:left;background:var(--bg2)}
+.at th{font-size:9px;font-weight:600;color:var(--txt2);text-transform:uppercase;letter-spacing:.5px;padding:5px;border-bottom:1px solid var(--border2);text-align:left;background:var(--bg2);vertical-align:middle}
 .at th.r{text-align:right}
-.at td{padding:3px 4px;border-bottom:1px solid var(--border)}
+.at td{padding:3px 4px;border-bottom:1px solid var(--border);vertical-align:middle}
 .at tr:last-child td{border-bottom:none}
 .at input, .at select{font-family:var(--ff);font-size:12px;background:transparent;border:none;border-bottom:1px solid transparent;outline:none;width:100%;color:var(--txt);padding:2px 3px}
 .at input:focus, .at select:focus{border-bottom-color:var(--navy)}
@@ -491,11 +491,10 @@ function numToWords(n){
   }
   function billones(n){
     if(n<1000000000)return millon(n);
-    var b=Math.floor(n/1000000000),r=n%1000000000;
-    var t='';
-    if(b===1) t='MIL MILLONES';
-    else t=mil(b)+' MILLONES'; // Cambiado para que diga "MIL SEISCIENTOS CINCUENTA Y CINCO MILLONES" como en la captura
-    return r>0?t+' '+millon(r):t;
+    var b=Math.floor(n/1000000),r=n%1000000;
+    var t=mil(Math.floor(b/1000))+' MIL '+(b%1000>0?cen(b%1000)+' ':'')+'MILLONES';
+    if(Math.floor(b/1000)===1) t='MIL '+(b%1000>0?cen(b%1000)+' ':'')+'MILLONES';
+    return r>0?t+' '+mil(r):t;
   }
   var cur=CFG.currency==='USD'?'DÓLARES':CFG.currency==='UF'?'UF':'PESOS';
   return'SON: '+billones(n)+' '+cur+' .-';
@@ -528,7 +527,7 @@ function rb(){
         <input class="ri mono ch" data-field="num" data-id="${it.id}" placeholder="N°" value="${esc(it.num)}" autocomplete="off"/>
         <input class="ri ch" data-field="name" data-id="${it.id}" placeholder="Nombre del capítulo..." value="${esc(it.name)}" autocomplete="off"/>
         <span></span><span></span><span></span>
-        <span class="span-ch-tot">${sym()} ${fmtB(ct[it.id]||0)}</span>
+        <span class="span-ch-tot">${fmtB(ct[it.id]||0)}</span>
         <span class="span-acts no-print">
           <button class="bs addp" onclick="addItToChapter('${it.id}')">+ Partida</button>
           <button class="bs del" onclick="di('${it.id}')">×</button>
@@ -544,7 +543,7 @@ function rb(){
       <input class="ri" style="width:55px" data-field="unit" data-id="${it.id}" placeholder="Unid" value="${esc(it.unit)}" autocomplete="off"/>
       <input class="${qtyClass}" data-field="qty" data-id="${it.id}" placeholder="0" value="${fmtQ(N(it.qty))}" onfocus="this.select()" autocomplete="off"/>
       <input class="${priceClass}" data-field="price" data-id="${it.id}" placeholder="P.Unit." value="${fmtP(N(it.price))}" onfocus="this.select()" autocomplete="off"/>
-      <span class="span-tot ${it.isApu||it.isCub?'magenta':''}">${sym()} ${fmtB(tot)}</span>
+      <span class="span-tot ${it.isApu||it.isCub?'magenta':''}">${fmtB(tot)}</span>
       <span class="span-acts no-print">
         <button class="bs cub${hc?' done':''}" onclick="openTof('${it.id}')">${hc?'✓Cub':'Cub'}</button>
         <button class="bs apu${ha?' done':''}" onclick="openApu('${it.id}')">${ha?'✓APU':'APU'}</button>
@@ -584,7 +583,7 @@ function initEvents(){
       var row=document.querySelector(`.row-it[data-id="${it.id}"], .row-ch[data-id="${it.id}"]`);
       if(row){
         var ts=row.querySelector('.span-ch-tot, .span-tot');
-        if(ts)ts.textContent=sym()+' '+(it.t==='ch'?fmtB(ct[it.id]||0):fmtB(N(it.qty)*N(it.price)));
+        if(ts)ts.textContent=(it.t==='ch'?fmtB(ct[it.id]||0):fmtB(N(it.qty)*N(it.price)));
       }
     });
     rc();markUnsaved();
@@ -654,11 +653,11 @@ function renderGGSubgroups(){
     html += `<div class="gg-subgroup">
       <div class="gg-subgroup-hdr">
         <span class="gg-subgroup-name">${esc(sg.name)}</span>
-        <span class="gg-subgroup-total" data-gg-total="${sgi}">${sym()} ${fmtB(sgTotal)}</span>
+        <span class="gg-subgroup-total" data-gg-total="${sgi}">${fmtB(sgTotal)}</span>
         <button class="bs del" onclick="delGGSubgroup(${sgi})">×</button>
       </div>
       <table class="gg-table">
-        <thead><tr><th>Descripción</th><th style="width:60px">Unid</th><th style="width:70px">Cant.</th><th style="width:90px">Tiempo Uso</th><th style="width:80px">Precio</th><th style="width:80px">Subtotal</th><th style="width:30px"></th></tr></thead>
+        <thead><tr><th style="width:260px">Descripción</th><th style="width:50px">Unid</th><th style="width:60px">Cant.</th><th style="width:80px">Tiempo Uso</th><th style="width:80px">Precio (${sym()})</th><th style="width:80px">Subtotal (${sym()})</th><th style="width:30px"></th></tr></thead>
         <tbody>`;
     
     sg.items.forEach((it, iti) => {
@@ -669,7 +668,7 @@ function renderGGSubgroups(){
         <td><input class="r" type="text" value="${fmtQ(N(it.qty))}" oninput="uGGItem(${sgi},${iti},'qty',this.value)" onfocus="this.select()"/></td>
         <td><input class="r" type="text" value="${fmtQ(N(it.tiempoUso))}" oninput="uGGItem(${sgi},${iti},'tiempoUso',this.value)" onfocus="this.select()"/></td>
         <td><input class="r" type="text" value="${fmtP(N(it.price))}" oninput="uGGItem(${sgi},${iti},'price',this.value)" onfocus="this.select()"/></td>
-        <td class="r mono" data-gg-sub="${sgi}-${iti}">${sym()} ${fmtB(sub)}</td>
+        <td class="r mono" data-gg-sub="${sgi}-${iti}">${fmtB(sub)}</td>
         <td><button class="bs del" onclick="delGGItem(${sgi},${iti})">×</button></td>
       </tr>`;
     });
@@ -708,10 +707,10 @@ function uGGItem(sgi,iti,f,v){
   let r=ggSubgroups[sgi].items[iti];
   let sub=N(r.qty)*N(r.tiempoUso)*N(r.price);
   let subEl=document.querySelector(`[data-gg-sub="${sgi}-${iti}"]`);
-  if(subEl) subEl.textContent=sym()+' '+fmtB(sub);
+  if(subEl) subEl.textContent=fmtB(sub);
   let sgTotal=ggSubgroups[sgi].items.reduce((a,it)=>a+N(it.qty)*N(it.tiempoUso)*N(it.price),0);
   let sgTotEl=document.querySelector(`[data-gg-total="${sgi}"]`);
-  if(sgTotEl) sgTotEl.textContent=sym()+' '+fmtB(sgTotal);
+  if(sgTotEl) sgTotEl.textContent=fmtB(sgTotal);
   updateGGTotal(); rc(); markUnsaved();
 }
 function delGGItem(sgi,iti){
@@ -741,8 +740,8 @@ function renderApuEdit(id){
     let rows=a.secs[si].rows||[];
     let st=rows.reduce((x,r)=>x+N(r.qty)*N(r.price),0);
     html+=`<div class="sec-wrap">
-      <div class="sec-hdr s-${cls[si]}"><span class="sl">${t}</span><span class="st" id="st-${id}-${si}">${sym()} ${fmtP(st)}</span></div>
-      <table class="at"><thead><tr><th>Descripción</th><th>Unid</th><th class="r">Rend.</th><th class="r">P.U. (${sym()})</th><th class="r">Subtotal (${sym()})</th><th></th></tr></thead><tbody>`;
+	      <div class="sec-hdr s-${cls[si]}"><span class="sl">${t}</span><span class="st" id="st-${id}-${si}">${fmtP(st)}</span></div>
+	      <table class="at"><thead><tr><th style="width:260px">Descripción</th><th style="width:60px">Unid</th><th class="r" style="width:70px">Rend.</th><th class="r" style="width:90px">P.U. (${sym()})</th><th class="r" style="width:100px">Subtotal (${sym()})</th><th style="width:30px"></th></tr></thead><tbody>`;
     rows.forEach((r,ri)=>html+=`<tr>
       <td><input value="${esc(r.desc)}" oninput="uapu('${id}',${si},${ri},'desc',this.value)"/></td>
       <td><input style="width:65px" value="${esc(r.unit)}" oninput="uapu('${id}',${si},${ri},'unit',this.value)"/></td>
@@ -1074,7 +1073,7 @@ function openSettings(){
 
     /* MONEDA */
     '<div class="cfg-section"><h4>Moneda y Decimales</h4><div class="cfg-grid">'+
-      '<div class="cfg-field"><label>Moneda</label><select onchange="CFG.currency=this.value;saveCFG();rb();rc();openSettings();">'+
+      '<div class="cfg-field"><label>Moneda</label><select onchange="CFG.currency=this.value;if(this.value===\'CLP\')CFG.parity=1;saveCFG();rb();rc();openSettings();">'+
         '<option value="CLP" '+(CFG.currency==='CLP'?'selected':'')+'>CLP ($)</option>'+
         '<option value="USD" '+(CFG.currency==='USD'?'selected':'')+'>USD (US$)</option>'+
         '<option value="UF" '+(CFG.currency==='UF'?'selected':'')+'>UF</option>'+
