@@ -1,4 +1,4 @@
-<!-- Restaurado desde index_copia.html -->
+<!-- Restaurado y mejorado según requerimientos -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -372,7 +372,8 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
       <div style="margin-bottom:15px;display:flex;justify-content:space-between;align-items:center">
         <h2 style="font-size:16px;color:var(--navy)">Listado de Análisis de Precios Unitarios</h2>
       </div>
-      <div id="apu-list" class="apu-list-grid"></div>
+      <div id="apu-list-grid" class="apu-list-grid"></div>
+      <div id="apu-list-empty" style="text-align:center;padding:40px;color:var(--txt3);display:none">No hay análisis unitarios creados.</div>
     </div>
 
     <!-- PANEL: CUB -->
@@ -380,7 +381,8 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
       <div style="margin-bottom:15px">
         <h2 style="font-size:16px;color:var(--navy)">Memorias de Cubicaciones</h2>
       </div>
-      <div id="cub-list" class="apu-list-grid"></div>
+      <div id="cub-list-grid" class="apu-list-grid"></div>
+      <div id="cub-list-empty" style="text-align:center;padding:40px;color:var(--txt3);display:none">No hay cubicaciones creadas.</div>
     </div>
   </main>
 </div>
@@ -388,7 +390,6 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
 <div class="ov" id="ov"><div id="mc"></div></div>
 
 <script>
-/* JS script content here, exactly from index_copia.html but with requested fixes */
 let items = [
   {id:gid(),t:'ch',num:'1.-',name:'OBRAS PRELIMINARES',unit:'',qty:0,price:0,isApu:false,isCub:false},
   {id:gid(),t:'it',num:'1.1',name:'Instalación de faenas',unit:'gl',qty:1,price:0,isApu:false,isCub:false}
@@ -398,6 +399,7 @@ let isDirty = false;
 let apuData = {};
 let tofData = {};
 let ggSubgroups = [];
+let autoSaveInterval = null;
 
 const GG_SUBGROUP_OPTIONS = [
   'Personal Técnico y Administrativo','Leyes Sociales Personal Mensual',
@@ -412,6 +414,7 @@ const GG_SUBGROUP_OPTIONS = [
 
 const CFG_DEF = {
   currency:'CLP', parity:1, decimalsQty:2, decimalsPrice:0, decimalsBudget:0,
+  decimalSeparator: 'punto', // 'punto' o 'coma'
   companyName:'', companyTagline:'Construcción Civil · Chile',
   companyRut:'', companyAddress:'', companyPhone:'', companyEmail:'', companyWeb:'',
   repLegal:'', repLegalRut:'', profName:'', profRut:'',
@@ -438,13 +441,19 @@ function saveCFG(){lsS('od_cfg',CFG);}
 function loadCFG(){let x=lsL('od_cfg');if(x)CFG=Object.assign(CFG,x);applyColor();updBrand();updLogoHdr();setupAutoSave();}
 function applyColor(){document.documentElement.style.setProperty('--navy',CFG.colorHeader);}
 function updBrand(){
-  document.getElementById('hdrProjName').textContent = document.getElementById('pObra').value || (currentProjectId?'Proyecto':'Nuevo proyecto');
+  let obra = document.getElementById('pObra').value;
+  document.getElementById('hdrProjName').textContent = obra || (currentProjectId?'Proyecto':'Nuevo proyecto');
 }
 function updLogoHdr(){
   if(CFG.logoDataUrl) document.getElementById('logoWrap').innerHTML=`<img src="${CFG.logoDataUrl}"/>`;
 }
 
-function N(v){return parseFloat(v)||0;}
+function N(v){
+  if(typeof v === 'string') {
+    v = v.replace(/\./g,'').replace(',','.');
+  }
+  return parseFloat(v)||0;
+}
 function sym(){return CFG.currency==='USD'?'US$':CFG.currency==='UF'?'UF':'$';}
 function fmtN(n,d){
   if(CFG.currency==='UF') return n.toLocaleString('es-CL',{minimumFractionDigits:d||2,maximumFractionDigits:d||2});
@@ -454,6 +463,16 @@ function fmtQ(n){return fmtN(n,CFG.decimalsQty);}
 function fmtP(n){return fmtN(n,CFG.decimalsPrice);}
 function fmtB(n){return fmtN(n,CFG.decimalsBudget);}
 function esc(s){return(s||'').toString().replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
+
+function validateDecimalInput(input) {
+  let val = input.value;
+  if (CFG.decimalSeparator === 'coma') {
+    if (val.includes('.')) { input.value = ''; return false; }
+  } else {
+    if (val.includes(',')) { input.value = ''; return false; }
+  }
+  return true;
+}
 
 function numToWords(n){
   n=Math.round(n);if(n===0)return'CERO';
@@ -561,7 +580,7 @@ function initEvents(){
   document.getElementById('brows').addEventListener('input',function(e){
     var inp=e.target;if(!inp.dataset||!inp.dataset.field)return;
     var id=inp.dataset.id,f=inp.dataset.field,v=inp.value;
-    if(f==='qty'||f==='price') v=N(v.replace(/\./g,'').replace(',','.'));
+    if(f==='qty'||f==='price') v=N(v);
     items=items.map(function(x){if(x.id!==id)return x;var o=Object.assign({},x);o[f]=v;return o;});
     var ct=ctotals();
     items.forEach(function(it){
@@ -642,8 +661,8 @@ function renderGGSubgroups(){
       html += `<tr>
         <td><input value="${esc(it.desc)}" oninput="uGGItem(${sgi},${iti},'desc',this.value)"/></td>
         <td><input value="${esc(it.unit)}" oninput="uGGItem(${sgi},${iti},'unit',this.value)"/></td>
-        <td><input class="r" type="text" value="${fmtQ(N(it.qty))}" oninput="uGGItem(${sgi},${iti},'qty',this.value)" onfocus="this.select()"/></td>
-        <td><input class="r" type="text" value="${fmtQ(N(it.tiempoUso))}" oninput="uGGItem(${sgi},${iti},'tiempoUso',this.value)" onfocus="this.select()"/></td>
+        <td><input class="r" type="text" value="${fmtQ(N(it.qty))}" oninput="if(validateDecimalInput(this)) uGGItem(${sgi},${iti},'qty',this.value)" onfocus="this.select()"/></td>
+        <td><input class="r" type="text" value="${fmtQ(N(it.tiempoUso))}" oninput="if(validateDecimalInput(this)) uGGItem(${sgi},${iti},'tiempoUso',this.value)" onfocus="this.select()"/></td>
         <td><input class="r" type="text" value="${fmtP(N(it.price))}" oninput="uGGItem(${sgi},${iti},'price',this.value)" onfocus="this.select()"/></td>
         <td class="r mono" data-gg-sub="${sgi}-${iti}">${sym()} ${fmtB(sub)}</td>
         <td><button class="bs del" onclick="delGGItem(${sgi},${iti})">×</button></td>
@@ -671,7 +690,7 @@ function addGGItem(sgi){
   renderGGSubgroups(); markUnsaved();
 }
 function uGGItem(sgi,iti,f,v){
-  if(f==='qty'||f==='price'||f==='tiempoUso') v=N(v.replace(/\./g,'').replace(',','.'));
+  if(f==='qty'||f==='price'||f==='tiempoUso') v=N(v);
   ggSubgroups[sgi].items[iti][f]=v;
   let r=ggSubgroups[sgi].items[iti];
   let sub=N(r.qty)*N(r.tiempoUso)*N(r.price);
@@ -713,7 +732,7 @@ function renderApuEdit(id){
     rows.forEach((r,ri)=>html+=`<tr>
       <td><input value="${esc(r.desc)}" oninput="uapu('${id}',${si},${ri},'desc',this.value)" onblur="checkApuAutoFill('${id}',${si},${ri},this.value)"/></td>
       <td><input style="width:65px" value="${esc(r.unit)}" oninput="uapu('${id}',${si},${ri},'unit',this.value)"/></td>
-      <td><input class="r" type="text" value="${fmtQ(N(r.qty))}" oninput="uapu('${id}',${si},${ri},'qty',this.value)" onfocus="this.select()"/></td>
+      <td><input class="r" type="text" value="${fmtQ(N(r.qty))}" oninput="if(validateDecimalInput(this)) uapu('${id}',${si},${ri},'qty',this.value)" onfocus="this.select()"/></td>
       <td><input class="r" type="text" value="${fmtP(N(r.price))}" oninput="uapu('${id}',${si},${ri},'price',this.value)" onfocus="this.select()"/></td>
       <td class="r mn" id="sub-${id}-${si}-${ri}">${fmtP(N(r.qty)*N(r.price))}</td>
       <td><button class="bs del" onclick="dapu('${id}',${si},${ri})">×</button></td></tr>`);
@@ -772,7 +791,7 @@ function checkApuAutoFill(id, si, ri, val) {
 }
 
 function uapu(id,si,ri,f,v){
-  if(f==='qty'||f==='price') v=N(v.replace(/\./g,'').replace(',','.'));
+  if(f==='qty'||f==='price') v=N(v);
   let a=apuData[id],r=a.secs[si].rows[ri];
   r[f]=v;
   if(f==='desc'&&(v.toLowerCase().includes('perdida')||v.toLowerCase().includes('pérdida'))){
@@ -817,10 +836,10 @@ function renderTof(id){
     let tot=N(r.n)*Math.max(1,N(r.a))*Math.max(1,N(r.l))*Math.max(1,N(r.h));
     html+=`<div class="tof-row">
       <input value="${esc(r.desc)}" oninput="utof('${id}',${ri},'desc',this.value)"/>
-      <input class="r" type="text" value="${fmtQ(N(r.n))}" oninput="utof('${id}',${ri},'n',this.value)" onfocus="this.select()"/>
-      <input class="r" type="text" value="${fmtQ(N(r.a))}" oninput="utof('${id}',${ri},'a',this.value)" onfocus="this.select()"/>
-      <input class="r" type="text" value="${fmtQ(N(r.l))}" oninput="utof('${id}',${ri},'l',this.value)" onfocus="this.select()"/>
-      <input class="r" type="text" value="${fmtQ(N(r.h))}" oninput="utof('${id}',${ri},'h',this.value)" onfocus="this.select()"/>
+      <input class="r" type="text" value="${fmtQ(N(r.n))}" oninput="if(validateDecimalInput(this)) utof('${id}',${ri},'n',this.value)" onfocus="this.select()"/>
+      <input class="r" type="text" value="${fmtQ(N(r.a))}" oninput="if(validateDecimalInput(this)) utof('${id}',${ri},'a',this.value)" onfocus="this.select()"/>
+      <input class="r" type="text" value="${fmtQ(N(r.l))}" oninput="if(validateDecimalInput(this)) utof('${id}',${ri},'l',this.value)" onfocus="this.select()"/>
+      <input class="r" type="text" value="${fmtQ(N(r.h))}" oninput="if(validateDecimalInput(this)) utof('${id}',${ri},'h',this.value)" onfocus="this.select()"/>
       <div class="st" id="tof-sub-${id}-${ri}">${fmtQ(tot)}</div>
       <button class="bs del" onclick="dtof('${id}',${ri})">×</button></div>`;
   });
@@ -834,7 +853,7 @@ function renderTof(id){
 }
 function atof(id){tofData[id].push({desc:'',n:1,a:1,l:1,h:1});renderTof(id);markUnsaved();}
 function utof(id,ri,f,v){
-  if(f==='n'||f==='a'||f==='l'||f==='h') v=N(v.replace(/\./g,'').replace(',','.'));
+  if(f==='n'||f==='a'||f==='l'||f==='h') v=N(v);
   tofData[id][ri][f]=v;
   let r=tofData[id][ri];
   let subEl=document.getElementById(`tof-sub-${id}-${ri}`);
@@ -852,7 +871,6 @@ function genPrintHtml(){
   var mandante=document.getElementById('pMandante').value;
   var ubic=document.getElementById('pUbicacion').value;
   var fecha=document.getElementById('pFecha').value;
-  var profesional=document.getElementById('pProfesional').value;
   var s=sym(), color=CFG.colorHeader, ct=ctotals();
   var dc=items.reduce((a,it)=>it.t==='it'?a+N(it.qty)*N(it.price):a,0);
   var ggF=document.getElementById('ggFijo').checked;
@@ -881,7 +899,7 @@ function genPrintHtml(){
   if(CFG.printGG&&ggSubgroups.length>0){
     ggHtml='<div style="page-break-before:always;padding:10mm;padding-bottom:30mm">'+runHdr+'<h3 style="font-size:14px;color:'+color+';border-bottom:2px solid #eee;padding-bottom:5px;margin-bottom:15px">Gastos Generales Detallados</h3>';
     ggSubgroups.forEach(sg=>{
-      let sgTotal=sg.items.reduce((a,it)=>a+N(it.qty)*N(it.price),0);
+      let sgTotal=sg.items.reduce((a,it)=>a+N(it.qty)*N(it.tiempoUso)*N(it.price),0);
       ggHtml+='<div style="margin-bottom:20px;border:1px solid #eee;border-radius:5px;overflow:hidden"><div style="background:#f9f9f9;padding:8px;font-weight:600;color:'+color+'">'+esc(sg.name)+' - '+s+' '+fmtB(sgTotal)+'</div>'+
         '<table style="width:100%;border-collapse:collapse;font-size:9px"><thead><tr style="background:#fcfcfc"><th style="text-align:left;padding:4px 8px">Descripción</th><th style="text-align:right">Unid</th><th style="text-align:right">Cant.</th><th style="text-align:right">T.Uso</th><th style="text-align:right">Precio</th><th style="text-align:right;padding-right:8px">Subtotal</th></tr></thead><tbody>';
       sg.items.forEach(it=>ggHtml+='<tr style="border-top:1px solid #f5f5f5"><td style="padding:3px 8px">'+esc(it.desc)+'</td><td style="text-align:right">'+esc(it.unit)+'</td><td style="text-align:right">'+fmtQ(N(it.qty))+'</td><td style="text-align:right">'+fmtQ(N(it.tiempoUso))+'</td><td style="text-align:right">'+s+' '+fmtP(N(it.price))+'</td><td style="text-align:right;padding-right:8px">'+s+' '+fmtB(N(it.qty)*N(it.price))+'</td></tr>');
@@ -923,7 +941,19 @@ function genPrintHtml(){
     });
   }
 
-  return `<html><head><style>@page{size:${pageSize};margin:0}body{font-family:'IBM Plex Sans',sans-serif;margin:0;padding:0;color:#0f172a}table{width:100%;border-collapse:collapse}th,td{padding:5px;border:1px solid #e2e8f0}h1,h2,h3{margin:0}</style></head><body>
+  let signatures = `<div style="display:flex;justify-content:space-around;margin-top:50px">
+    <div style="text-align:center;border-top:1px solid #333;width:200px;padding-top:5px"><strong>${esc(CFG.repLegal)}</strong><br/>Representante Legal</div>
+    <div style="text-align:center;border-top:1px solid #333;width:200px;padding-top:5px"><strong>${esc(CFG.profName)}</strong><br/>Profesional</div>
+  </div>`;
+
+  return `<html><head><title>Informe PresAI - ${esc(obra)}</title><style>
+    body{font-family:'IBM Plex Sans',sans-serif;margin:0;padding:0;color:#333}
+    table{width:100%;border-collapse:collapse}
+    th,td{border:1px solid #eee;padding:4px 6px}th{background:#f5f5f5}
+    .page-break{page-break-before:always}
+    .avoid-break{page-break-inside:avoid}
+    @page{size:${pageSize};margin:${margins}}
+  </style></head><body>
     <div style="padding:10mm;padding-bottom:30mm">${runHdr}<h2 style="text-align:center;font-size:18px;color:${color};margin:20px 0">PRESUPUESTO DE OBRA</h2>
     <table><thead><tr style="background:#f1f5f9"><th>Ítem</th><th>Descripción</th><th>Unid</th><th>Cant.</th><th>P.Unit.</th><th>Total</th></tr></thead><tbody>${trows}</tbody></table>
     <div style="margin-top:20px;display:flex;justify-content:flex-end"><div style="width:250px">
@@ -933,7 +963,10 @@ function genPrintHtml(){
     <div style="display:flex;justify-content:space-between;padding:4px;border-bottom:2px solid #cbd5e1;font-weight:600"><span>Total Neto</span><span>${s} ${fmtB(net)}</span></div>
     <div style="display:flex;justify-content:space-between;padding:4px;border-bottom:1px solid #eee"><span>IVA</span><span>${s} ${fmtB(iva)}</span></div>
     <div style="display:flex;justify-content:space-between;padding:10px;background:#f8fafc;font-size:16px;font-weight:700;color:${color}"><span>TOTAL</span><span>${s} ${fmtB(grand)}</span></div>
-    </div></div></div>${ggHtml}${apuHtml}${cubHtml}</body></html>`;
+    </div></div>
+    <p style="font-size:9px;font-style:italic;text-align:right;margin-top:5px">${numToWords(grand)}</p>
+    ${signatures}
+    </div>${ggHtml}${apuHtml}${cubHtml}</body></html>`;
 }
 
 function doPrint(){
@@ -981,6 +1014,8 @@ function openSettings(){
   let html='<div class="modal" style="max-width:700px;max-height:90vh;overflow-y:auto">'+
     '<div class="mh"><h3>⚙️ Configuración PresAI</h3><button class="btn-s" onclick="closeMod()">✕</button></div>'+
     '<div class="mb">'+
+    
+    /* PROYECTO */
     '<div class="cfg-section"><h4>Proyecto</h4><div class="cfg-grid">'+
       '<div class="cfg-field cfg-field-full"><label>Nombre de la Obra / Proyecto</label><input id="cfg-obra" value="'+esc(obra)+'" oninput="document.getElementById(\'pObra\').value=this.value;syncHdr();markUnsaved()"/></div>'+
       '<div class="cfg-field"><label>Mandante / Cliente</label><input id="cfg-mandante" value="'+esc(mandante)+'" oninput="document.getElementById(\'pMandante\').value=this.value;markUnsaved()"/></div>'+
@@ -988,6 +1023,8 @@ function openSettings(){
       '<div class="cfg-field"><label>Profesional a cargo</label><input id="cfg-profesional" value="'+esc(profesional)+'" oninput="document.getElementById(\'pProfesional\').value=this.value;markUnsaved()"/></div>'+
       '<div class="cfg-field"><label>Fecha</label><input type="date" id="cfg-fecha" value="'+esc(fecha)+'" oninput="document.getElementById(\'pFecha\').value=this.value;markUnsaved()"/></div>'+
     '</div></div>'+
+
+    /* MONEDA Y DECIMALES */
     '<div class="cfg-section"><h4>Moneda y Decimales</h4><div class="cfg-grid">'+
       '<div class="cfg-field"><label>Moneda</label><select onchange="CFG.currency=this.value;saveCFG();rb();rc();openSettings();">'+
         '<option value="CLP" '+(CFG.currency==='CLP'?'selected':'')+'>CLP ($)</option>'+
@@ -998,13 +1035,89 @@ function openSettings(){
       '<div class="cfg-field"><label>Dec. Cantidades</label><input type="number" value="'+CFG.decimalsQty+'" oninput="CFG.decimalsQty=N(this.value);saveCFG();rb()" onfocus="this.select()"/></div>'+
       '<div class="cfg-field"><label>Dec. P.Unit (APU)</label><input type="number" value="'+CFG.decimalsPrice+'" oninput="CFG.decimalsPrice=N(this.value);saveCFG();rb()" onfocus="this.select()"/></div>'+
       '<div class="cfg-field"><label>Dec. Totales</label><input type="number" value="'+CFG.decimalsBudget+'" oninput="CFG.decimalsBudget=N(this.value);saveCFG();rb()" onfocus="this.select()"/></div>'+
+      '<div class="cfg-field"><label>Separador de Decimales</label><select onchange="CFG.decimalSeparator=this.value;saveCFG();openSettings();">'+
+        '<option value="punto" '+(CFG.decimalSeparator==='punto'?'selected':'')+'>Punto (.)</option>'+
+        '<option value="coma" '+(CFG.decimalSeparator==='coma'?'selected':'')+'>Coma (,)</option>'+
+      '</select></div>'+
       '<div class="cfg-field" style="grid-column: span 2"><label class="chk-opt"><input type="checkbox" '+(CFG.alertOnDeleteDetail?'checked':'')+' onchange="CFG.alertOnDeleteDetail=this.checked;saveCFG()"> Alerta al borrar detalle cubicación / APU</label></div>'+
     '</div></div>'+
+
+    /* IMPRESIÓN */
+    '<div class="cfg-section"><h4>Formato de Impresión</h4><div class="cfg-grid">'+
+      '<div class="cfg-field"><label>Tamaño de Hoja</label><select onchange="CFG.pageSize=this.value;saveCFG()">'+
+        '<option value="letter" '+(CFG.pageSize==='letter'?'selected':'')+'>Carta (Letter)</option>'+
+        '<option value="legal" '+(CFG.pageSize==='legal'?'selected':'')+'>Oficio (Legal)</option>'+
+      '</select></div>'+
+    '</div>'+
+    '<div style="margin-top:15px"><label style="font-size:11px;font-weight:600;color:var(--navy);text-transform:uppercase;display:block;margin-bottom:8px">Opciones de Impresión</label>'+
+      '<label class="chk-opt" style="margin-bottom:8px"><input type="checkbox" '+(CFG.printCover?'checked':'')+' onchange="CFG.printCover=this.checked;saveCFG()"> Portada</label>'+
+      '<div class="print-opt-row"><label><input type="checkbox" '+(CFG.printApu?'checked':'')+' onchange="CFG.printApu=this.checked;saveCFG()"/> APUs</label>'+
+        '<select onchange="CFG.apuPrintMode=this.value;saveCFG()" style="margin-left:auto">'+
+          '<option value="continuo" '+(CFG.apuPrintMode==='continuo'?'selected':'')+'>Continuo</option>'+
+          '<option value="por hoja" '+(CFG.apuPrintMode==='por hoja'?'selected':'')+'>Por hoja</option>'+
+        '</select></div>'+
+      '<div class="print-opt-row"><label><input type="checkbox" '+(CFG.printCub?'checked':'')+' onchange="CFG.printCub=this.checked;saveCFG()"/> Cubicaciones</label>'+
+        '<select onchange="CFG.cubPrintMode=this.value;saveCFG()" style="margin-left:auto">'+
+          '<option value="continuo" '+(CFG.cubPrintMode==='continuo'?'selected':'')+'>Continuo</option>'+
+          '<option value="por hoja" '+(CFG.cubPrintMode==='por hoja'?'selected':'')+'>Por hoja</option>'+
+        '</select></div>'+
+      '<label class="chk-opt" style="margin-top:8px"><input type="checkbox" '+(CFG.printGG?'checked':'')+' onchange="CFG.printGG=this.checked;saveCFG()"> Gastos Generales en Informe</label>'+
+    '</div></div>'+
+
+    /* EMPRESA */
+    '<div class="cfg-section"><h4>Empresa Constructora</h4><div class="cfg-grid">'+
+      '<div class="cfg-field"><label>Nombre</label><input value="'+esc(CFG.companyName)+'" oninput="CFG.companyName=this.value;saveCFG();updBrand()"/></div>'+
+      '<div class="cfg-field"><label>Tagline</label><input value="'+esc(CFG.companyTagline)+'" oninput="CFG.companyTagline=this.value;saveCFG()"/></div>'+
+      '<div class="cfg-field"><label>Dirección</label><input value="'+esc(CFG.companyAddress)+'" oninput="CFG.companyAddress=this.value;saveCFG()"/></div>'+
+      '<div class="cfg-field"><label>Teléfono / Celular</label><input value="'+esc(CFG.companyPhone)+'" oninput="CFG.companyPhone=this.value;saveCFG()"/></div>'+
+      '<div class="cfg-field"><label>Email</label><input value="'+esc(CFG.companyEmail)+'" oninput="CFG.companyEmail=this.value;saveCFG()"/></div>'+
+      '<div class="cfg-field"><label>Web</label><input value="'+esc(CFG.companyWeb)+'" oninput="CFG.companyWeb=this.value;saveCFG()"/></div>'+
+      '<div class="cfg-field"><label>Color Informe</label><input type="color" value="'+CFG.colorHeader+'" oninput="CFG.colorHeader=this.value;saveCFG();applyColor()"/></div>'+
+      '<div class="cfg-field"><label>Logo</label>'+
+        '<div style="display:flex;gap:10px;align-items:center">'+
+          '<button class="bs" onclick="document.getElementById(\'logoInp\').click()">Subir Logo</button>'+
+          (CFG.logoDataUrl?'<img src="'+CFG.logoDataUrl+'" style="height:30px;border:1px solid #eee"/>':'')+
+        '</div>'+
+        '<input type="file" id="logoInp" style="display:none" onchange="hLogo(this)"/>'+
+      '</div>'+
+    '</div></div>'+
+
+    /* FIRMANTES */
+    '<div class="cfg-section"><h4>Firmantes</h4><div class="cfg-grid">'+
+      '<div class="cfg-field"><label>Rep. Legal</label><input value="'+esc(CFG.repLegal)+'" oninput="CFG.repLegal=this.value;saveCFG()"/></div>'+
+      '<div class="cfg-field"><label>Profesional</label><input value="'+esc(CFG.profName)+'" oninput="CFG.profName=this.value;saveCFG()"/></div>'+
+    '</div></div>'+
+
+    /* IMAGEN PORTADA */
+    '<div class="cfg-section"><h4>Imagen Portada</h4>'+
+      '<div style="display:flex;gap:15px;align-items:center">'+
+        '<button class="bs" onclick="document.getElementById(\'covInp\').click()">Subir Imagen Portada</button>'+
+        (CFG.coverImgUrl?'<img src="'+CFG.coverImgUrl+'" style="height:40px;border:1px solid #eee"/><button class="bs del" onclick="CFG.coverImgUrl=\'\';saveCFG();openSettings()">×</button>':'')+
+      '</div>'+
+      '<input type="file" id="covInp" style="display:none" onchange="hCov(this)"/>'+
+    '</div>'+
+
+    /* AUTOSAVE */
+    '<div class="cfg-section"><h4>Guardado Automático</h4><div class="cfg-grid">'+
+      '<label class="chk-opt"><input type="checkbox" '+(CFG.autoSave?'checked':'')+' onchange="CFG.autoSave=this.checked;saveCFG();setupAutoSave()"> Activar Guardado Automático</label>'+
+      '<div class="cfg-field"><label>Intervalo (segundos)</label><input type="number" value="'+CFG.autoSaveInterval+'" oninput="CFG.autoSaveInterval=N(this.value);saveCFG();setupAutoSave()" onfocus="this.select()"/></div>'+
+    '</div></div>'+
+
+    /* PRORRATEO */
+    '<div class="cfg-section"><h4>Prorrateo</h4><div class="chk-opts">'+
+      '<label class="chk-opt"><input type="checkbox" '+(CFG.ggProrrateado?'checked':'')+' onchange="CFG.ggProrrateado=this.checked;saveCFG();rc()"> Prorratear Gastos Generales en APU</label>'+
+      '<label class="chk-opt"><input type="checkbox" '+(CFG.utilProrrateado?'checked':'')+' onchange="CFG.utilProrrateado=this.checked;saveCFG();rc()"> Prorratear Utilidad en APU</label>'+
+      '<label class="chk-opt"><input type="checkbox" '+(CFG.impProrrateado?'checked':'')+' onchange="CFG.impProrrateado=this.checked;saveCFG();rc()"> Prorratear Imprevistos en APU</label>'+
+    '</div></div>'+
+
     '</div>'+
     '<div class="mf"><button class="btn-p blue" onclick="closeMod()">Listo</button></div>'+
   '</div>';
   document.getElementById('mc').innerHTML=html;
 }
+
+function hLogo(i){let r=new FileReader();r.onload=e=>{CFG.logoDataUrl=e.target.result;saveCFG();updLogoHdr();openSettings();};r.readAsDataURL(i.files[0]);}
+function hCov(i){let r=new FileReader();r.onload=e=>{CFG.coverImgUrl=e.target.result;saveCFG();openSettings();};r.readAsDataURL(i.files[0]);}
 
 function closeMod(){document.getElementById('ov').style.display='none';}
 function sw(p,t){
@@ -1012,41 +1125,46 @@ function sw(p,t){
   document.getElementById('p-'+p).classList.add('on');
   document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));
   t.classList.add('on');
+  if(p==='apu')refreshApuTab();
+  if(p==='cub')refreshCubTab();
 }
 function markUnsaved(){isDirty=true;}
 function syncHdr(){updBrand();}
-function hideApp(){document.getElementById('main-app').style.display='none';}
+function hideApp(){document.getElementById('main-app').style.display='none';document.getElementById('wow-screen').style.display='flex';}
 function showApp(){document.getElementById('main-app').style.display='flex';document.getElementById('wow-screen').style.display='none';}
 
 function setupAutoSave(){
-  if(window._asInt)clearInterval(window._asInt);
-  if(CFG.autoSave)window._asInt=setInterval(()=>{if(isDirty)saveProject();},CFG.autoSaveInterval*1000);
+  if(autoSaveInterval)clearInterval(autoSaveInterval);
+  if(CFG.autoSave&&currentProjectId)autoSaveInterval=setInterval(()=>{if(isDirty)saveProject();},CFG.autoSaveInterval*1000);
 }
 
 function refreshApuTab(){
-  let cont=document.getElementById('apu-list');
-  let apuItems=items.filter(it=>it.t==='it');
-  cont.innerHTML=apuItems.map(it=>{
-    let ha=apuData[it.id];
-    return `<div class="apu-card ${ha?'done':''}" onclick="openApu('${it.id}')">
-      <div class="apu-card-num">${esc(it.num)}</div>
-      <div class="apu-card-name">${esc(it.name)}</div>
-      <div class="apu-card-price">${sym()} ${fmtP(N(it.price))} / ${esc(it.unit)}</div>
-    </div>`;
-  }).join('');
+  let grid=document.getElementById('apu-list-grid'),empty=document.getElementById('apu-list-empty');
+  let apus=items.filter(it=>it.t==='it'&&apuData[it.id]);
+  if(!apus.length){grid.style.display='none';empty.style.display='block';}
+  else{
+    grid.style.display='grid';empty.style.display='none';
+    grid.innerHTML=apus.map(it=>`<div class="tot-card" style="cursor:pointer" onclick="openApu('${it.id}')">
+      <div style="font-weight:600;color:var(--navy)">${it.num} ${esc(it.name)}</div>
+      <div style="text-align:right;font-family:var(--mono)">${sym()} ${fmtP(it.price)}</div>
+    </div>`).join('');
+  }
 }
 
 function refreshCubTab(){
-  let cont=document.getElementById('cub-list');
-  let cubItems=items.filter(it=>it.t==='it');
-  cont.innerHTML=cubItems.map(it=>{
-    let hc=tofData[it.id]&&tofData[it.id].length;
-    return `<div class="apu-card ${hc?'done':''}" onclick="openTof('${it.id}')">
-      <div class="apu-card-num">${esc(it.num)}</div>
-      <div class="apu-card-name">${esc(it.name)}</div>
-      <div class="apu-card-price">${fmtQ(N(it.qty))} ${esc(it.unit)}</div>
-    </div>`;
-  }).join('');
+  let grid=document.getElementById('cub-list-grid'),empty=document.getElementById('cub-list-empty');
+  let cubs=items.filter(it=>it.t==='it'&&tofData[it.id]&&tofData[it.id].length);
+  if(!cubs.length){grid.style.display='none';empty.style.display='block';}
+  else{
+    grid.style.display='grid';empty.style.display='none';
+    grid.innerHTML=cubs.map(it=>{
+      let total=tofData[it.id].reduce((x,r)=>x+(N(r.n)*Math.max(1,N(r.a))*Math.max(1,N(r.l))*Math.max(1,N(r.h))),0);
+      return `<div class="tot-card" style="cursor:pointer" onclick="openTof('${it.id}')">
+        <div style="font-weight:600;color:var(--magenta)">${it.num} ${esc(it.name)}</div>
+        <div style="text-align:right;font-family:var(--mono)">${fmtQ(total)} ${esc(it.unit)}</div>
+      </div>`;
+    }).join('');
+  }
 }
 
 function newProject(){
@@ -1054,18 +1172,32 @@ function newProject(){
   currentProjectId=null;isDirty=false;
   items=[{id:gid(),t:'ch',num:'1.-',name:'',unit:'',qty:0,price:0,isApu:false,isCub:false},{id:gid(),t:'it',num:'1.1',name:'',unit:'',qty:0,price:0,isApu:false,isCub:false}];
   ggSubgroups=[];apuData={};tofData={};
+  ['pObra','pMandante','pUbicacion','pProfesional'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('pFecha').value=new Date().toISOString().split('T')[0];
   rb();renderGGSubgroups();updBrand();closeMod();syncHdr();showApp();
 }
 
 function saveProject(){
   let obra=document.getElementById('pObra').value.trim();
-  if(!obra){alert('Nombre de obra requerido.');openSettings();return;}
+  if(!obra){alert('Nombre de obra requerido. Por favor, ingrésalo en ⚙️ Configuración.');openSettings();return;}
   if(!currentProjectId)currentProjectId='proj_'+Date.now();
-  let p={id:currentProjectId,obra,items,ggSubgroups,apuData,tofData};
+  let p={
+    id:currentProjectId, obra,
+    mandante:document.getElementById('pMandante').value,
+    ubicacion:document.getElementById('pUbicacion').value,
+    profesional:document.getElementById('pProfesional').value,
+    fecha:document.getElementById('pFecha').value,
+    items,ggSubgroups,apuData,tofData,
+    pGG:document.getElementById('pGG').value,
+    pUtil:document.getElementById('pUtil').value,
+    pImp:document.getElementById('pImp').value,
+    pIVA:document.getElementById('pIVA').value,
+    ggFijo:document.getElementById('ggFijo').checked
+  };
   lsS('od_proj_'+currentProjectId,p);
   let idx=getIdx(),e=idx.find(x=>x.id===currentProjectId);
   if(e){e.obra=obra;e.savedAt=new Date().toISOString();}else idx.unshift({id:currentProjectId,obra,savedAt:new Date().toISOString()});
-  saveIdx(idx);isDirty=false;syncHdr();
+  saveIdx(idx);isDirty=false;alert('Guardado');syncHdr();
 }
 
 function openProjects(){
@@ -1084,6 +1216,15 @@ function loadProject(id){
   if(!p)return;
   currentProjectId=id;items=p.items;ggSubgroups=p.ggSubgroups||[];apuData=p.apuData||{};tofData=p.tofData||{};
   document.getElementById('pObra').value=p.obra;
+  document.getElementById('pMandante').value=p.mandante||'';
+  document.getElementById('pUbicacion').value=p.ubicacion||'';
+  document.getElementById('pProfesional').value=p.profesional||'';
+  document.getElementById('pFecha').value=p.fecha||'';
+  document.getElementById('pGG').value=p.pGG;
+  document.getElementById('pUtil').value=p.pUtil;
+  document.getElementById('pImp').value=p.pImp;
+  document.getElementById('pIVA').value=p.pIVA;
+  document.getElementById('ggFijo').checked=p.ggFijo;
   rb();renderGGSubgroups();syncHdr();closeMod();
 }
 
