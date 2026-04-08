@@ -413,7 +413,7 @@ const GG_SUBGROUP_OPTIONS = [
 const CFG_DEF = {
   currency:'CLP', parity:1, decimalsQty:2, decimalsPrice:0, decimalsBudget:0,
   companyName:'', companyTagline:'Construcción Civil · Chile',
-  companyRut:'', companyAddress:'', companyPhone:'', companyEmail:'', companyWeb:'',
+  companyRut:'', companyAddress:'', companyPhone:'', companyEmail:'', companyWeb:'', decimalSeparator:'.',
   repLegal:'', repLegalRut:'', profName:'', profRut:'',
   colorHeader:'#1e3a5f', logoDataUrl:'', coverImgUrl:'',
   printCover:true, printApu:true, printCub:true, printGG:false,
@@ -449,8 +449,9 @@ function updLogoHdr(){
 function N(v){return parseFloat(v)||0;}
 function sym(){return CFG.currency==='USD'?'US$':CFG.currency==='UF'?'UF':'$';}
 function fmtN(n,d){
-  if(CFG.currency==='UF') return n.toLocaleString('es-CL',{minimumFractionDigits:d||2,maximumFractionDigits:d||2});
-  return n.toLocaleString('es-CL',{minimumFractionDigits:d||0,maximumFractionDigits:d||0});
+  let locale = CFG.decimalSeparator === ',' ? 'de-DE' : 'en-US';
+  if(CFG.currency==='UF') return n.toLocaleString(locale,{minimumFractionDigits:d||2,maximumFractionDigits:d||2});
+  return n.toLocaleString(locale,{minimumFractionDigits:d||0,maximumFractionDigits:d||0});
 }
 function fmtQ(n){return fmtN(n,CFG.decimalsQty);}
 function fmtP(n){return fmtN(n,CFG.decimalsPrice);}
@@ -923,7 +924,7 @@ function genPrintHtml(){
   var mparts=margins.split(' ');
   var footer='<div style="text-align:center;font-size:9px;color:#64748b;border-top:1px solid #eee;position:fixed;bottom:'+mparts[2]+';left:'+mparts[3]+';right:'+mparts[3]+';background:#fff;padding:3px 0">'+
     '<div style="display:flex;justify-content:space-between;align-items:center;font-size:8px">'+
-      '<div style="flex:1;text-align:left">'+esc(CFG.companyAddress)+' | '+esc(CFG.companyPhone)+' | '+esc(CFG.companyEmail)+'</div>'+
+      '<div style="flex:1;text-align:left">'+esc(CFG.companyAddress)+' | '+esc(CFG.companyPhone)+' | '+esc(CFG.companyEmail)+(CFG.companyWeb?' | '+esc(CFG.companyWeb):'')+'</div>'+
       '<div style="font-weight:600">Pág. <span class="pageNumber"></span></div>'+
     '</div>'+
   '</div>';
@@ -1043,6 +1044,10 @@ function openSettings(){
       '<div class="cfg-field"><label>Dec. Cantidades</label><input type="number" value="'+CFG.decimalsQty+'" oninput="CFG.decimalsQty=N(this.value);saveCFG();rb()" onfocus="this.select()"/></div>'+
       '<div class="cfg-field"><label>Dec. P.Unit (APU)</label><input type="number" value="'+CFG.decimalsPrice+'" oninput="CFG.decimalsPrice=N(this.value);saveCFG();rb()" onfocus="this.select()"/></div>'+
       '<div class="cfg-field"><label>Dec. Totales</label><input type="number" value="'+CFG.decimalsBudget+'" oninput="CFG.decimalsBudget=N(this.value);saveCFG();rb()" onfocus="this.select()"/></div>'+
+      '<div class="cfg-field"><label>Separador Decimal</label><select onchange="CFG.decimalSeparator=this.value;saveCFG();rb();rc();openSettings();">'+
+        '<option value="." '+(CFG.decimalSeparator==='.'?'selected':'')+'>Punto (.)</option>'+
+        '<option value="," '+(CFG.decimalSeparator===','?'selected':'')+'>Coma (,)</option>'+
+      '</select></div>'+
     '</div></div>'+
 
     /* IMPRESIÓN */
@@ -1191,7 +1196,7 @@ function openProjects(){
           '<div class="proj-menu-content">'+
             '<div class="proj-menu-item" onclick="dupP(\''+p.id+'\')">📋 Duplicar</div>'+
             '<div class="proj-menu-item" onclick="renP(\''+p.id+'\')">✏️ Renombrar</div>'+
-            '<div class="proj-menu-item" onclick="exportXlsx(\''+p.id+'\')">📊 Exportar Excel</div>'+
+            '<div class="proj-menu-item" onclick="exportXlsx(\''+p.id+'\')">📊 Exportar .xlsx</div>'+
             '<div class="proj-menu-item" onclick="delP(\''+p.id+'\')">🗑️ Eliminar</div>'+
           '</div>'+
         '</div>'+
@@ -1532,7 +1537,7 @@ ${ws1}${ws2}${ws3}${ws4}</Workbook>`;
   const a=document.createElement('a');
   a.href=url;
   const nombre=(p.obra||'Presupuesto').replace(/\s+/g,'_');
-  a.download=nombre+'_'+new Date().toISOString().slice(0,10)+'.xls';
+  a.download=nombre+'_'+new Date().toISOString().slice(0,10)+'.xlsx';
   document.body.appendChild(a);a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
