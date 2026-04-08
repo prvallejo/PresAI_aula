@@ -546,6 +546,7 @@ function initEvents(){
         inp.value = fmtQ(N(it.qty)); return;
       } else {
         it.isCub = false; delete tofData[id]; inp.classList.remove('magenta');
+        rb(); // Redibujar para quitar el check visual
       }
     }
     if(f==='price' && it.isApu && (v==='' || N(v.replace(/\./g,'').replace(',','.')) === 0)) {
@@ -553,6 +554,7 @@ function initEvents(){
         inp.value = fmtP(N(it.price)); return;
       } else {
         it.isApu = false; delete apuData[id]; inp.classList.remove('magenta');
+        rb(); // Redibujar para quitar el check visual
       }
     }
     if(f==='qty'||f==='price') v=N(v.replace(/\./g,'').replace(',','.'));
@@ -1051,19 +1053,20 @@ function openSettings(){
       '</select></div>'+
     '</div>'+
     '<div style="margin-top:15px"><label style="font-size:11px;font-weight:600;color:var(--navy);text-transform:uppercase;display:block;margin-bottom:8px">Impresión</label>'+
-      '<label class="chk-opt" style="margin-bottom:8px"><input type="checkbox" '+(CFG.printCover?'checked':'')+' onchange="CFG.printCover=this.checked;saveCFG()"> Portada</label>'+
-      '<div class="print-opt-row"><label><input type="checkbox" '+(CFG.printApu?'checked':'')+' onchange="CFG.printApu=this.checked;saveCFG()"/> APUs</label>'+
-        '<select onchange="CFG.apuPrintMode=this.value;saveCFG()" style="margin-left:auto">'+
-          '<option value="continuo" '+(CFG.apuPrintMode==='continuo'?'selected':'')+'>Continuo</option>'+
-          '<option value="por hoja" '+(CFG.apuPrintMode==='por hoja'?'selected':'')+'>Por hoja</option>'+
-        '</select></div>'+
-      '<div class="print-opt-row"><label><input type="checkbox" '+(CFG.printCub?'checked':'')+' onchange="CFG.printCub=this.checked;saveCFG()"/> Cubicaciones</label>'+
-        '<select onchange="CFG.cubPrintMode=this.value;saveCFG()" style="margin-left:auto">'+
-          '<option value="continuo" '+(CFG.cubPrintMode==='continuo'?'selected':'')+'>Continuo</option>'+
-          '<option value="por hoja" '+(CFG.cubPrintMode==='por hoja'?'selected':'')+'>Por hoja</option>'+
-        '</select></div>'+
-      '<label class="chk-opt" style="margin-top:8px"><input type="checkbox" '+(CFG.printGG?'checked':'')+' onchange="CFG.printGG=this.checked;saveCFG()"> Gastos Generales en Informe</label>'+
-    '</div></div>'+
+      '<div style="display:flex;flex-direction:column;gap:10px;align-items:flex-start">'+
+        '<label class="chk-opt"><input type="checkbox" '+(CFG.printCover?'checked':'')+' onchange="CFG.printCover=this.checked;saveCFG()"> Portada</label>'+
+        '<div class="print-opt-row" style="margin:0;width:100%"><label><input type="checkbox" '+(CFG.printApu?'checked':'')+' onchange="CFG.printApu=this.checked;saveCFG()"/> APUs</label>'+
+          '<select onchange="CFG.apuPrintMode=this.value;saveCFG()" style="margin-left:auto">'+
+            '<option value="continuo" '+(CFG.apuPrintMode==='continuo'?'selected':'')+'>Continuo</option>'+
+            '<option value="por hoja" '+(CFG.apuPrintMode==='por hoja'?'selected':'')+'>Por hoja</option>'+
+          '</select></div>'+
+        '<div class="print-opt-row" style="margin:0;width:100%"><label><input type="checkbox" '+(CFG.printCub?'checked':'')+' onchange="CFG.printCub=this.checked;saveCFG()"/> Cubicaciones</label>'+
+          '<select onchange="CFG.cubPrintMode=this.value;saveCFG()" style="margin-left:auto">'+
+            '<option value="continuo" '+(CFG.cubPrintMode==='continuo'?'selected':'')+'>Continuo</option>'+
+            '<option value="por hoja" '+(CFG.cubPrintMode==='por hoja'?'selected':'')+'>Por hoja</option>'+
+          '</select></div>'+
+        '<label class="chk-opt"><input type="checkbox" '+(CFG.printGG?'checked':'')+' onchange="CFG.printGG=this.checked;saveCFG()"> Gastos Generales</label>'+
+      '</div></div>'+
 
     /* EMPRESA */
     '<div class="cfg-section"><h4>Empresa Constructora</h4><div class="cfg-grid">'+
@@ -1125,7 +1128,19 @@ function newProject(){
   currentProjectId=null;isDirty=false;
   items=[{id:gid(),t:'ch',num:'1.-',name:'',unit:'',qty:0,price:0,isApu:false,isCub:false},{id:gid(),t:'it',num:'1.1',name:'',unit:'',qty:0,price:0,isApu:false,isCub:false}];
   ggSubgroups=[];apuData={};tofData={};
-  CFG.coverImgUrl='';
+  
+  // Configuración predeterminada solicitada
+  CFG.currency = 'CLP';
+  CFG.pageSize = 'letter';
+  CFG.printCover = true;
+  CFG.printApu = false;
+  CFG.printCub = false;
+  CFG.printGG = false;
+  CFG.autoSave = true;
+  CFG.autoSaveInterval = 120;
+  CFG.coverImgUrl = '';
+  saveCFG();
+
   ['pObra','pMandante','pUbicacion','pProfesional'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('pFecha').value=new Date().toISOString().split('T')[0];
   rb();renderGGSubgroups();updBrand();closeMod();syncHdr();showApp();openSettings();
