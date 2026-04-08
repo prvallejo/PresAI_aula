@@ -224,8 +224,7 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
 .cfg-field input,.cfg-field select{width:100%;padding:6px 8px;font-size:12px;border:1px solid var(--border2);border-radius:5px;outline:none;font-family:var(--ff)}
 .cfg-field input:focus{border-color:var(--navy)}
 .chk-opts{display:flex;flex-direction:column;gap:8px}
-.chk-opt{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--txt);cursor:pointer}
-.print-opt-row{display:flex;align-items:center;gap:12px;font-size:11px;margin-bottom:8px}
+.chk-opt{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--txt);cursor:poin	.print-opt-row{display:flex;align-items:center;gap:12px;margin-bottom:8px;min-height:32px};margin-bottom:8px}
 .print-opt-row label{margin:0}
 .print-opt-row select{width:120px;padding:4px 6px;font-size:11px;border:1px solid var(--border2);border-radius:4px}
 
@@ -321,6 +320,7 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
       <div class="tab" onclick="sw('gg',this)">Gastos Generales</div>
       <div class="tab" id="tab-apu" onclick="sw('apu',this)">Análisis Unitarios</div>
       <div class="tab" id="tab-cub" onclick="sw('cub',this)">Cubicaciones</div>
+      <div class="tab" id="tab-notes" onclick="sw('notes',this)">Notas</div>
     </div>
     <div id="gg-quick-add" style="display:none;padding-right:10px">
       <select id="gg-subgroup-select" class="gg-add-btn-select" style="font-size:11px;padding:6px 28px 6px 12px;background-position:right 8px center;background-size:10px;border-radius:6px;box-shadow:none">
@@ -337,10 +337,12 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
       <input type="hidden" id="pUbicacion" value=""/>
       <input type="hidden" id="pProfesional" value=""/>
       <input type="hidden" id="pFecha" value=""/>
+      <input type="hidden" id="pPayment" value=""/>
+      <input type="hidden" id="pExecution" value=""/>
 
       <div class="tbl-wrap">
         <div class="tbl-hdr">
-          <span>Ítem</span><span>Descripción de la Partida</span><span class="r">Unid</span><span class="r">Cant.</span><span class="r">P.Unit.</span><span class="r">Total</span><span></span>
+          <span>Ítem</span><span>Descripción de la Partida</span><span class="r">Unid</span><span class="r">Cant.</span><span class="r">P.Unit. (${sym()})</span><span class="r">Total (${sym()})</span><span></span>
         </div>
         <div id="brows"></div>
         <div class="tbl-add no-print">
@@ -379,6 +381,17 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
       <div id="cub-list-empty" style="padding:40px;text-align:center;color:var(--txt3)">No hay Cubicaciones creadas aún.</div>
       <div id="cub-list-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px"></div>
     </div>
+
+    <!-- PANEL: NOTAS -->
+    <div id="p-notes" class="pnl">
+      <div class="tbl-wrap" style="padding:20px">
+        <h3 style="margin-bottom:15px;color:var(--navy)">Notas al Presupuesto</h3>
+        <div id="notes-list" style="display:flex;flex-direction:column;gap:10px"></div>
+        <div style="margin-top:20px;color:var(--txt3);font-size:11px;font-style:italic">
+          * Se genera automáticamente una lista numerada según la cantidad de partidas del presupuesto.
+        </div>
+      </div>
+    </div>
   </main>
 </div>
 
@@ -409,16 +422,18 @@ const GG_SUBGROUP_OPTIONS = [
 
 const CFG_DEF = {
   currency:'CLP', parity:1, decimalsQty:2, decimalsPrice:0, decimalsBudget:0,
-  companyName:'', companyTagline:'Construcción Civil · Chile',
+  companyName:'', companyTagline:'Construcción Civil · Chile', notes:[],
   companyRut:'', companyAddress:'', companyPhone:'', companyEmail:'', companyWeb:'', decimalSeparator:'.',
   repLegal:'', repLegalRut:'', profName:'', profRut:'',
   colorHeader:'#1e3a5f', logoDataUrl:'', coverImgUrl:'',
   printCover:true, printApu:true, printCub:true, printGG:false,
+  printPayment:true, printExecution:true, printNotes:true,
   pageSize:'letter', apuPrintMode:'continuo', cubPrintMode:'continuo',
   autoSave:true, autoSaveInterval:300, ggProrrateado:false, utilProrrateado:false, impProrrateado:false,
   impPorApu:false, impVisible:false,
   /* campos proyecto en CFG */
-  projObra:'', projMandante:'', projUbicacion:'', projProfesional:'', projFecha:''
+  projObra:'', projMandante:'', projUbicacion:'', projProfesional:'', projFecha:'',
+  projPayment:'', projExecution:''
 };
 let CFG = Object.assign({}, CFG_DEF);
 
@@ -473,7 +488,10 @@ function numToWords(n){
   function billones(n){
     if(n<1000000000)return millon(n);
     var b=Math.floor(n/1000000000),r=n%1000000000;
-    var t=b===1?'MIL MILLONES':mil(b)+' MIL MILLONES';
+    var t='';
+    if(b===1) t='MIL MILLONES';
+    else if(b<1000) t=mil(b)+' MIL MILLONES';
+    else t=billones(b)+' MIL MILLONES';
     return r>0?t+' '+millon(r):t;
   }
   var cur=CFG.currency==='USD'?'DÓLARES':CFG.currency==='UF'?'UF':'PESOS';
@@ -867,7 +885,7 @@ function genPrintHtml(){
     ggSubgroups.forEach(sg=>{
       let sgTotal=sg.items.reduce((a,it)=>a+N(it.qty)*N(it.price),0);
       ggHtml+='<div style="margin-bottom:20px;border:1px solid #eee;border-radius:5px;overflow:hidden"><div style="background:#f9f9f9;padding:8px;font-weight:600;color:'+color+'">'+esc(sg.name)+' - '+s+' '+fmtB(sgTotal)+'</div>'+
-        '<table style="width:100%;border-collapse:collapse;font-size:9px"><thead><tr style="background:#fcfcfc"><th style="text-align:left;padding:4px 8px">Descripción</th><th style="text-align:right">Unid</th><th style="text-align:right">Cant.</th><th style="text-align:right">T.Uso</th><th style="text-align:right">Precio</th><th style="text-align:right;padding-right:8px">Subtotal</th></tr></thead><tbody>';
+        '<table style="width:100%;border-collapse:collapse;font-size:9px"><thead><tr style="background:#fcfcfc"><th style="text-align:left;padding:4px 8px">Descripción</th><th style="text-align:right">Unid</th><th style="text-align:right">Cant.</th><th style="text-align:right">T.Uso</th><th style="text-align:right">Precio ('+s+')</th><th style="text-align:right;padding-right:8px">Subtotal ('+s+')</th></tr></thead><tbody>';
       sg.items.forEach(it=>ggHtml+='<tr style="border-top:1px solid #f5f5f5"><td style="padding:3px 8px">'+esc(it.desc)+'</td><td style="text-align:right">'+esc(it.unit)+'</td><td style="text-align:right">'+fmtQ(N(it.qty))+'</td><td style="text-align:right">'+fmtQ(N(it.tiempoUso))+'</td><td style="text-align:right">'+s+' '+fmtP(N(it.price))+'</td><td style="text-align:right;padding-right:8px">'+s+' '+fmtB(N(it.qty)*N(it.price))+'</td></tr>');
       ggHtml+='</tbody></table></div>';
     });
@@ -887,7 +905,7 @@ function genPrintHtml(){
       apuHtml+=(CFG.apuPrintMode==='por hoja'?'<div style="page-break-before:always;padding:10mm;padding-bottom:30mm">':'')+
         '<div style="margin-bottom:20px;border:1px solid #eee;border-radius:5px;overflow:hidden">'+
         '<div style="background:#f9f9f9;padding:8px;display:flex;justify-content:space-between;font-weight:600;color:'+color+'"><span>'+esc(it.num)+' — '+esc(it.name)+'</span><span>'+s+' '+fmtP(tot)+' / '+esc(it.unit)+'</span></div>'+
-        '<table style="width:100%;border-collapse:collapse;font-size:9px"><thead><tr style="background:#fcfcfc;color:#666"><th style="text-align:left;padding:4px 8px">Recurso</th><th style="text-align:right">Unid</th><th style="text-align:right">Rend.</th><th style="text-align:right">P.U.</th><th style="text-align:right;padding-right:8px">Subtotal</th></tr></thead><tbody>';
+        '<table style="width:100%;border-collapse:collapse;font-size:9px"><thead><tr style="background:#fcfcfc;color:#666"><th style="text-align:left;padding:4px 8px">Recurso</th><th style="text-align:right">Unid</th><th style="text-align:right">Rend.</th><th style="text-align:right">P.U. ('+s+')</th><th style="text-align:right;padding-right:8px">Subtotal ('+s+')</th></tr></thead><tbody>';
       ['Mano de Obra','Materiales','Equipos','Subcontratos'].forEach((tn,si)=>{
         a.secs[si].rows.forEach(r=>apuHtml+='<tr style="border-top:1px solid #f5f5f5"><td style="padding:3px 8px">'+esc(r.desc)+' <small style="color:#999">('+tn+')</small></td><td style="text-align:right">'+esc(r.unit)+'</td><td style="text-align:right">'+fmtQ(N(r.qty))+'</td><td style="text-align:right">'+s+' '+fmtP(N(r.price))+'</td><td style="text-align:right;padding-right:8px">'+s+' '+fmtB(N(r.qty)*N(r.price))+'</td></tr>');
       });
@@ -911,6 +929,22 @@ function genPrintHtml(){
       cubHtml+='<tr style="font-weight:700;background:#f0f4f8"><td colspan="5" style="padding:4px 8px">TOTAL PARTIDA</td><td style="text-align:right;padding-right:8px">'+fmtQ(total)+' '+esc(it.unit)+'</td></tr></tbody></table></div>'+(CFG.cubPrintMode==='por hoja'?'</div>':'');
     });
     cubHtml+='</div>';
+  }
+
+  var payment = document.getElementById('pPayment').value;
+  var execution = document.getElementById('pExecution').value;
+  var extraInfo = '';
+  if((CFG.printPayment && payment) || (CFG.printExecution && execution) || (CFG.printNotes && CFG.notes && CFG.notes.some(n=>n.trim()))){
+    extraInfo = '<div style="page-break-before:always;padding:10mm;padding-bottom:10mm">'+runHdr+
+      '<h3 style="font-size:14px;color:'+color+';border-bottom:2px solid #eee;padding-bottom:5px;margin-bottom:15px">Información Adicional</h3>';
+    if(CFG.printPayment && payment) extraInfo += '<p style="font-size:11px;margin-bottom:10px"><strong>Forma de Pago:</strong> '+esc(payment)+'</p>';
+    if(CFG.printExecution && execution) extraInfo += '<p style="font-size:11px;margin-bottom:10px"><strong>Plazo de Ejecución:</strong> '+esc(execution)+'</p>';
+    if(CFG.printNotes && CFG.notes && CFG.notes.some(n=>n.trim())){
+      extraInfo += '<div style="margin-top:20px"><h4 style="font-size:12px;color:'+color+';margin-bottom:10px">Notas al Presupuesto:</h4><ol style="font-size:10px;padding-left:20px">';
+      CFG.notes.forEach(n => { if(n.trim()) extraInfo += '<li style="margin-bottom:5px">'+esc(n)+'</li>'; });
+      extraInfo += '</ol></div>';
+    }
+    extraInfo += '</div>';
   }
 
   var signatures='<div style="display:flex;justify-content:space-around;margin-top:80px;page-break-inside:avoid">'+
@@ -951,7 +985,7 @@ function genPrintHtml(){
 
   html+='<div style="padding:10mm;padding-bottom:30mm">'+runHdr+
     '<h3 style="font-size:14px;color:'+color+';border-bottom:2px solid #eee;padding-bottom:5px;margin-bottom:15px">Presupuesto Detallado</h3>'+
-    '<table><thead><tr style="background:#f9f9f9"><th>Ítem</th><th>Descripción</th><th style="text-align:center">Unid</th><th style="text-align:right">Cant.</th><th style="text-align:right">P.Unit.</th><th style="text-align:right">Total</th></tr></thead><tbody>'+trows+'</tbody></table>'+
+    '<table><thead><tr style="background:#f9f9f9"><th>Ítem</th><th>Descripción</th><th style="text-align:center">Unid</th><th style="text-align:right">Cant.</th><th style="text-align:right">P.Unit. ('+s+')</th><th style="text-align:right">Total ('+s+')</th></tr></thead><tbody>'+trows+'</tbody></table>'+
     '<div style="width:250px;margin-left:auto;margin-top:20px;font-size:11px">'+
       '<div style="display:flex;justify-content:space-between;padding:3px 0"><span>Costo Directo</span><span>'+s+' '+fmtB(dc)+'</span></div>'+
       (!CFG.ggProrrateado?'<div style="display:flex;justify-content:space-between;padding:3px 0"><span>Gastos Generales</span><span>'+s+' '+fmtB(ggV)+'</span></div>':'')+
@@ -962,9 +996,9 @@ function genPrintHtml(){
       '<div style="display:flex;justify-content:space-between;padding:5px 0;border-top:2px solid #333;font-weight:700;font-size:14px;color:'+color+'"><span>TOTAL GENERAL</span><span>'+s+' '+fmtB(grand)+'</span></div>'+
     '</div>'+
     '<p style="font-size:9px;font-style:italic;text-align:right;margin-top:5px">'+numToWords(grand)+'</p>'+
-    (ggHtml||apuHtml||cubHtml?'':signatures)+'</div>'+
-    ggHtml+apuHtml+cubHtml+
-    (ggHtml||apuHtml||cubHtml?'<div style="padding:10mm;padding-bottom:30mm;position:relative;min-height:200px">'+signatures+'</div>':'')+
+    (ggHtml||apuHtml||cubHtml||extraInfo?'':signatures)+'</div>'+
+    ggHtml+apuHtml+cubHtml+extraInfo+
+    (ggHtml||apuHtml||cubHtml||extraInfo?'<div style="padding:10mm;padding-bottom:30mm;position:relative;min-height:200px">'+signatures+'</div>':'')+
     footer+
   '</body></html>';
 
@@ -1016,6 +1050,8 @@ function openSettings(){
   let ubicacion=document.getElementById('pUbicacion').value;
   let profesional=document.getElementById('pProfesional').value;
   let fecha=document.getElementById('pFecha').value;
+  let payment=document.getElementById('pPayment').value;
+  let execution=document.getElementById('pExecution').value;
 
   let html='<div class="modal" style="max-width:700px;max-height:90vh;overflow-y:auto">'+
     '<div class="mh"><h3>⚙️ Configuración PresAI</h3><button class="btn-s" onclick="closeMod()">✕</button></div>'+
@@ -1028,6 +1064,8 @@ function openSettings(){
       '<div class="cfg-field"><label>Ubicación</label><input id="cfg-ubicacion" value="'+esc(ubicacion)+'" oninput="document.getElementById(\'pUbicacion\').value=this.value;markUnsaved()"/></div>'+
       '<div class="cfg-field"><label>Profesional a cargo</label><input id="cfg-profesional" value="'+esc(profesional)+'" oninput="document.getElementById(\'pProfesional\').value=this.value;markUnsaved()"/></div>'+
       '<div class="cfg-field"><label>Fecha</label><input type="date" id="cfg-fecha" value="'+esc(fecha)+'" oninput="document.getElementById(\'pFecha\').value=this.value;markUnsaved()"/></div>'+
+      '<div class="cfg-field"><label>Forma de Pago</label><input id="cfg-payment" value="'+esc(payment)+'" oninput="document.getElementById(\'pPayment\').value=this.value;markUnsaved()"/></div>'+
+      '<div class="cfg-field"><label>Plazo ejecución</label><input id="cfg-execution" value="'+esc(execution)+'" oninput="document.getElementById(\'pExecution\').value=this.value;markUnsaved()"/></div>'+
     '</div></div>'+
 
     /* MONEDA */
@@ -1068,12 +1106,15 @@ function openSettings(){
             '<option value="por hoja" '+(CFG.cubPrintMode==='por hoja'?'selected':'')+'>Por hoja</option>'+
           '</select></div>'+
         '<label class="chk-opt"><input type="checkbox" '+(CFG.printGG?'checked':'')+' onchange="CFG.printGG=this.checked;saveCFG()"> Gastos Generales</label>'+
+        '<label class="chk-opt"><input type="checkbox" '+(CFG.printPayment?'checked':'')+' onchange="CFG.printPayment=this.checked;saveCFG()"> Forma de pago</label>'+
+        '<label class="chk-opt"><input type="checkbox" '+(CFG.printExecution?'checked':'')+' onchange="CFG.printExecution=this.checked;saveCFG()"> Plazo ejecución</label>'+
+        '<label class="chk-opt"><input type="checkbox" '+(CFG.printNotes?'checked':'')+' onchange="CFG.printNotes=this.checked;saveCFG()"> Notas</label>'+
       '</div></div>'+
 
     /* EMPRESA */
     '<div class="cfg-section"><h4>Empresa Constructora</h4><div class="cfg-grid">'+
       '<div class="cfg-field"><label>Nombre</label><input value="'+esc(CFG.companyName)+'" oninput="CFG.companyName=this.value;saveCFG();updBrand()"/></div>'+
-      '<div class="cfg-field"><label>Tagline</label><input value="'+esc(CFG.companyTagline)+'" oninput="CFG.companyTagline=this.value;saveCFG()"/></div>'+
+      '<div class="cfg-field"><label>Rubro/Industria</label><input value="'+esc(CFG.companyTagline)+'" oninput="CFG.companyTagline=this.value;saveCFG()"/></div>'+
       '<div class="cfg-field"><label>Dirección</label><input value="'+esc(CFG.companyAddress)+'" oninput="CFG.companyAddress=this.value;saveCFG()"/></div>'+
       '<div class="cfg-field"><label>Teléfono / Celular</label><input value="'+esc(CFG.companyPhone)+'" oninput="CFG.companyPhone=this.value;saveCFG()"/></div>'+
       '<div class="cfg-field"><label>Email</label><input value="'+esc(CFG.companyEmail)+'" oninput="CFG.companyEmail=this.value;saveCFG()"/></div>'+
@@ -1143,7 +1184,7 @@ function newProject(){
   CFG.coverImgUrl = '';
   saveCFG();
 
-  ['pObra','pMandante','pUbicacion','pProfesional'].forEach(id=>document.getElementById(id).value='');
+  ['pObra','pMandante','pUbicacion','pProfesional','pPayment','pExecution'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('pFecha').value=new Date().toISOString().split('T')[0];
   rb();renderGGSubgroups();updBrand();closeMod();syncHdr();showApp();openSettings();
 }
@@ -1159,7 +1200,9 @@ function saveProject(){
     ubicacion:document.getElementById('pUbicacion').value,
     profesional:document.getElementById('pProfesional').value,
     fecha:document.getElementById('pFecha').value,
-    items,ggSubgroups,apuData,tofData,
+    payment:document.getElementById('pPayment').value,
+    execution:document.getElementById('pExecution').value,
+    items,ggSubgroups,apuData,tofData,notes:CFG.notes,
     pGG:document.getElementById('pGG').value,
     pUtil:document.getElementById('pUtil').value,
     pImp:document.getElementById('pImp').value,
@@ -1207,12 +1250,15 @@ function openProjects(){
 function loadP(id){
   let p=lsL('od_proj_'+id);if(!p)return;
   currentProjectId=id;items=p.items;ggSubgroups=p.ggSubgroups||[];apuData=p.apuData;tofData=p.tofData;
+  CFG.notes=p.notes||[];
   CFG.coverImgUrl=p.coverImgUrl||'';
   document.getElementById('pObra').value=p.obra;
   document.getElementById('pMandante').value=p.mandante||'';
   document.getElementById('pUbicacion').value=p.ubicacion||'';
   document.getElementById('pProfesional').value=p.profesional||'';
   document.getElementById('pFecha').value=p.fecha||'';
+  document.getElementById('pPayment').value=p.payment||'';
+  document.getElementById('pExecution').value=p.execution||'';
   document.getElementById('pGG').value=p.pGG;
   document.getElementById('pUtil').value=p.pUtil;
   document.getElementById('pImp').value=p.pImp;
@@ -1247,6 +1293,7 @@ function sw(id,el){
   document.getElementById('p-'+id).classList.add('on');
   el.classList.add('on');
   document.getElementById('gg-quick-add').style.display = (id === 'gg') ? 'block' : 'none';
+  if(id === 'notes') refreshNotesTab();
 }
 function syncHdr(){
   let el=document.getElementById('pObra');if(!el)return;
@@ -1282,6 +1329,24 @@ function refreshCubTab(){
       </div>`;
     }).join('');
   }
+}
+
+function refreshNotesTab(){
+  let container = document.getElementById('notes-list');
+  let partidas = items.filter(it => it.t === 'it');
+  if(!CFG.notes) CFG.notes = [];
+  
+  // Asegurar que el array de notas tenga el mismo tamaño que las partidas
+  while(CFG.notes.length < partidas.length) CFG.notes.push('');
+  if(CFG.notes.length > partidas.length) CFG.notes = CFG.notes.slice(0, partidas.length);
+
+  container.innerHTML = CFG.notes.map((note, i) => `
+    <div style="display:flex;gap:10px;align-items:center">
+      <span style="font-weight:600;color:var(--navy);width:25px">${i+1}.</span>
+      <input class="ri" style="border-bottom:1px solid var(--border)" value="${esc(note)}" 
+        oninput="CFG.notes[${i}]=this.value;markUnsaved()" placeholder="Escriba una nota para la partida ${partidas[i].num}..."/>
+    </div>
+  `).join('');
 }
 
 function setupAutoSave(){
@@ -1525,7 +1590,7 @@ function exportXlsx(projId){
   const a=document.createElement('a');
   a.href=url;
   const nombre=(p.obra||'Presupuesto').replace(/\s+/g,'_');
-  a.download=nombre+'_'+new Date().toISOString().slice(0,10)+'.xlsx';
+  a.download=nombre+'_'+new Date().toISOString().slice(0,10)+'.xls';
   document.body.appendChild(a);a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
