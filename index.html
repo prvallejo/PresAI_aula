@@ -776,7 +776,7 @@ function renderTof(id){
   let rows=tofData[id],it=items.find(x=>x.id===id);
   let html=`<div class="tof-hdr"><span>Descripción / Eje</span><span>Cant.</span><span>Ancho</span><span>Largo</span><span>Alto</span><span>Total</span><span></span></div>`;
   rows.forEach((r,ri)=>{
-    let tot=N(r.n)*Math.max(1,N(r.a))*Math.max(1,N(r.l))*Math.max(1,N(r.h));
+    let tot=N(r.n)*N(r.a)*N(r.l)*N(r.h);
     html+=`<div class="tof-row">
       <input value="${esc(r.desc)}" oninput="utof('${id}',${ri},'desc',this.value)"/>
       <input class="r" type="text" value="${fmtQ(N(r.n))}" oninput="utof('${id}',${ri},'n',this.value)" onfocus="this.select()"/>
@@ -786,9 +786,9 @@ function renderTof(id){
       <div class="st" id="tof-sub-${id}-${ri}">${fmtQ(tot)}</div>
       <button class="bs del" onclick="dtof('${id}',${ri})">×</button></div>`;
   });
-  let total=rows.reduce((x,r)=>x+(N(r.n)*Math.max(1,N(r.a))*Math.max(1,N(r.l))*Math.max(1,N(r.h))),0);
+  let total=rows.reduce((x,r)=>x+(N(r.n)*N(r.a)*N(r.l)*N(r.h)),0);
   html+=`<button class="bs addp" style="margin:10px" onclick="atof('${id}')">+ Agregar Fila</button>
-    <div style="text-align:right;padding:10px;font-size:15px;font-weight:600;color:var(--navy)" id="tof-total-${id}">Total Cubicidad: ${fmtQ(total)} ${esc(it.unit)}</div>`;
+    <div style="text-align:right;padding:10px;font-size:15px;font-weight:600;color:var(--navy)" id="tof-total-${id}">Total Cubicación: ${fmtQ(total)} ${esc(it.unit)}</div>`;
   document.getElementById('tof-body').innerHTML=html;
   it.qty=total;
   it.isCub=true;
@@ -800,10 +800,10 @@ function utof(id,ri,f,v){
   tofData[id][ri][f]=v;
   let r=tofData[id][ri];
   let subEl=document.getElementById(`tof-sub-${id}-${ri}`);
-  if(subEl)subEl.textContent=fmtQ(N(r.n)*Math.max(1,N(r.a))*Math.max(1,N(r.l))*Math.max(1,N(r.h)));
-  let total=tofData[id].reduce((x,r)=>x+(N(r.n)*Math.max(1,N(r.a))*Math.max(1,N(r.l))*Math.max(1,N(r.h))),0);
+  if(subEl)subEl.textContent=fmtQ(N(r.n)*N(r.a)*N(r.l)*N(r.h));
+  let total=tofData[id].reduce((x,r)=>x+(N(r.n)*N(r.a)*N(r.l)*N(r.h)),0);
   let totEl=document.getElementById(`tof-total-${id}`);
-  if(totEl)totEl.textContent='Total Cubicidad: '+fmtQ(total)+' '+esc(items.find(x=>x.id===id).unit);
+  if(totEl)totEl.textContent='Total Cubicación: '+fmtQ(total)+' '+esc(items.find(x=>x.id===id).unit);
   items.find(x=>x.id===id).qty=total;
   rc();markUnsaved();
 }
