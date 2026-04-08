@@ -1052,16 +1052,16 @@ function openSettings(){
         '<option value="legal" '+(CFG.pageSize==='legal'?'selected':'')+'>Oficio (Legal)</option>'+
       '</select></div>'+
     '</div>'+
-    '<div style="margin-top:15px"><label style="font-size:11px;font-weight:600;color:var(--navy);text-transform:uppercase;display:block;margin-bottom:8px">Impresión</label>'+
+    '<div style="margin-top:15px;margin-bottom:30px"><label style="font-size:11px;font-weight:600;color:var(--navy);text-transform:uppercase;display:block;margin-bottom:8px">Impresión</label>'+
       '<div style="display:flex;flex-direction:column;gap:10px;align-items:flex-start">'+
         '<label class="chk-opt"><input type="checkbox" '+(CFG.printCover?'checked':'')+' onchange="CFG.printCover=this.checked;saveCFG()"> Portada</label>'+
-        '<div class="print-opt-row" style="margin:0;width:100%"><label><input type="checkbox" '+(CFG.printApu?'checked':'')+' onchange="CFG.printApu=this.checked;saveCFG()"/> APUs</label>'+
-          '<select onchange="CFG.apuPrintMode=this.value;saveCFG()" style="margin-left:auto">'+
+        '<div class="print-opt-row" style="margin:0;display:flex;align-items:center;gap:10px"><label style="display:flex;align-items:center;gap:5px;white-space:nowrap"><input type="checkbox" '+(CFG.printApu?'checked':'')+' onchange="CFG.printApu=this.checked;saveCFG()"/> APUs</label>'+
+          '<select onchange="CFG.apuPrintMode=this.value;saveCFG()" style="padding:2px 5px;border-radius:4px;border:1px solid var(--border2);font-size:11px">'+
             '<option value="continuo" '+(CFG.apuPrintMode==='continuo'?'selected':'')+'>Continuo</option>'+
             '<option value="por hoja" '+(CFG.apuPrintMode==='por hoja'?'selected':'')+'>Por hoja</option>'+
           '</select></div>'+
-        '<div class="print-opt-row" style="margin:0;width:100%"><label><input type="checkbox" '+(CFG.printCub?'checked':'')+' onchange="CFG.printCub=this.checked;saveCFG()"/> Cubicaciones</label>'+
-          '<select onchange="CFG.cubPrintMode=this.value;saveCFG()" style="margin-left:auto">'+
+        '<div class="print-opt-row" style="margin:0;display:flex;align-items:center;gap:10px"><label style="display:flex;align-items:center;gap:5px;white-space:nowrap"><input type="checkbox" '+(CFG.printCub?'checked':'')+' onchange="CFG.printCub=this.checked;saveCFG()"/> Cubicaciones</label>'+
+          '<select onchange="CFG.cubPrintMode=this.value;saveCFG()" style="padding:2px 5px;border-radius:4px;border:1px solid var(--border2);font-size:11px">'+
             '<option value="continuo" '+(CFG.cubPrintMode==='continuo'?'selected':'')+'>Continuo</option>'+
             '<option value="por hoja" '+(CFG.cubPrintMode==='por hoja'?'selected':'')+'>Por hoja</option>'+
           '</select></div>'+
