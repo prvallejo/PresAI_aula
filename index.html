@@ -355,14 +355,14 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
     </div>
 
     <!-- PANEL: GG -->
-    <div id="p-gg" class="pnl">
-      <div id="gg-subgroups-container"></div>
-      <div style="display:flex;justify-content:center;margin-top:25px;margin-bottom:20px">
-        <select id="gg-subgroup-select" class="gg-add-btn-select">
+    <div id="p-gg" class="pnl" style="display:flex;flex-direction:column;height:100%">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:15px 0;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--bg);position:sticky;top:0;z-index:10">
+        <div style="font-weight:600;color:var(--navy);font-size:14px" id="gg-total-label">Total Gastos Generales: $ 0</div>
+        <select id="gg-subgroup-select" class="gg-add-btn-select" style="margin:0">
           <option value="">🔻 Agregar Subgrupo</option>
         </select>
       </div>
-      <div style="text-align:right;padding:20px 0;font-weight:600;color:var(--navy);font-size:14px" id="gg-total-label">Total Gastos Generales: $ 0</div>
+      <div id="gg-subgroups-container" style="flex:1;overflow-y:auto;padding-bottom:20px"></div>
     </div>
 
     <!-- PANEL: APU LIST -->
