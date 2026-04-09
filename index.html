@@ -634,31 +634,33 @@ function rc(){
   var pGG=N(document.getElementById('pGG').value),pU=N(document.getElementById('pUtil').value),pImp=N(document.getElementById('pImp').value),pIVA=N(document.getElementById('pIVA').value);
   var ggV=ggF?dc*(pGG/100):ggSubgroups.reduce((a,sg)=>a+sg.items.reduce((b,it)=>b+N(it.qty)*N(it.tiempoUso)*N(it.price),0),0);
   var util=dc*(pU/100),imp=dc*(pImp/100),net=dc+ggV+util+imp,iva=net*(pIVA/100),grand=net+iva;
+  var parity=CFG.parity||1;
+  var dcDisplay=dc*parity,ggVDisplay=ggV*parity,utilDisplay=util*parity,impDisplay=imp*parity,netDisplay=net*parity,ivaDisplay=iva*parity,grandDisplay=grand*parity;
   
-  var html=`<div class="tr2"><span class="tl">Costo Directo</span><span class="tv">${sym()} ${fmtB(dc)}</span></div>`;
+  var html=`<div class="tr2"><span class="tl">Costo Directo</span><span class="tv">${sym()} ${fmtB(dcDisplay)}</span></div>`;
   
   if(!CFG.ggProrrateado){
-    html+=`<div class="tr2"><span class="tl">Gastos Generales${ggF?' ('+pGG+'%)':''}</span><span class="tv">${sym()} ${fmtB(ggV)}</span></div>`;
+    html+=`<div class="tr2"><span class="tl">Gastos Generales${ggF?' ('+pGG+'%)':''}</span><span class="tv">${sym()} ${fmtB(ggVDisplay)}</span></div>`;
   } else {
-    html+=`<div class="tr2 prorate"><span class="tl">Gastos Generales ($ ${fmtB(ggV)} prorrateados)</span></div>`;
+    html+=`<div class="tr2 prorate"><span class="tl">Gastos Generales ($ ${fmtB(ggVDisplay)} prorrateados)</span></div>`;
   }
   
   if(!CFG.utilProrrateado){
-    html+=`<div class="tr2"><span class="tl">Utilidad (${pU}%)</span><span class="tv">${sym()} ${fmtB(util)}</span></div>`;
+    html+=`<div class="tr2"><span class="tl">Utilidad (${pU}%)</span><span class="tv">${sym()} ${fmtB(utilDisplay)}</span></div>`;
   } else {
-    html+=`<div class="tr2 prorate"><span class="tl">Utilidad ($ ${fmtB(util)} prorrateada)</span></div>`;
+    html+=`<div class="tr2 prorate"><span class="tl">Utilidad ($ ${fmtB(utilDisplay)} prorrateada)</span></div>`;
   }
   
   if(!CFG.impProrrateado && pImp>0){
-    html+=`<div class="tr2"><span class="tl">Imprevistos (${pImp}%)</span><span class="tv">${sym()} ${fmtB(imp)}</span></div>`;
+    html+=`<div class="tr2"><span class="tl">Imprevistos (${pImp}%)</span><span class="tv">${sym()} ${fmtB(impDisplay)}</span></div>`;
   } else if(CFG.impProrrateado && pImp>0) {
-    html+=`<div class="tr2 prorate"><span class="tl">Imprevistos ($ ${fmtB(imp)} prorrateados)</span></div>`;
+    html+=`<div class="tr2 prorate"><span class="tl">Imprevistos ($ ${fmtB(impDisplay)} prorrateados)</span></div>`;
   }
   
-  html+=`<div class="tr2 sep"><span class="tl" style="font-weight:500">Total Neto</span><span class="tv" style="font-weight:500">${sym()} ${fmtB(net)}</span></div>
-    <div class="tr2"><span class="tl">IVA (${pIVA}%)</span><span class="tv">${sym()} ${fmtB(iva)}</span></div>
-    <div class="tr2 grand"><span class="tl">Total General</span><span class="tv">${sym()} ${fmtB(grand)}</span></div>
-    <div class="words-row">${numToWords(grand)}</div>`;
+  html+=`<div class="tr2 sep"><span class="tl" style="font-weight:500">Total Neto</span><span class="tv" style="font-weight:500">${sym()} ${fmtB(netDisplay)}</span></div>
+    <div class="tr2"><span class="tl">IVA (${pIVA}%)</span><span class="tv">${sym()} ${fmtB(ivaDisplay)}</span></div>
+    <div class="tr2 grand"><span class="tl">Total General</span><span class="tv">${sym()} ${fmtB(grandDisplay)}</span></div>
+    <div class="words-row">${numToWords(Math.round(grandDisplay))}</div>`;
   
   document.getElementById('totals').innerHTML = html;
   updateGGTotal();
@@ -894,9 +896,9 @@ function genPrintHtml(){
   var trows='';
   items.forEach(it=>{
     if(it.t==='ch'){
-      trows+='<tr style="background:'+color+'18"><td colspan="2" style="font-weight:700;color:'+color+';padding:6px 8px;font-size:10px">'+esc(it.num)+'&nbsp;&nbsp;'+esc(it.name)+'</td><td></td><td></td><td></td><td style="text-align:right;font-family:monospace;font-weight:700;color:'+color+';padding:6px 8px">'+s+' '+fmtB(ct[it.id]||0)+'</td></tr>';
+      trows+='<tr style="background:'+color+'18"><td colspan="2" style="font-weight:700;color:'+color+';padding:6px 8px;font-size:10px">'+esc(it.num)+'&nbsp;&nbsp;'+esc(it.name)+'</td><td></td><td></td><td></td><td style="text-align:right;font-family:monospace;font-weight:700;color:'+color+';padding:6px 8px">'+fmtB(ct[it.id]||0)+'</td></tr>';
     } else {
-      trows+='<tr><td style="font-family:monospace;font-size:9px;padding:5px 8px;color:#475569">'+esc(it.num)+'</td><td style="padding:5px 8px">'+esc(it.name)+'</td><td style="text-align:center;padding:5px 8px;font-size:9px">'+esc(it.unit)+'</td><td style="text-align:right;font-family:monospace;padding:5px 8px">'+fmtQ(N(it.qty))+'</td><td style="text-align:right;font-family:monospace;padding:5px 8px">'+s+' '+fmtP(N(it.price))+'</td><td style="text-align:right;font-family:monospace;padding:5px 8px;font-weight:500">'+s+' '+fmtB(N(it.qty)*N(it.price))+'</td></tr>';
+      trows+='<tr><td style="font-family:monospace;font-size:9px;padding:5px 8px;color:#475569">'+esc(it.num)+'</td><td style="padding:5px 8px">'+esc(it.name)+'</td><td style="text-align:center;padding:5px 8px;font-size:9px">'+esc(it.unit)+'</td><td style="text-align:right;font-family:monospace;padding:5px 8px">'+fmtQ(N(it.qty))+'</td><td style="text-align:right;font-family:monospace;padding:5px 8px">'+fmtP(N(it.price))+'</td><td style="text-align:right;font-family:monospace;padding:5px 8px;font-weight:500">'+fmtB(N(it.qty)*N(it.price))+'</td></tr>';
     }
   });
 
@@ -907,7 +909,7 @@ function genPrintHtml(){
       let sgTotal=sg.items.reduce((a,it)=>a+N(it.qty)*N(it.price),0);
       ggHtml+='<div style="margin-bottom:20px;border:1px solid #eee;border-radius:5px;overflow:hidden"><div style="background:#f9f9f9;padding:8px;font-weight:600;color:'+color+'">'+esc(sg.name)+' - '+s+' '+fmtB(sgTotal)+'</div>'+
         '<table style="width:100%;border-collapse:collapse;font-size:9px"><thead><tr style="background:#fcfcfc"><th style="text-align:left;padding:4px 8px">Descripción</th><th style="text-align:right">Unid</th><th style="text-align:right">Cant.</th><th style="text-align:right">T.Uso</th><th style="text-align:right">Precio ('+s+')</th><th style="text-align:right;padding-right:8px">Subtotal ('+s+')</th></tr></thead><tbody>';
-      sg.items.forEach(it=>ggHtml+='<tr style="border-top:1px solid #f5f5f5"><td style="padding:3px 8px">'+esc(it.desc)+'</td><td style="text-align:right">'+esc(it.unit)+'</td><td style="text-align:right">'+fmtQ(N(it.qty))+'</td><td style="text-align:right">'+fmtQ(N(it.tiempoUso))+'</td><td style="text-align:right">'+s+' '+fmtP(N(it.price))+'</td><td style="text-align:right;padding-right:8px">'+s+' '+fmtB(N(it.qty)*N(it.tiempoUso)*N(it.price))+'</td></tr>');
+      sg.items.forEach(it=>ggHtml+='<tr style="border-top:1px solid #f5f5f5"><td style="padding:3px 8px">'+esc(it.desc)+'</td><td style="text-align:right">'+esc(it.unit)+'</td><td style="text-align:right">'+fmtQ(N(it.qty))+'</td><td style="text-align:right">'+fmtQ(N(it.tiempoUso))+'</td><td style="text-align:right">'+fmtP(N(it.price))+'</td><td style="text-align:right;padding-right:8px">'+fmtB(N(it.qty)*N(it.tiempoUso)*N(it.price))+'</td></tr>');
       ggHtml+='</tbody></table></div>';
     });
     var totalGG = ggSubgroups.reduce((a, sg) => a + sg.items.reduce((b, it) => b + N(it.qty) * N(it.tiempoUso) * N(it.price), 0), 0);
@@ -928,9 +930,9 @@ function genPrintHtml(){
         '<div style="background:#f9f9f9;padding:8px;display:flex;justify-content:space-between;font-weight:600;color:'+color+'"><span>'+esc(it.num)+' — '+esc(it.name)+'</span><span>'+s+' '+fmtP(tot)+' / '+esc(it.unit)+'</span></div>'+
         '<table style="width:100%;border-collapse:collapse;font-size:9px"><thead><tr style="background:#fcfcfc;color:#666"><th style="text-align:left;padding:4px 8px">Recurso</th><th style="text-align:right">Unid</th><th style="text-align:right">Rend.</th><th style="text-align:right">P.U. ('+s+')</th><th style="text-align:right;padding-right:8px">Subtotal ('+s+')</th></tr></thead><tbody>';
       ['Mano de Obra','Materiales','Equipos','Subcontratos'].forEach((tn,si)=>{
-        a.secs[si].rows.forEach(r=>apuHtml+='<tr style="border-top:1px solid #f5f5f5"><td style="padding:3px 8px">'+esc(r.desc)+' <small style="color:#999">('+tn+')</small></td><td style="text-align:right">'+esc(r.unit)+'</td><td style="text-align:right">'+fmtQ(N(r.qty))+'</td><td style="text-align:right">'+s+' '+fmtP(N(r.price))+'</td><td style="text-align:right;padding-right:8px">'+s+' '+fmtB(N(r.qty)*N(r.price))+'</td></tr>');
+        a.secs[si].rows.forEach(r=>apuHtml+='<tr style="border-top:1px solid #f5f5f5"><td style="padding:3px 8px">'+esc(r.desc)+' <small style="color:#999">('+tn+')</small></td><td style="text-align:right">'+esc(r.unit)+'</td><td style="text-align:right">'+fmtQ(N(r.qty))+'</td><td style="text-align:right">'+fmtP(N(r.price))+'</td><td style="text-align:right;padding-right:8px">'+fmtB(N(r.qty)*N(r.price))+'</td></tr>');
       });
-      apuHtml+='<tr style="background:#fffdf0"><td colspan="4" style="padding:3px 8px">Leyes Sociales ('+pct.toFixed(1)+'%)</td><td style="text-align:right;padding-right:8px">'+s+' '+fmtP(lt)+'</td></tr>'+
+      apuHtml+='<tr style="background:#fffdf0"><td colspan="4" style="padding:3px 8px">Leyes Sociales ('+pct.toFixed(1)+'%)</td><td style="text-align:right;padding-right:8px">'+fmtP(lt)+'</td></tr>'+
         '<tr style="background:#f0f4f8;font-weight:700;color:'+color+'"><td colspan="4" style="padding:5px 8px">TOTAL UNITARIO</td><td style="text-align:right;padding-right:8px">'+s+' '+fmtP(tot)+'</td></tr></tbody></table></div>'+(CFG.apuPrintMode==='por hoja'?'</div>':'');
     });
     apuHtml+='</div>';
@@ -1198,6 +1200,7 @@ function openSettings(tab){
       '<label class="chk-opt"><input type="checkbox" '+(CFG.impProrrateado?'checked':'')+'  onchange="CFG.impProrrateado=this.checked;saveCFG();rc()"> Prorratear Imprevistos en APU</label>'+
     '</div></div>'+
     '</div></div>'+
+    '</div></div>'+  /* fin mb padding:0 y cfg-tab-pnl moneda */
 
     /* ── PANEL AYUDA ── */
     '<div class="cfg-tab-pnl '+(tab==='ayuda'?'on':'')+'" id="cfg-pnl-ayuda" style="max-height:60vh;overflow-y:auto">'+
