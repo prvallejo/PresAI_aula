@@ -95,12 +95,12 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
 
 /* ── BUDGET TABLE ── */
 .tbl-wrap{background:var(--bg);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:12px}
-.tbl-hdr{display:grid;grid-template-columns:50px minmax(120px,1fr) 55px 70px 110px 110px 140px;background:var(--bg2);border-bottom:1px solid var(--border2);padding:0 8px}
+.tbl-hdr{display:grid;grid-template-columns:50px minmax(120px,1fr) 64px 90px 120px 120px 140px;background:var(--bg2);border-bottom:1px solid var(--border2);padding:0 8px}
 .tbl-hdr span{padding:9px 6px;font-size:9px;font-weight:600;color:var(--txt2);text-transform:uppercase;letter-spacing:.6px}
 .tbl-hdr .r{text-align:right}
 .row-ch,.row-it{display:grid;border-bottom:1px solid var(--border);padding:0 8px;align-items:center}
-.row-ch{grid-template-columns:50px minmax(120px,1fr) 55px 70px 110px 110px 140px;background:rgba(30,58,95,.05);border-bottom:1px solid var(--border2)}
-.row-it{grid-template-columns:50px minmax(120px,1fr) 55px 70px 110px 110px 140px}
+.row-ch{grid-template-columns:50px minmax(120px,1fr) 64px 90px 120px 120px 140px;background:rgba(30,58,95,.05);border-bottom:1px solid var(--border2)}
+.row-it{grid-template-columns:50px minmax(120px,1fr) 64px 90px 120px 120px 140px}
 .row-it:hover{background:#f6f8ff}.row-ch:hover{background:rgba(30,58,95,.08)}
 .ri{font-family:var(--ff);font-size:13px;color:var(--txt);background:transparent;border:none;outline:none;width:100%;padding:10px 6px;line-height:1.3}
 .ri::placeholder{color:var(--txt3);font-style:italic}.ri:focus::placeholder{opacity:0}
@@ -225,17 +225,38 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
 .cfg-field input,.cfg-field select{width:100%;padding:6px 8px;font-size:12px;border:1px solid var(--border2);border-radius:5px;outline:none;font-family:var(--ff)}
 .cfg-field input:focus{border-color:var(--navy)}
 .chk-opts{display:flex;flex-direction:column;gap:8px}
-.chk-opt{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--txt);cursor:poin	.print-opt-row{display:flex;align-items:center;gap:12px;margin-bottom:8px;min-height:32px};margin-bottom:8px}
+.chk-opt{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--txt);cursor:pointer;margin-bottom:8px}
+.print-opt-row{display:flex;align-items:center;gap:12px;margin-bottom:8px;min-height:32px}
 .print-opt-row label{margin:0}
 .print-opt-row select{width:120px;padding:4px 6px;font-size:11px;border:1px solid var(--border2);border-radius:4px}
 
 /* ── HELP MODAL ── */
 .help-content{font-size:12px;line-height:1.6;color:var(--txt)}
-.help-section{margin-bottom:16px}
-.help-section h5{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:8px}
-.help-section p{margin-bottom:6px;color:var(--txt2)}
+.help-section{margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.help-section:last-child{border:none}
+.help-section h5{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.help-section p{margin-bottom:8px;color:var(--txt2)}
 .help-section ul{margin-left:16px;margin-bottom:8px}
-.help-section li{margin-bottom:4px}
+.help-section li{margin-bottom:5px;color:var(--txt2)}
+.help-tip{background:var(--navy-lt);border-left:3px solid var(--navy);padding:8px 12px;border-radius:0 6px 6px 0;margin:8px 0;font-size:11px;color:var(--navy)}
+.help-warning{background:#fffbeb;border-left:3px solid var(--amber);padding:8px 12px;border-radius:0 6px 6px 0;margin:8px 0;font-size:11px;color:var(--amber)}
+.help-visual{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:12px;margin:10px 0;font-size:11px}
+.help-visual-row{display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid var(--border)}
+.help-visual-row:last-child{border:none}
+.help-badge{display:inline-block;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:600;font-family:var(--mono)}
+.help-badge.green{background:var(--green-lt);color:var(--green);border:1px solid var(--green)}
+.help-badge.amber{background:var(--amber-lt);color:var(--amber);border:1px solid var(--amber)}
+.help-badge.magenta{background:var(--magenta-lt);color:var(--magenta);border:1px solid var(--magenta)}
+.help-badge.navy{background:var(--navy-lt);color:var(--navy);border:1px solid var(--navy)}
+.help-badge.red{background:var(--red-lt);color:var(--red);border:1px solid var(--red)}
+
+/* ── SETTINGS TABS ── */
+.cfg-tabs{display:flex;border-bottom:2px solid var(--border);margin-bottom:16px;gap:0}
+.cfg-tab{padding:9px 16px;font-size:11px;font-weight:600;color:var(--txt2);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;transition:all .2s}
+.cfg-tab.on{color:var(--navy);border-bottom-color:var(--navy)}
+.cfg-tab:hover:not(.on){color:var(--txt);background:var(--bg2)}
+.cfg-tab-pnl{display:none}
+.cfg-tab-pnl.on{display:block}
 
 /* ── PREVIEW MODAL ── */
 .preview-frame{width:100%;height:600px;border:1px solid var(--border);border-radius:5px}
@@ -310,8 +331,8 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
       <button class="hbtn" onclick="saveProject()"><svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Guardar</button>
       <button class="hbtn" onclick="previewReport()"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Vista Previa</button>
       <button class="hbtn green" onclick="doPrint()"><svg viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Imprimir</button>
-      <button class="hbtn" onclick="openHelp()"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
-      <button class="hbtn" onclick="openSettings()"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button>
+      <button class="hbtn" onclick="openSettings('config')"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button>
+      <button class="hbtn" onclick="closeApp()" title="Cerrar aplicación" style="background:rgba(153,27,27,0.15);border-color:rgba(239,68,68,0.4);color:#fca5a5"><svg viewBox="0 0 24 24"><path d="M18.36 6.64a9 9 0 11-12.73 0"/><line x1="12" y1="2" x2="12" y2="12"/></svg></button>
     </div>
   </header>
 
@@ -540,7 +561,7 @@ function rb(){
     return `<div class="row-it" data-id="${it.id}">
       <input class="ri mono" data-field="num" data-id="${it.id}" placeholder="N°" value="${esc(it.num)}" autocomplete="off"/>
       <input class="ri" data-field="name" data-id="${it.id}" placeholder="Descripción..." value="${esc(it.name)}" autocomplete="off"/>
-      <input class="ri" style="width:55px" data-field="unit" data-id="${it.id}" placeholder="Unid" value="${esc(it.unit)}" autocomplete="off"/>
+      <input class="ri" data-field="unit" data-id="${it.id}" placeholder="Unid" value="${esc(it.unit)}" autocomplete="off"/>
       <input class="${qtyClass}" data-field="qty" data-id="${it.id}" placeholder="0" value="${fmtQ(N(it.qty))}" onfocus="this.select()" autocomplete="off"/>
       <input class="${priceClass}" data-field="price" data-id="${it.id}" placeholder="P.Unit." value="${fmtP(N(it.price))}" onfocus="this.select()" autocomplete="off"/>
       <span class="span-tot ${it.isApu||it.isCub?'magenta':''}">${fmtB(tot)}</span>
@@ -1046,7 +1067,15 @@ function openHelp(){
 }
 
 /* ── SETTINGS ── */
-function openSettings(){
+function swCfgTab(id){
+  document.querySelectorAll('.cfg-tab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.cfg-tab-pnl').forEach(p=>p.classList.remove('on'));
+  document.getElementById('cfg-tab-'+id).classList.add('on');
+  document.getElementById('cfg-pnl-'+id).classList.add('on');
+}
+
+function openSettings(tab){
+  tab = tab || 'config';
   document.getElementById('ov').style.display='block';
   let obra=document.getElementById('pObra').value;
   let mandante=document.getElementById('pMandante').value;
@@ -1056,9 +1085,15 @@ function openSettings(){
   let payment=document.getElementById('pPayment').value;
   let execution=document.getElementById('pExecution').value;
 
-  let html='<div class="modal" style="max-width:700px;max-height:90vh;overflow-y:auto">'+
-    '<div class="mh"><h3>⚙️ Configuración PresAI</h3><button class="btn-s" onclick="closeMod()">✕</button></div>'+
+  let html='<div class="modal" style="max-width:760px;max-height:90vh;overflow-y:auto">'+
+    '<div class="mh"><h3>⚙️ PresAI — Configuración y Ayuda</h3><button class="btn-s" onclick="closeMod()">✕</button></div>'+
     '<div class="mb">'+
+    '<div class="cfg-tabs">'+
+      '<div class="cfg-tab '+(tab==='config'?'on':''+'"')+'" id="cfg-tab-config" onclick="swCfgTab(\"config\")">⚙️ Configuración</div>'+
+      '<div class="cfg-tab '+(tab==='help'?'on':''+'"')+'" id="cfg-tab-help" onclick="swCfgTab(\"help\")">❔ Ayuda</div>'+
+    '</div>'+
+    '<div class="cfg-tab-pnl '+(tab==='config'?'on':'')+'" id="cfg-pnl-config">'+
+    '<div class="mb" style="padding:0">'+
 
     /* PROYECTO */
     '<div class="cfg-section"><h4>Proyecto</h4><div class="cfg-grid">'+
@@ -1095,23 +1130,28 @@ function openSettings(){
         '<option value="legal" '+(CFG.pageSize==='legal'?'selected':'')+'>Oficio (Legal)</option>'+
       '</select></div>'+
     '</div>'+
-    '<div style="margin-top:15px;margin-bottom:30px"><label style="font-size:11px;font-weight:600;color:var(--navy);text-transform:uppercase;display:block;margin-bottom:8px">Impresión</label>'+
-      '<div style="display:flex;flex-direction:column;gap:10px;align-items:flex-start">'+
-        '<label class="chk-opt"><input type="checkbox" '+(CFG.printCover?'checked':'')+' onchange="CFG.printCover=this.checked;saveCFG()"> Portada</label>'+
-        '<div class="print-opt-row" style="margin:0;display:flex;align-items:center;gap:10px"><label style="display:flex;align-items:center;gap:5px;white-space:nowrap"><input type="checkbox" '+(CFG.printApu?'checked':'')+' onchange="CFG.printApu=this.checked;saveCFG()"/> APUs</label>'+
-          '<select onchange="CFG.apuPrintMode=this.value;saveCFG()" style="padding:2px 5px;border-radius:4px;border:1px solid var(--border2);font-size:11px">'+
-            '<option value="continuo" '+(CFG.apuPrintMode==='continuo'?'selected':'')+'>Continuo</option>'+
-            '<option value="por hoja" '+(CFG.apuPrintMode==='por hoja'?'selected':'')+'>Por hoja</option>'+
-          '</select></div>'+
-        '<div class="print-opt-row" style="margin:0;display:flex;align-items:center;gap:10px"><label style="display:flex;align-items:center;gap:5px;white-space:nowrap"><input type="checkbox" '+(CFG.printCub?'checked':'')+' onchange="CFG.printCub=this.checked;saveCFG()"/> Cubicaciones</label>'+
-          '<select onchange="CFG.cubPrintMode=this.value;saveCFG()" style="padding:2px 5px;border-radius:4px;border:1px solid var(--border2);font-size:11px">'+
-            '<option value="continuo" '+(CFG.cubPrintMode==='continuo'?'selected':'')+'>Continuo</option>'+
-            '<option value="por hoja" '+(CFG.cubPrintMode==='por hoja'?'selected':'')+'>Por hoja</option>'+
-          '</select></div>'+
-        '<label class="chk-opt"><input type="checkbox" '+(CFG.printGG?'checked':'')+' onchange="CFG.printGG=this.checked;saveCFG()"> Gastos Generales</label>'+
-        '<label class="chk-opt"><input type="checkbox" '+(CFG.printPayment?'checked':'')+' onchange="CFG.printPayment=this.checked;saveCFG()"> Forma de pago</label>'+
-        '<label class="chk-opt"><input type="checkbox" '+(CFG.printExecution?'checked':'')+' onchange="CFG.printExecution=this.checked;saveCFG()"> Plazo ejecución</label>'+
-        '<label class="chk-opt"><input type="checkbox" '+(CFG.printNotes?'checked':'')+' onchange="CFG.printNotes=this.checked;saveCFG()"> Notas</label>'+
+    '<div style="margin-top:15px;margin-bottom:30px"><label style="font-size:11px;font-weight:600;color:var(--navy);text-transform:uppercase;display:block;margin-bottom:10px">Secciones a Imprimir</label>'+
+      '<div style="display:grid;grid-template-columns:180px 140px;gap:8px 0;align-items:center">'+
+        '<label class="chk-opt" style="margin:0"><input type="checkbox" '+(CFG.printCover?'checked':'')+' onchange="CFG.printCover=this.checked;saveCFG()"> Portada</label>'+
+        '<span></span>'+
+        '<label class="chk-opt" style="margin:0"><input type="checkbox" '+(CFG.printApu?'checked':'')+' onchange="CFG.printApu=this.checked;saveCFG()"/> APUs</label>'+
+        '<select onchange="CFG.apuPrintMode=this.value;saveCFG()" style="padding:4px 7px;border-radius:4px;border:1px solid var(--border2);font-size:11px;width:130px">'+
+          '<option value="continuo" '+(CFG.apuPrintMode==='continuo'?'selected':'')+'>Continuo</option>'+
+          '<option value="por hoja" '+(CFG.apuPrintMode==='por hoja'?'selected':'')+'>Por hoja</option>'+
+        '</select>'+
+        '<label class="chk-opt" style="margin:0"><input type="checkbox" '+(CFG.printCub?'checked':'')+' onchange="CFG.printCub=this.checked;saveCFG()"/> Cubicaciones</label>'+
+        '<select onchange="CFG.cubPrintMode=this.value;saveCFG()" style="padding:4px 7px;border-radius:4px;border:1px solid var(--border2);font-size:11px;width:130px">'+
+          '<option value="continuo" '+(CFG.cubPrintMode==='continuo'?'selected':'')+'>Continuo</option>'+
+          '<option value="por hoja" '+(CFG.cubPrintMode==='por hoja'?'selected':'')+'>Por hoja</option>'+
+        '</select>'+
+        '<label class="chk-opt" style="margin:0"><input type="checkbox" '+(CFG.printGG?'checked':'')+' onchange="CFG.printGG=this.checked;saveCFG()"> Gastos Generales</label>'+
+        '<span></span>'+
+        '<label class="chk-opt" style="margin:0"><input type="checkbox" '+(CFG.printPayment?'checked':'')+' onchange="CFG.printPayment=this.checked;saveCFG()"> Forma de pago</label>'+
+        '<span></span>'+
+        '<label class="chk-opt" style="margin:0"><input type="checkbox" '+(CFG.printExecution?'checked':'')+' onchange="CFG.printExecution=this.checked;saveCFG()"> Plazo ejecución</label>'+
+        '<span></span>'+
+        '<label class="chk-opt" style="margin:0"><input type="checkbox" '+(CFG.printNotes?'checked':'')+' onchange="CFG.printNotes=this.checked;saveCFG()"> Notas</label>'+
+        '<span></span>'+
       '</div></div>'+
 
     /* EMPRESA */
@@ -1160,7 +1200,175 @@ function openSettings(){
       '<label class="chk-opt"><input type="checkbox" '+(CFG.impProrrateado?'checked':'')+' onchange="CFG.impProrrateado=this.checked;saveCFG();rc()"> Prorratear Imprevistos en APU</label>'+
     '</div></div>'+
 
+    '</div>'+  /* fin cfg-section prorrateo */
+    '</div>'+  /* fin mb padding:0 */
+    '</div>'+  /* fin cfg-tab-pnl config */
+
+    /* ── PANEL AYUDA ── */
+    '<div class="cfg-tab-pnl '+(tab==='help'?'on':''+'"')+' id="cfg-pnl-help" style="max-height:60vh;overflow-y:auto">'+
+    '<div class="help-content">'+
+
+    /* BIENVENIDA */
+    '<div class="help-section">'+
+      '<h5>&#x1F4CB; ¿Qué es PresAI?</h5>'+
+      '<p>PresAI es una aplicación web de presupuestación de obras civiles diseñada para funcionar directamente en tu navegador, sin instalación. Toda la información se guarda localmente en tu dispositivo mediante <strong>LocalStorage</strong>, por lo que no requiere conexión a internet una vez cargada.</p>'+
+      '<div class="help-tip">&#x1F4A1; Puedes usar PresAI en tu celular en modo horizontal, en tablet o en computador. Para móviles, gira el dispositivo a modo <strong>horizontal</strong> para ver la tabla completa.</div>'+
     '</div>'+
+
+    /* PANTALLA INICIO */
+    '<div class="help-section">'+
+      '<h5>&#x1F3E0; Pantalla de Inicio</h5>'+
+      '<p>Al abrir la aplicación, verás la pantalla de bienvenida con dos opciones:</p>'+
+      '<div class="help-visual">'+
+        '<div class="help-visual-row"><span class="help-badge navy">&#x1F4C2; Mis Proyectos</span><span>Abre el listado de proyectos guardados en tu dispositivo.</span></div>'+
+        '<div class="help-visual-row"><span class="help-badge green">➕ Nuevo Proyecto</span><span>Crea un presupuesto en blanco y abre la configuración inicial.</span></div>'+
+      '</div>'+
+    '</div>'+
+
+    /* BARRA SUPERIOR */
+    '<div class="help-section">'+
+      '<h5>&#x1F4CC; Barra Superior (Header)</h5>'+
+      '<p>La barra superior siempre está visible y contiene los controles principales del proyecto activo:</p>'+
+      '<div class="help-visual">'+
+        '<div class="help-visual-row"><span class="help-badge navy">&#x1F4C2; Proyectos</span><span>Abre el gestor de proyectos: cargar, duplicar, renombrar, exportar o eliminar proyectos.</span></div>'+
+        '<div class="help-visual-row"><span class="help-badge navy">➕ Nuevo</span><span>Crea un nuevo proyecto (te pedirá confirmar si hay cambios sin guardar).</span></div>'+
+        '<div class="help-visual-row"><span class="help-badge navy">&#x1F4BE; Guardar</span><span>Guarda el proyecto activo. Requiere que el nombre de la obra esté ingresado en ⚙️.</span></div>'+
+        '<div class="help-visual-row"><span class="help-badge navy">&#x1F441; Vista Previa</span><span>Muestra cómo quedará el informe impreso antes de imprimir.</span></div>'+
+        '<div class="help-visual-row"><span class="help-badge green">&#x1F5A8; Imprimir</span><span>Genera el informe PDF/impreso con todos los datos del proyecto.</span></div>'+
+        '<div class="help-visual-row"><span class="help-badge navy">⚙️ Config</span><span>Abre esta ventana de configuración y ayuda.</span></div>'+
+        '<div class="help-visual-row"><span class="help-badge red">⏻ Cerrar</span><span>Cierra la aplicación y regresa a la pantalla de inicio (los datos guardados se conservan).</span></div>'+
+      '</div>'+
+      '<div class="help-warning">⚠️ El botón <strong>Guardar</strong> guarda en el navegador (LocalStorage). Si limpias el caché del navegador, perderás los datos. Exporta a .xlsx periódicamente como respaldo.</div>'+
+    '</div>'+
+
+    /* PRESUPUESTO */
+    '<div class="help-section">'+
+      '<h5>&#x1F4CB; Pestaña: Presupuesto</h5>'+
+      '<p>Es la pestaña principal. Organiza el presupuesto en <strong>Capítulos</strong> (ej: 1.- Hormigones) y <strong>Partidas</strong> (ej: 1.1 Fundaciones). Cada partida tiene:</p>'+
+      '<div class="help-visual">'+
+        '<div class="help-visual-row"><span class="help-badge navy">N° Ítem</span><span>Número automático (editable). Ej: 1.1, 1.2, 2.1</span></div>'+
+        '<div class="help-visual-row"><span class="help-badge navy">Descripción</span><span>Nombre de la partida o capítulo.</span></div>'+
+        '<div class="help-visual-row"><span class="help-badge navy">Unid</span><span>Unidad de medida (m2, m3, kg, gl, etc.).</span></div>'+
+        '<div class="help-visual-row"><span class="help-badge magenta">Cant.</span><span>Cantidad. Si está en magenta, proviene de una Cubicación vinculada.</span></div>'+
+        '<div class="help-visual-row"><span class="help-badge magenta">P.Unit.</span><span>Precio unitario. Si está en magenta, proviene de un APU vinculado.</span></div>'+
+        '<div class="help-visual-row"><span class="help-badge navy">Total</span><span>Cant. × P.Unit. (calculado automáticamente).</span></div>'+
+      '</div>'+
+      '<p><strong>Botones de acción por partida:</strong></p>'+
+      '<div class="help-visual">'+
+        '<div class="help-visual-row"><span class="help-badge magenta">✓Cub / Cub</span><span>Abre el módulo de Cubicación para calcular la cantidad. El ✓ indica que ya tiene cubicación.</span></div>'+
+        '<div class="help-visual-row"><span class="help-badge amber">✓APU / APU</span><span>Abre el Análisis de Precio Unitario. El ✓ indica que ya tiene APU.</span></div>'+
+        '<div class="help-visual-row"><span class="help-badge red">×</span><span>Elimina la fila (pide confirmación).</span></div>'+
+        '<div class="help-visual-row"><span class="help-badge green">+ Partida</span><span>Agrega una nueva partida dentro del capítulo (aparece en filas de capítulo).</span></div>'+
+      '</div>'+
+      '<div class="help-tip">&#x1F4A1; El panel de totales a la derecha muestra el resumen: Costo Directo, GG, Utilidad, Imprevistos, IVA y Total General. Los porcentajes son editables en tiempo real.</div>'+
+    '</div>'+
+
+    /* GASTOS GENERALES */
+    '<div class="help-section">'+
+      '<h5>&#x1F4B0; Pestaña: Gastos Generales</h5>'+
+      '<p>Permite desglosar los Gastos Generales (GG) de la obra en subgrupos temáticos. Cada subgrupo contiene ítems con <strong>Cantidad</strong>, <strong>Tiempo de Uso</strong> y <strong>Precio</strong>.</p>'+
+      '<p>Fórmula por ítem: <code>Cantidad × Tiempo de Uso × Precio</code></p>'+
+      '<div class="help-visual">'+
+        '<div class="help-visual-row"><span class="help-badge navy">Personal profesional</span><span>Honorarios, sueldos de ingenieros y profesionales.</span></div>'+
+        '<div class="help-visual-row"><span class="help-badge navy">Máquinas y equipos</span><span>Arriendo o depreciación de maquinaria.</span></div>'+
+        '<div class="help-visual-row"><span class="help-badge navy">Instalaciones</span><span>Bodega, oficina, cerco perimetral, etc.</span></div>'+
+        '<div class="help-visual-row"><span class="help-badge navy">Seguridad</span><span>EPP, señalética, implementos de seguridad.</span></div>'+
+      '</div>'+
+      '<div class="help-tip">&#x1F4A1; En el panel de totales del Presupuesto puedes elegir entre usar un <strong>% fijo</strong> de GG o el total calculado en esta pestaña. Activa “Usar % fijo” para simplificar.</div>'+
+    '</div>'+
+
+    /* APU */
+    '<div class="help-section">'+
+      '<h5>&#x1F4CA; Pestaña: Análisis Unitarios (APU)</h5>'+
+      '<p>El APU desglosa el costo de cada partida en 4 secciones:</p>'+
+      '<div class="help-visual">'+
+        '<div class="help-visual-row"><span style="width:120px;font-weight:600;color:#1d4ed8">Mano de Obra</span><span>Cuadrillas, operarios, capataces. Incluye cálculo automático de Leyes Sociales (AFP, Salud, Seguro, Mutual, SIS, etc.).</span></div>'+
+        '<div class="help-visual-row"><span style="width:120px;font-weight:600;color:#15803d">Materiales</span><span>Todos los insumos con su rendimiento y precio unitario.</span></div>'+
+        '<div class="help-visual-row"><span style="width:120px;font-weight:600;color:#92400e">Equipos</span><span>Maquinaria, herramientas especiales y su costo de operación.</span></div>'+
+        '<div class="help-visual-row"><span style="width:120px;font-weight:600;color:#7e22ce">Subcontratos</span><span>Trabajos entregados a terceros con precio global.</span></div>'+
+      '</div>'+
+      '<p>El <strong>Precio Unitario Total</strong> del APU se transfiere automáticamente a la columna P.Unit. de la partida en el Presupuesto (se muestra en magenta).</p>'+
+      '<div class="help-tip">&#x1F4A1; Escribe “pérdida” en la descripción de un material para que PresAI calcule automáticamente el porcentaje de pérdida sobre el ítem anterior.</div>'+
+    '</div>'+
+
+    /* CUBICACIONES */
+    '<div class="help-section">'+
+      '<h5>&#x1F4D0; Pestaña: Cubicaciones</h5>'+
+      '<p>Permite calcular la cantidad de cada partida mediante mediciones geométricas. Cada fila tiene:</p>'+
+      '<div class="help-visual">'+
+        '<div class="help-visual-row"><span class="help-badge navy">Descripción</span><span>Nombre del elemento medido (ej: “Muro Norte”).</span></div>'+
+        '<div class="help-visual-row"><span class="help-badge navy">N</span><span>Número de veces que se repite la medición.</span></div>'+
+        '<div class="help-visual-row"><span class="help-badge navy">Ancho</span><span>Dimensión horizontal (metros).</span></div>'+
+        '<div class="help-visual-row"><span class="help-badge navy">Largo</span><span>Dimensión longitudinal (metros).</span></div>'+
+        '<div class="help-visual-row"><span class="help-badge navy">Alto</span><span>Dimensión vertical (metros). Opcional según la unidad.</span></div>'+
+        '<div class="help-visual-row"><span class="help-badge magenta">Subtotal</span><span>N × Ancho × Largo × Alto (calculado automáticamente).</span></div>'+
+      '</div>'+
+      '<p>La suma total de la cubicación se transfiere automáticamente a la columna <strong>Cant.</strong> de la partida (se muestra en magenta).</p>'+
+    '</div>'+
+
+    /* NOTAS */
+    '<div class="help-section">'+
+      '<h5>&#x1F4DD; Pestaña: Notas</h5>'+
+      '<p>Genera automáticamente una lista numerada de notas, una por cada partida del presupuesto. Puedes editar el texto de cada nota y agregar notas adicionales con el botón <strong>+ Agregar Nota</strong>.</p>'+
+      '<p>Las notas se incluyen en el informe impreso si la opción <strong>Notas</strong> está activada en ⚙️ &gt; Formato de Impresión.</p>'+
+    '</div>'+
+
+    /* IMPRESION */
+    '<div class="help-section">'+
+      '<h5>&#x1F5A8; Impresión y Exportación</h5>'+
+      '<p>El botón <strong>Imprimir</strong> genera un documento HTML optimizado para impresión que se abre en una nueva ventana. Desde ahí puedes:</p>'+
+      '<ul>'+
+        '<li>Imprimir directamente en papel o impresora PDF.</li>'+
+        '<li>Guardar como PDF usando la opción “Guardar como PDF” del diálogo de impresión del navegador.</li>'+
+      '</ul>'+
+      '<p>En <strong>⚙️ &gt; Formato de Impresión</strong> puedes configurar qué secciones incluir:</p>'+
+      '<div class="help-visual">'+
+        '<div class="help-visual-row"><span class="help-badge navy">Portada</span><span>Página inicial con logo, nombre de obra, mandante, fecha y firma.</span></div>'+
+        '<div class="help-visual-row"><span class="help-badge amber">APUs</span><span>Incluye todos los Análisis de Precios Unitarios. Elige entre impresión continua o una por hoja.</span></div>'+
+        '<div class="help-visual-row"><span class="help-badge magenta">Cubicaciones</span><span>Incluye las tablas de cubicación. Elige entre impresión continua o una por hoja.</span></div>'+
+        '<div class="help-visual-row"><span class="help-badge navy">Gastos Generales</span><span>Incluye el detalle de GG por subgrupos.</span></div>'+
+        '<div class="help-visual-row"><span class="help-badge navy">Forma de pago</span><span>Incluye la forma de pago acordada.</span></div>'+
+        '<div class="help-visual-row"><span class="help-badge navy">Notas</span><span>Incluye la lista de notas al presupuesto.</span></div>'+
+      '</div>'+
+      '<p>Para exportar a <strong>Excel (.xlsx)</strong>, ve a <strong>Proyectos → menú ⋮ → Exportar .xlsx</strong>.</p>'+
+    '</div>'+
+
+    /* PROYECTOS */
+    '<div class="help-section">'+
+      '<h5>&#x1F4C1; Gestión de Proyectos</h5>'+
+      '<p>Desde el botón <strong>Proyectos</strong> puedes administrar todos tus presupuestos guardados:</p>'+
+      '<div class="help-visual">'+
+        '<div class="help-visual-row"><span class="help-badge navy">&#x1F4CB; Duplicar</span><span>Crea una copia del proyecto con el sufijo “(copia)”.</span></div>'+
+        '<div class="help-visual-row"><span class="help-badge navy">✏️ Renombrar</span><span>Cambia el nombre del proyecto.</span></div>'+
+        '<div class="help-visual-row"><span class="help-badge green">&#x1F4CA; Exportar .xlsx</span><span>Descarga el presupuesto en formato Excel para compartir o archivar.</span></div>'+
+        '<div class="help-visual-row"><span class="help-badge red">&#x1F5D1;️ Eliminar</span><span>Borra el proyecto permanentemente del dispositivo.</span></div>'+
+      '</div>'+
+      '<div class="help-warning">⚠️ Los datos se guardan en el navegador. Si usas modo incognito o limpias el caché, los proyectos se perderán. Exporta a .xlsx como respaldo externo.</div>'+
+    '</div>'+
+
+    /* MONEDA */
+    '<div class="help-section">'+
+      '<h5>&#x1F4B1; Moneda y Decimales</h5>'+
+      '<p>En <strong>⚙️ &gt; Moneda y Decimales</strong> puedes configurar:</p>'+
+      '<div class="help-visual">'+
+        '<div class="help-visual-row"><span class="help-badge navy">CLP ($)</span><span>Peso chileno. La paridad se fija en 1 automáticamente.</span></div>'+
+        '<div class="help-visual-row"><span class="help-badge navy">USD (US$)</span><span>Dólar estadounidense. Ingresa la paridad para convertir a CLP en el informe.</span></div>'+
+        '<div class="help-visual-row"><span class="help-badge navy">UF</span><span>Unidad de Fomento. Ingresa el valor UF del día para la conversión.</span></div>'+
+      '</div>'+
+      '<p>También puedes ajustar la cantidad de decimales para cantidades, precios unitarios y totales, y elegir entre punto (.) o coma (,) como separador decimal.</p>'+
+    '</div>'+
+
+    /* EMPRESA */
+    '<div class="help-section">'+
+      '<h5>&#x1F3E2; Empresa y Firmantes</h5>'+
+      '<p>En <strong>⚙️ &gt; Empresa Constructora</strong> ingresa los datos de tu empresa: nombre, rubro, dirección, teléfono, email y web. Estos datos aparecen en el encabezado del informe impreso.</p>'+
+      '<p>Puedes subir el <strong>logo</strong> de tu empresa (se muestra en el header de la app y en el informe) y una <strong>imagen de portada</strong> para la primera página del informe.</p>'+
+      '<p>En <strong>Firmantes</strong> ingresa los nombres del Representante Legal y del Profesional a cargo para las líneas de firma al final del informe.</p>'+
+    '</div>'+
+
+    '</div>'+  /* fin help-content */
+    '</div>'+  /* fin cfg-tab-pnl help */
+
     '<div class="mf"><button class="btn-p blue" onclick="closeMod()">Listo</button></div>'+
   '</div>';
   document.getElementById('mc').innerHTML=html;
@@ -1392,6 +1600,13 @@ function showApp(){
 function hideApp(){
   document.getElementById('wow-screen').style.display='flex';
   document.getElementById('main-app').style.display='none';
+}
+function closeApp(){
+  if(isDirty){
+    if(!confirm('¿Cerrar la aplicación? Tienes cambios sin guardar que se perderán.\n\nPresiona Cancelar para volver y guardar primero.'))return;
+  }
+  closeMod();
+  hideApp();
 }
 
 /* ── EXPORT XLSX ── */
