@@ -159,345 +159,297 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
 
 /* ── GG SUBGROUPS ── */
 .gg-subgroup{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:12px}
-.gg-subgroup-hdr{display:flex;justify-content:space-between;align-items:center;padding-bottom:10px;border-bottom:1px solid var(--border2);margin-bottom:10px}
-.gg-subgroup-name{font-weight:600;color:var(--navy);font-size:12px}
-.gg-subgroup-total{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--amber)}
-.gg-table{width:100%;border-collapse:collapse;font-size:11px}
-.gg-table th{background:var(--bg2);padding:6px;text-align:left;font-weight:600;color:var(--txt2);border-bottom:1px solid var(--border2);font-size:9px;text-transform:uppercase;vertical-align:middle}
-.gg-table td{padding:5px 6px;border-bottom:1px solid var(--border);vertical-align:middle}
-.gg-table input{font-family:var(--ff);font-size:11px;background:transparent;border:none;border-bottom:1px solid transparent;outline:none;width:100%;padding:2px 3px;color:var(--txt)}
-.gg-table input:focus{border-bottom-color:var(--navy)}
-.gg-table .r{text-align:right;font-family:var(--mono)}
-.gg-actions{display:flex;gap:4px;justify-content:flex-end}
+.gg-subgroup-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.gg-subgroup-name{font-size:12px;font-weight:600;color:var(--navy)}
+.gg-subgroup-total{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--navy)}
+.gg-table{width:100%;border-collapse:collapse}
+.gg-table th{text-align:left;font-size:9px;color:var(--txt2);text-transform:uppercase;padding:4px 8px;background:var(--bg2)}
+.gg-table td{padding:4px;border-bottom:1px solid var(--border)}
+.gg-table input{width:100%;border:none;outline:none;font-size:12px;padding:4px;background:transparent}
+.gg-table input:focus{background:var(--navy-lt)}
+.gg-table .r{text-align:right}
+.gg-table .mono{font-family:var(--mono)}
 
-/* ── APU ── */
-.sec-wrap{margin-bottom:10px}
-.sec-hdr{display:flex;align-items:center;justify-content:space-between;padding:5px 10px;border-radius:5px;margin-bottom:3px}
-.s-mo{background:#eff6ff;color:#1d4ed8}.s-mat{background:#f0fdf4;color:#15803d}
-.s-eq{background:#fffbeb;color:#92400e}.s-sub{background:#fdf4ff;color:#7e22ce}
-.sec-hdr .sl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
-.sec-hdr .st{font-family:var(--mono);font-size:12px;font-weight:600}
-.at{width:100%;border-collapse:collapse}
-.at th{font-size:9px;font-weight:600;color:var(--txt2);text-transform:uppercase;letter-spacing:.5px;padding:5px;border-bottom:1px solid var(--border2);text-align:left;background:var(--bg2);vertical-align:middle}
-.at th.r{text-align:right}
-.at td{padding:3px 4px;border-bottom:1px solid var(--border);vertical-align:middle}
-.at tr:last-child td{border-bottom:none}
-.at input, .at select{font-family:var(--ff);font-size:12px;background:transparent;border:none;border-bottom:1px solid transparent;outline:none;width:100%;color:var(--txt);padding:2px 3px}
-.at input:focus, .at select:focus{border-bottom-color:var(--navy)}
-.at .r{text-align:right;font-family:var(--mono)}.at .mn{font-family:var(--mono);text-align:right;font-size:11px}
-.ls-box{background:rgba(180,83,8,.04);border:1px solid rgba(180,83,8,.2);border-left:4px solid var(--amber);border-radius:0 8px 8px 0;padding:12px 14px;margin-top:10px}
-.ls-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px}
-.ls-title{font-size:10px;font-weight:600;color:var(--amber);text-transform:uppercase;letter-spacing:.5px}
-.ls-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:7px}
-.li{display:flex;flex-direction:column;gap:3px}
-.li label{font-size:9px;color:var(--txt2);font-weight:500}
-.li input{font-family:var(--mono);font-size:12px;border:1px solid var(--border2);border-radius:4px;padding:3px 6px;background:var(--bg);color:var(--txt);text-align:right}
-.li input:focus{outline:none;border-color:var(--amber)}
-.ls-foot{display:flex;justify-content:space-between;align-items:center;padding-top:8px;border-top:1px dashed rgba(180,83,8,.2)}
-.ls-foot .lt{font-size:10px;color:var(--txt2)}
-.ls-foot .lv{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--amber)}
+/* ── APU MODAL ── */
+.apu-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.apu-sec{border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:15px}
+.apu-sec-hdr{background:var(--bg2);padding:8px 12px;font-size:11px;font-weight:600;color:var(--txt2);display:flex;justify-content:space-between}
+.apu-tbl{width:100%;border-collapse:collapse}
+.apu-tbl th{font-size:9px;text-align:left;padding:4px 8px;color:var(--txt3);background:#fcfcfc}
+.apu-tbl td{padding:2px 4px;border-bottom:1px solid var(--border)}
+.apu-tbl input{width:100%;border:none;outline:none;font-size:11px;padding:4px;background:transparent}
+.apu-tbl input:focus{background:var(--navy-lt)}
+.apu-tbl .r{text-align:right}
+.apu-ls{background:var(--amber-lt);padding:12px;border-radius:8px;border:1px solid var(--amber);margin-top:10px}
+.apu-ls-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px}
+.ls-f{display:flex;flex-direction:column;gap:2px}
+.ls-f label{font-size:9px;color:var(--amber);font-weight:600}
+.ls-f input{border:1px solid rgba(180,83,9,0.2);border-radius:4px;padding:3px 6px;font-size:11px;font-family:var(--mono)}
 
-/* ── TOF (Cubicaciones) — ahora con columna ALTO ── */
-.tof-hdr{display:grid;grid-template-columns:1fr 55px 55px 55px 55px 80px 30px;background:var(--bg2);border-bottom:1px solid var(--border2);padding:0 8px}
-.tof-hdr span{padding:8px 4px;font-size:9px;font-weight:600;color:var(--txt2);text-transform:uppercase}
-.tof-row{display:grid;grid-template-columns:1fr 55px 55px 55px 55px 80px 30px;border-bottom:1px solid var(--border);padding:0 8px;align-items:center}
-.tof-row input{font-size:12px;padding:6px 4px;border:none;background:transparent;outline:none;width:100%}
-.tof-row input:focus{background:var(--bg2)}
-.tof-row .r{text-align:right;font-family:var(--mono)}
-.tof-row .st{font-family:var(--mono);font-size:12px;text-align:right;padding:6px 4px;font-weight:500}
+/* ── TOF MODAL ── */
+.tof-tbl{width:100%;border-collapse:collapse}
+.tof-tbl th{font-size:10px;text-align:left;padding:6px 10px;background:var(--bg2);color:var(--txt2)}
+.tof-tbl td{padding:4px;border-bottom:1px solid var(--border)}
+.tof-tbl input{width:100%;border:none;outline:none;font-size:12px;padding:6px;background:transparent}
+.tof-tbl input:focus{background:var(--magenta-lt)}
+.tof-tbl .r{text-align:right}
 
-/* ── PRINT STYLES ── */
-@media print {
-  @page { size: landscape; margin: 10mm 10mm 20mm 10mm; }
-  body { background: #fff; font-size: 10pt; }
-  .no-print { display: none !important; }
-  .page-break { page-break-before: always; }
-  .avoid-break { page-break-inside: avoid; }
-}
+/* ── SETTINGS MODAL ── */
+.cfg-section{margin-bottom:25px}
+.cfg-section h4{font-size:12px;color:var(--navy);text-transform:uppercase;margin-bottom:12px;border-bottom:2px solid var(--navy-lt);padding-bottom:4px}
+.cfg-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.cfg-field{display:flex;flex-direction:column;gap:4px}
+.cfg-field-full{grid-column:span 2}
+.cfg-field label{font-size:11px;color:var(--txt2);font-weight:500}
+.cfg-field input,.cfg-field select{padding:7px 10px;border:1px solid var(--border2);border-radius:6px;font-size:12px;font-family:var(--ff)}
+.cfg-field input:focus{outline:none;border-color:var(--navy)}
+.chk-opt{display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer}
 
-/* ── CONFIG MODAL ── */
-.cfg-section{margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--border)}
-.cfg-section:last-child{border:none}
-.cfg-section h4{font-size:11px;color:var(--navy);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;font-weight:700}
-.cfg-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 16px}
-.cfg-field-full{grid-column:1/-1}
-.cfg-field label{display:block;font-size:10px;color:var(--txt2);margin-bottom:4px;font-weight:500}
-.cfg-field input,.cfg-field select{width:100%;padding:6px 8px;font-size:12px;border:1px solid var(--border2);border-radius:5px;outline:none;font-family:var(--ff)}
-.cfg-field input:focus{border-color:var(--navy)}
-.chk-opts{display:flex;flex-direction:column;gap:8px}
-.chk-opt{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--txt);cursor:poin	.print-opt-row{display:flex;align-items:center;gap:12px;margin-bottom:8px;min-height:32px};margin-bottom:8px}
-.print-opt-row label{margin:0}
-.print-opt-row select{width:120px;padding:4px 6px;font-size:11px;border:1px solid var(--border2);border-radius:4px}
+/* ── UTILS ── */
+.no-print{display:block}
+@media print{.no-print{display:none!important}}
+.preview-frame{width:100%;height:100%;border:none;background:#fff}
+.help-content{line-height:1.6}
+.help-section{margin-bottom:20px}
+.help-section h5{color:var(--navy);margin-bottom:5px;font-size:13px}
+.help-section p{font-size:12px;color:var(--txt2)}
 
-/* ── HELP MODAL ── */
-.help-content{font-size:12px;line-height:1.6;color:var(--txt)}
-.help-section{margin-bottom:16px}
-.help-section h5{font-size:13px;font-weight:700;color:var(--navy);margin-bottom:8px}
-.help-section p{margin-bottom:6px;color:var(--txt2)}
-.help-section ul{margin-left:16px;margin-bottom:8px}
-.help-section li{margin-bottom:4px}
-
-/* ── PREVIEW MODAL ── */
-.preview-frame{width:100%;height:600px;border:1px solid var(--border);border-radius:5px}
-
-/* ── GG ADD SELECT ── */
-.gg-add-select{
-  flex:1;padding:10px 14px;border:2px dashed var(--border2);border-radius:8px;
-  font-family:var(--ff);font-size:13px;font-weight:500;color:var(--navy);background:var(--bg);
-  cursor:pointer;outline:none;transition:all .2s;appearance:none;-webkit-appearance:none;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%231e3a5f' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:right 12px center;padding-right:36px;
-}
-.gg-add-select:hover{border-color:var(--navy);background-color:var(--navy-lt);box-shadow:0 2px 8px rgba(30,58,95,0.12);}
-.gg-add-select:focus{border-color:var(--navy);border-style:solid;box-shadow:0 0 0 3px rgba(30,58,95,0.15);}
-
-.gg-add-btn-select{
-  padding:12px 24px;border:none;border-radius:8px;font-family:var(--ff);font-size:14px;font-weight:600;
-  color:white;background:var(--navy);cursor:pointer;outline:none;transition:all .2s;
-  appearance:none;-webkit-appearance:none;box-shadow:0 4px 12px rgba(30,58,95,0.25);
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:right 12px center;padding-right:36px;
-}
-.gg-add-btn-select:hover{background:linear-gradient(135deg, var(--navy) 0%, #0f2847 100%);box-shadow:0 6px 16px rgba(30,58,95,0.35);transform:translateY(-2px);}
-.gg-add-btn-select:focus{box-shadow:0 0 0 4px rgba(30,58,95,0.2), 0 4px 12px rgba(30,58,95,0.25);}
-.gg-add-btn-select:active{transform:translateY(0);}
-
-/* ── PROJECT MENU ── */
-.proj-menu{position:relative;display:inline-block}
-.proj-menu-btn{background:none;border:none;cursor:pointer;font-size:16px;padding:4px 8px;color:var(--txt2)}
-.proj-menu-btn:hover{color:var(--navy)}
-.proj-menu-content{display:none;position:absolute;right:0;background:var(--bg);border:1px solid var(--border);border-radius:6px;box-shadow:0 4px 12px rgba(0,0,0,0.1);z-index:100;min-width:140px}
-.proj-menu-content.show{display:block}
-.proj-menu-item{padding:8px 12px;cursor:pointer;font-size:11px;color:var(--txt2);border-bottom:1px solid var(--border2)}
-.proj-menu-item:last-child{border:none}
-.proj-menu-item:hover{background:var(--bg2);color:var(--navy)}
+/* ── UNSAVED INDICATOR ── */
+#unsaved-dot { width: 8px; height: 8px; background: #ef4444; border-radius: 50%; display: none; margin-left: 5px; }
 </style>
 </head>
 <body>
+
 <div id="rotate-warning">
-  <svg viewBox="0 0 24 24"><path d="M23.25 12.77l-2.57-2.57c-.51-.51-1.18-.77-1.85-.77H5.17c-.67 0-1.34.26-1.85.77L.75 12.77c-.51.51-.51 1.34 0 1.85l2.57 2.57c.51.51 1.18.77 1.85.77h13.66c.67 0 1.34-.26 1.85-.77l2.57-2.57c.51-.51.51-1.34 0-1.85zM17.5 15H6.5c-.28 0-.5-.22-.5-.5s.22-.5.5-.5h11c.28 0 .5.22.5.5s-.22.5-.5.5z"/></svg>
-  <h2>Gira tu dispositivo</h2>
-  <p>Para una mejor experiencia en PresAI, por favor usa tu celular o tableta en modo horizontal.</p>
+  <svg viewBox="0 0 24 24"><path d="M16.48 2.52c3.27 1.55 5.61 4.72 5.97 8.48h2.02c-.38-4.82-3.38-8.91-7.5-11.05l-.49 2.57zm-14.48 8.48c.38-4.82 3.38-8.91 7.5-11.05l.49 2.57c-3.27 1.55-5.61 4.72-5.97 8.48h-2.02zm14.48 10.48c-3.27-1.55-5.61-4.72-5.97-8.48h-2.02c.38 4.82 3.38 8.91 7.5 11.05l.49-2.57zm-14.48-8.48c.36 3.76 2.7 6.93 5.97 8.48l-.49 2.57c-4.12-2.14-7.12-6.23-7.5-11.05h2.02z"/></svg>
+  <h2>Por favor, gira tu dispositivo</h2>
+  <p>PresAI funciona mejor en modo horizontal (landscape) para una mejor visualización de las tablas.</p>
 </div>
 
 <div id="wow-screen">
   <h1>PresAI</h1>
-  <p>Software avanzado de presupuesto</p>
+  <p>Presupuestos de Obra con Inteligencia y Precisión</p>
   <div class="wow-buttons">
-    <button class="wow-btn primary" onclick="openProjects()">📂 Mis Proyectos</button>
-    <button class="wow-btn secondary" onclick="newProject()">➕ Nuevo Proyecto</button>
+    <button class="wow-btn primary" onclick="hideWow()">Empezar Ahora</button>
+    <button class="wow-btn secondary" onclick="openHelp()">Ver Tutorial</button>
   </div>
 </div>
 
-<div class="app" id="main-app" style="display:none">
-  <header class="hdr no-print">
+<div class="app">
+  <header class="hdr">
     <div class="hdr-left">
-      <div class="hdr-logo-wrap" id="logoWrap" onclick="openSettings()">
-        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <div class="hdr-logo-wrap" onclick="location.reload()">
+        <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
       </div>
       <div class="hdr-txt">
         <div class="name">Pres<span>AI</span></div>
-        <div class="sub">CONSTRUCCIÓN CIVIL</div>
+        <div class="sub">v2.5.0 PRO</div>
       </div>
-      <div class="hdr-proj" id="hdrProj" style="display:none">
-        <div class="hdr-proj-name" id="hdrProjName">Cargando...</div>
-        <div class="hdr-proj-badge" id="hdrProjBadge">nuevo</div>
+      <div class="hdr-proj">
+        <div class="hdr-proj-name" id="hdr-obra-name">Nuevo Proyecto</div>
+        <div class="hdr-proj-badge">ID: <span id="hdr-proj-id">---</span><span id="unsaved-dot"></span></div>
       </div>
     </div>
     <div class="hdr-right">
-      <button class="hbtn" onclick="openProjects()"><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg> Proyectos</button>
-      <button class="hbtn" onclick="newProject()"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Nuevo</button>
-      <button class="hbtn" onclick="saveProject()"><svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Guardar</button>
-      <button class="hbtn" onclick="previewReport()"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Vista Previa</button>
-      <button class="hbtn green" onclick="doPrint()"><svg viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Imprimir</button>
-      <button class="hbtn" onclick="openHelp()"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
-      <button class="hbtn" onclick="openSettings()"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button>
+      <button class="hbtn" onclick="openSettings()">
+        <svg viewBox="0 0 24 24"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        Config
+      </button>
+      <button class="hbtn" onclick="previewReport()">
+        <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        Vista Previa
+      </button>
+      <button class="hbtn green" onclick="doPrint()">
+        <svg viewBox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6z"/></svg>
+        Imprimir PDF
+      </button>
+      <button class="hbtn" onclick="exportToExcel()">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h8M10 9h1"/></svg>
+        Excel
+      </button>
+      <button class="hbtn" onclick="saveToCloud()">
+        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+        Guardar
+      </button>
     </div>
   </header>
 
-  <nav class="tabs no-print">
+  <nav class="tabs">
     <div class="tabs-list">
-      <div class="tab on" onclick="sw('bud',this)">Presupuesto</div>
-      <div class="tab" onclick="sw('gg',this)">Gastos Generales</div>
-      <div class="tab" id="tab-apu" onclick="sw('apu',this)">Análisis Unitarios</div>
-      <div class="tab" id="tab-cub" onclick="sw('cub',this)">Cubicaciones</div>
-      <div class="tab" id="tab-notes" onclick="sw('notes',this)">Notas</div>
+      <div class="tab on" onclick="st(0)">Presupuesto</div>
+      <div class="tab" onclick="st(1)">Gastos Generales</div>
+      <div class="tab" onclick="st(2)">Análisis Unitarios</div>
+      <div class="tab" onclick="st(3)">Cubicaciones</div>
     </div>
-    <div id="gg-quick-add" style="display:none;padding-right:10px">
-      <select id="gg-subgroup-select" class="gg-add-btn-select" style="font-size:11px;padding:6px 28px 6px 12px;background-position:right 8px center;background-size:10px;border-radius:6px;box-shadow:none">
-        <option value="">+ Agregar Subgrupo</option>
-      </select>
+    <div style="display:flex;gap:8px;padding-right:10px">
+      <input type="text" id="pObra" placeholder="Nombre de la Obra" style="display:none" oninput="syncHdr()"/>
+      <input type="text" id="pMandante" placeholder="Mandante" style="display:none"/>
+      <input type="text" id="pUbicacion" placeholder="Ubicación" style="display:none"/>
+      <input type="date" id="pFecha" style="display:none"/>
+      <input type="text" id="pProfesional" placeholder="Profesional" style="display:none"/>
+      <input type="text" id="pPayment" style="display:none"/>
+      <input type="text" id="pExecution" style="display:none"/>
     </div>
   </nav>
 
   <main class="content">
-    <!-- PANEL: BUDGET -->
-    <div id="p-bud" class="pnl on">
-      <input type="hidden" id="pObra" value=""/>
-      <input type="hidden" id="pMandante" value=""/>
-      <input type="hidden" id="pUbicacion" value=""/>
-      <input type="hidden" id="pProfesional" value=""/>
-      <input type="hidden" id="pFecha" value=""/>
-      <input type="hidden" id="pPayment" value=""/>
-      <input type="hidden" id="pExecution" value=""/>
-
+    <!-- PRESUPUESTO -->
+    <div class="pnl on" id="p0">
       <div class="tbl-wrap">
         <div class="tbl-hdr">
-          <span>Ítem</span><span>Descripción de la Partida</span><span class="r">Unid</span><span class="r">Cant.</span><span class="r" id="hdr-punit">P.Unit.</span><span class="r" id="hdr-total">Total</span><span></span>
+          <span>Ítem</span><span>Descripción</span><span>Unid</span><span class="r">Cant.</span><span class="r" id="hdr-punit">P.Unit. ($)</span><span class="r" id="hdr-total">Total ($)</span><span></span>
         </div>
         <div id="brows"></div>
-        <div class="tbl-add no-print">
-          <button class="bs addp" onclick="addCh()">+ Nuevo Capítulo</button>
-          <button class="bs addp" onclick="addIt()">+ Nueva Partida</button>
+        <div class="tbl-add">
+          <button class="bs addp" onclick="addCh()">+ Capítulo</button>
+          <button class="bs addp" onclick="addIt()">+ Partida</button>
         </div>
       </div>
 
       <div class="tot-card">
-        <div id="totals" class="totals-left"></div>
-        <div class="cfg-side no-print">
-          <div class="cfg-lbl">Parámetros de Cálculo</div>
-          <div class="cr"><label>Gastos Generales (%)</label><input type="number" id="pGG" value="15" oninput="rc();markUnsaved()" onfocus="this.select()"/></div>
-          <div class="cr"><label style="font-size:9px;color:var(--txt3);margin-left:12px"><input type="checkbox" id="ggFijo" onchange="rc();markUnsaved()"/> Usar % fijo</label></div>
-          <div class="cr"><label>Utilidad (%)</label><input type="number" id="pUtil" value="12" oninput="rc();markUnsaved()" onfocus="this.select()"/></div>
-          <div class="cr"><label>Imprevistos (%)</label><input type="number" id="pImp" value="0" oninput="rc();markUnsaved()" onfocus="this.select()"/></div>
-          <div class="cr"><label>IVA (%)</label><input type="number" id="pIVA" value="19" oninput="rc();markUnsaved()" onfocus="this.select()"/></div>
+        <div class="totals-left" id="totals"></div>
+        <div class="cfg-side">
+          <div class="cfg-lbl">Parámetros Globales</div>
+          <div class="cr"><label>Gastos Generales (%)</label><input type="number" id="pGG" value="15" oninput="rc();markUnsaved()"/></div>
+          <div class="cr"><label>Utilidad (%)</label><input type="number" id="pUtil" value="10" oninput="rc();markUnsaved()"/></div>
+          <div class="cr"><label>Imprevistos (%)</label><input type="number" id="pImp" value="0" oninput="rc();markUnsaved()"/></div>
+          <div class="cr"><label>IVA (%)</label><input type="number" id="pIVA" value="19" oninput="rc();markUnsaved()"/></div>
+          <div class="cr" style="margin-top:5px"><label style="font-size:10px;color:var(--navy)">GG Fijo (sobre CD)</label><input type="checkbox" id="ggFijo" checked onchange="rc();markUnsaved()"/></div>
         </div>
       </div>
     </div>
 
-    <!-- PANEL: GG -->
-    <div id="p-gg" class="pnl">
+    <!-- GASTOS GENERALES -->
+    <div class="pnl" id="p1">
       <div id="gg-subgroups-container"></div>
-      <div style="text-align:right;padding:20px 0;font-weight:600;color:var(--navy);font-size:14px" id="gg-total-label">Total Gastos Generales: $ 0</div>
-    </div>
-
-    <!-- PANEL: APU LIST -->
-    <div id="p-apu" class="pnl">
-      <div id="apu-list-empty" style="padding:40px;text-align:center;color:var(--txt3)">No hay Análisis de Precios Unitarios creados aún.</div>
-      <div id="apu-list-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px"></div>
-    </div>
-
-    <!-- PANEL: CUBICACIONES -->
-    <div id="p-cub" class="pnl">
-      <div id="cub-list-empty" style="padding:40px;text-align:center;color:var(--txt3)">No hay Cubicaciones creadas aún.</div>
-      <div id="cub-list-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px"></div>
-    </div>
-
-    <!-- PANEL: NOTAS -->
-    <div id="p-notes" class="pnl">
-      <div class="tbl-wrap" style="padding:20px">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px">
-          <h3 style="color:var(--navy)">Notas al Presupuesto</h3>
-          <button class="bs addp" onclick="addExtraNote()">+ Agregar Nota</button>
-        </div>
-        <div id="notes-list" style="display:flex;flex-direction:column;gap:10px"></div>
-        <div style="margin-top:20px;color:var(--txt3);font-size:11px;font-style:italic">
-          * Se genera automáticamente una lista numerada según la cantidad de partidas del presupuesto. Puedes agregar notas adicionales con el botón superior.
-        </div>
+      <div style="margin-top:15px;display:flex;gap:10px;align-items:center">
+        <select id="gg-subgroup-select" class="bs" style="padding:8px 12px;font-size:12px"></select>
       </div>
+    </div>
+
+    <!-- APU -->
+    <div class="pnl" id="p2">
+      <div id="apu-list-container"></div>
+    </div>
+
+    <!-- CUBICACIONES -->
+    <div class="pnl" id="p3">
+      <div id="cub-list-container"></div>
     </div>
   </main>
 </div>
 
-<!-- MODAL OVERLAY -->
 <div class="ov" id="ov"><div id="mc"></div></div>
 
 <script>
-/* ── STATE ── */
+/* ── CONFIG & DATA ── */
+let CFG = {
+  companyName: 'MI EMPRESA CONSTRUCTORA',
+  companyTagline: 'Construcción y Proyectos de Ingeniería',
+  companyAddress: 'Av. Principal 123, Santiago',
+  companyPhone: '+56 9 1234 5678',
+  companyEmail: 'contacto@empresa.cl',
+  companyWeb: 'www.empresa.cl',
+  repLegal: 'JUAN PÉREZ GONZÁLEZ',
+  profName: '',
+  logoDataUrl: '',
+  coverImgUrl: '',
+  currency: 'CLP',
+  parity: 1,
+  decimalsQty: 2,
+  decimalsPrice: 0,
+  decimalsBudget: 0,
+  decimalSeparator: ',',
+  pageSize: 'letter',
+  colorHeader: '#1e3a5f',
+  printBudgetNum: true,
+  printCover: true,
+  printApu: true,
+  apuPrintMode: 'continuo',
+  printCub: true,
+  cubPrintMode: 'continuo',
+  printGG: true,
+  printPayment: true,
+  printExecution: true,
+  printNotes: true,
+  ggProrrateado: false,
+  utilProrrateado: false,
+  impProrrateado: false,
+  notes: ['Presupuesto válido por 15 días.', 'Precios no incluyen permisos municipales.'],
+  extraNotes: []
+};
+
 let items = [
-  {id:gid(),t:'ch',num:'1.-',name:'OBRAS PRELIMINARES',unit:'',qty:0,price:0,isApu:false,isCub:false},
-  {id:gid(),t:'it',num:'1.1',name:'Instalación de faenas',unit:'gl',qty:1,price:0,isApu:false,isCub:false}
+  {id:'1',t:'ch',num:'1.-',name:'OBRAS PRELIMINARES',unit:'',qty:0,price:0,isApu:false,isCub:false},
+  {id:'2',t:'it',num:'1.1',name:'Instalación de Faenas',unit:'gl',qty:1,price:150000,isApu:false,isCub:false},
+  {id:'3',t:'it',num:'1.2',name:'Cierre Perimetral',unit:'ml',qty:45,price:12500,isApu:false,isCub:false}
 ];
-let ggSubgroups = []; 
-let apuData = {}; 
-let tofData = {}; 
-let currentProjectId = null;
-let isDirty = false;
-let autoSaveInterval = null;
-let pageCount = 0;
+
+let apuData = {};
+let tofData = {};
+let ggSubgroups = [
+  {name: 'PERSONAL TÉCNICO Y ADMINISTRATIVO', items: [{id:'gg1',desc:'Jefe de Obra',unit:'mes',qty:1,tiempoUso:1,price:1200000}]}
+];
 
 const GG_SUBGROUP_OPTIONS = [
-  'Personal profesional','Personal técnico','Personal supervisión',
-  'Herramientas menores','Máquinas y equipos','Artículos de oficina',
-  'Consumos de obra','Gastos en la zona','Gastos oficina central',
-  'Instalaciones','Elementos de seguridad','Costo financiero y garantías',
-  'Seguridad','Administración','Transporte','Otros'
+  'PERSONAL TÉCNICO Y ADMINISTRATIVO',
+  'INSTALACIONES PROVISIONALES',
+  'CONSUMOS Y SERVICIOS',
+  'EQUIPOS Y HERRAMIENTAS MENORES',
+  'GASTOS ADMINISTRATIVOS Y FINANCIEROS',
+  'SEGUROS Y GARANTÍAS',
+  'MOVILIZACIÓN Y TRASLADOS'
 ];
 
-const CFG_DEF = {
-  currency:'CLP', parity:1, decimalsQty:2, decimalsPrice:0, decimalsBudget:0,
-  companyName:'', companyTagline:'Construcción Civil · Chile', notes:[],
-  companyRut:'', companyAddress:'', companyPhone:'', companyEmail:'', companyWeb:'', decimalSeparator:'.',
-  repLegal:'', repLegalRut:'', profName:'', profRut:'',
-  colorHeader:'#1e3a5f', logoDataUrl:'', coverImgUrl:'',
-  printCover:true, printApu:true, printCub:true, printGG:false,
-  printPayment:true, printExecution:true, printNotes:true, printBudgetNum:false,
-  pageSize:'letter', apuPrintMode:'continuo', cubPrintMode:'continuo',
-  autoSave:true, autoSaveInterval:300, ggProrrateado:false, utilProrrateado:false, impProrrateado:false,
-  impPorApu:false, impVisible:false,
-  /* campos proyecto en CFG */
-  projObra:'', projMandante:'', projUbicacion:'', projProfesional:'', projFecha:'',
-  projPayment:'', projExecution:''
-};
-let CFG = Object.assign({}, CFG_DEF);
-
-const UNITS_BUDGET = ['cu','gl','m3','m2','m','kg','un','día','mes','global'];
-const UNITS_APU = ['hd','hr','plg','plancha','lts','saco','cu','gl','m3','m2','m','kg','un','día','mes'];
-
 /* ── UTILS ── */
-function gid(){return 'id_'+Math.random().toString(36).substr(2,9);}
-function lsS(k,v){localStorage.setItem(k,JSON.stringify(v));}
-function lsL(k){let x=localStorage.getItem(k);return x?JSON.parse(x):null;}
-function lsD(k){localStorage.removeItem(k);}
-function getIdx(){return lsL('od_index')||[];}
-function saveIdx(idx){lsS('od_index',idx);}
-
-function saveCFG(){lsS('od_cfg',CFG);}
-function loadCFG(){let x=lsL('od_cfg');if(x)CFG=Object.assign(CFG,x);applyColor();updBrand();updLogoHdr();setupAutoSave();}
-function applyColor(){document.documentElement.style.setProperty('--navy',CFG.colorHeader);}
-function updBrand(){
-  document.getElementById('hdrProjName').textContent = document.getElementById('pObra').value || (currentProjectId?'Proyecto':'Nuevo proyecto');
-}
-function updLogoHdr(){
-  if(CFG.logoDataUrl) document.getElementById('logoWrap').innerHTML=`<img src="${CFG.logoDataUrl}"/>`;
-}
-
-function N(v){return parseFloat(v)||0;}
-function sym(){return CFG.currency==='USD'?'US$':CFG.currency==='UF'?'UF':'$';}
-function fmtN(n,d){
-  let locale = CFG.decimalSeparator === ',' ? 'de-DE' : 'en-US';
-  if(CFG.currency==='UF') return n.toLocaleString(locale,{minimumFractionDigits:d||2,maximumFractionDigits:d||2});
-  return n.toLocaleString(locale,{minimumFractionDigits:d||0,maximumFractionDigits:d||0});
-}
-function fmtQ(n){return fmtN(n,CFG.decimalsQty);}
-function fmtP(n){return fmtN(n,CFG.decimalsPrice);}
-function fmtB(n){return fmtN(n,CFG.decimalsBudget);}
-function esc(s){return(s||'').toString().replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
-
-/* ── numToWords corregida — soporta miles de millones ── */
-function numToWords(n){
-  n=Math.round(n);if(n===0)return'CERO';
-  var u=['','UN','DOS','TRES','CUATRO','CINCO','SEIS','SIETE','OCHO','NUEVE'];
-  var d10=['DIEZ','ONCE','DOCE','TRECE','CATORCE','QUINCE','DIECISÉIS','DIECISIETE','DIECIOCHO','DIECINUEVE'];
-  var tens=['','','VEINTE','TREINTA','CUARENTA','CINCUENTA','SESENTA','SETENTA','OCHENTA','NOVENTA'];
-  function dec(n){if(n<10)return u[n];if(n<20)return d10[n-10];var t=tens[Math.floor(n/10)];var r=n%10;return r===0?t:(Math.floor(n/10)===2?'VEINTI'+u[r]:t+' Y '+u[r]);}
-  function cen(n){if(n===100)return'CIEN';if(n<100)return dec(n);var c=['','CIENTO','DOSCIENTOS','TRESCIENTOS','CUATROCIENTOS','QUINIENTOS','SEISCIENTOS','SETECIENTOS','OCHOCIENTOS','NOVECIENTOS'];var r=n%100;return c[Math.floor(n/100)]+(r>0?' '+dec(r):'');}
-  function mil(n){if(n<1000)return cen(n);var m=Math.floor(n/1000),r=n%1000,t=m===1?'MIL':cen(m)+' MIL';return r>0?t+' '+cen(r):t;}
-  function millon(n){
-    if(n<1000000)return mil(n);
-    var m=Math.floor(n/1000000),r=n%1000000;
-    var t=m===1?'UN MILLÓN':mil(m)+' MILLONES';
-    return r>0?t+' '+mil(r):t;
+function gid(){return Math.random().toString(36).substr(2,9);}
+function N(v){
+  if(typeof v==='number')return v;
+  if(!v)return 0;
+  let s=v.toString().replace(/\s/g,'');
+  if(CFG.decimalSeparator===','){
+    s=s.replace(/\./g,'').replace(',','.');
+  } else {
+    s=s.replace(/,/g,'');
   }
-  function billones(n){
-    if(n<1000000000)return millon(n);
-    var b=Math.floor(n/1000000),r=n%1000000;
-    var t=mil(Math.floor(b/1000))+' MIL '+(b%1000>0?cen(b%1000)+' ':'')+'MILLONES';
-    if(Math.floor(b/1000)===1) t='MIL '+(b%1000>0?cen(b%1000)+' ':'')+'MILLONES';
-    return r>0?t+' '+mil(r):t;
-  }
-  var cur=CFG.currency==='USD'?'DÓLARES':CFG.currency==='UF'?'UF':'PESOS';
-  return'SON: '+billones(n)+' '+cur+' .-';
+  return parseFloat(s)||0;
+}
+function sym(){return CFG.currency==='CLP'?'$':(CFG.currency==='USD'?'US$':'UF');}
+function fmt(n,d){
+  let sep=CFG.decimalSeparator==='.'?',':'.';
+  let dec=CFG.decimalSeparator;
+  let parts=n.toFixed(d).split('.');
+  parts[0]=parts[0].replace(/\B(?=(\d{3})+(?!\d))/g,sep);
+  return parts.join(dec);
+}
+function fmtQ(n){return fmt(n,CFG.decimalsQty);}
+function fmtP(n){return fmt(n,CFG.decimalsPrice);}
+function fmtB(n){return fmt(n,CFG.decimalsBudget);}
+function esc(s){if(!s)return '';return s.toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+function numToWords(n) {
+  // Simplificado para el ejemplo
+  return 'SON: ' + fmtB(n) + ' ' + (CFG.currency==='CLP'?'PESOS':CFG.currency);
+}
+
+/* ── UI ── */
+function st(idx){
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('on',i===idx));
+  document.querySelectorAll('.pnl').forEach((p,i)=>p.classList.toggle('on',i===idx));
+}
+function closeMod(){document.getElementById('ov').style.display='none';}
+function hideWow(){document.getElementById('wow-screen').style.display='none';}
+function hideApp(){
+  // Si hay datos previos, ocultar wow. Para este demo, siempre visible al inicio.
+}
+
+function syncHdr(){
+  let name = document.getElementById('pObra').value || 'Nuevo Proyecto';
+  document.getElementById('hdr-obra-name').textContent = name;
+}
+
+function markUnsaved(){
+  document.getElementById('unsaved-dot').style.display = 'inline-block';
 }
 
 /* ── CORE LOGIC ── */
@@ -587,6 +539,24 @@ function initEvents(){
       }
     });
     rc();markUnsaved();
+  });
+
+  // CORRECCIÓN 1: Navegación con Enter desde DESCRIPCION a UNID seleccionando todo el campo
+  document.getElementById('brows').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      var inp = e.target;
+      if (inp.dataset && inp.dataset.field === 'name') {
+        var row = inp.closest('.row-it');
+        if (row) {
+          var unitInp = row.querySelector('input[data-field="unit"]');
+          if (unitInp) {
+            e.preventDefault();
+            unitInp.focus();
+            unitInp.select();
+          }
+        }
+      }
+    }
   });
 }
 
@@ -699,156 +669,215 @@ function delGGSubgroup(sgi){
 }
 function addGGItem(sgi){
   ggSubgroups[sgi].items.push({id:gid(),desc:'',unit:'',qty:1,price:0,tiempoUso:1});
-  renderGGSubgroups(); markUnsaved();
+  renderGGSubgroups(); rc(); markUnsaved();
 }
-function uGGItem(sgi,iti,f,v){
-  if(f==='qty'||f==='price'||f==='tiempoUso') v=N(v.replace(/\./g,'').replace(',','.'));
+function delGGItem(sgi, iti){
+  if(confirm('¿Eliminar item?')) { ggSubgroups[sgi].items.splice(iti,1); renderGGSubgroups(); rc(); markUnsaved(); }
+}
+function uGGItem(sgi, iti, f, v){
+  if(f==='qty'||f==='price'||f==='tiempoUso') v=N(v);
   ggSubgroups[sgi].items[iti][f]=v;
-  let r=ggSubgroups[sgi].items[iti];
-  let sub=N(r.qty)*N(r.tiempoUso)*N(r.price);
-  let subEl=document.querySelector(`[data-gg-sub="${sgi}-${iti}"]`);
-  if(subEl) subEl.textContent=fmtB(sub);
-  let sgTotal=ggSubgroups[sgi].items.reduce((a,it)=>a+N(it.qty)*N(it.tiempoUso)*N(it.price),0);
-  let sgTotEl=document.querySelector(`[data-gg-total="${sgi}"]`);
-  if(sgTotEl) sgTotEl.textContent=fmtB(sgTotal);
+  let it = ggSubgroups[sgi].items[iti];
+  let sub = N(it.qty) * N(it.tiempoUso) * N(it.price);
+  let cell = document.querySelector(`[data-gg-sub="${sgi}-${iti}"]`);
+  if(cell) cell.textContent = fmtB(sub);
   updateGGTotal(); rc(); markUnsaved();
 }
-function delGGItem(sgi,iti){
-  ggSubgroups[sgi].items.splice(iti,1); renderGGSubgroups(); rc(); markUnsaved();
-}
 function updateGGTotal(){
-  let total=ggSubgroups.reduce((a,sg)=>a+sg.items.reduce((b,it)=>b+N(it.qty)*N(it.tiempoUso)*N(it.price),0),0);
-  document.getElementById('gg-total-label').textContent=`Total Gastos Generales: ${sym()} ${fmtB(total)}`;
+  ggSubgroups.forEach((sg, sgi) => {
+    let total = sg.items.reduce((a, it) => a + N(it.qty) * N(it.tiempoUso) * N(it.price), 0);
+    let cell = document.querySelector(`[data-gg-total="${sgi}"]`);
+    if(cell) cell.textContent = fmtB(total);
+  });
 }
 
 /* ── APU ── */
+function refreshApuTab(){
+  let cont = document.getElementById('apu-list-container');
+  let apuItems = items.filter(it => it.t==='it');
+  if(!apuItems.length) { cont.innerHTML = '<p style="color:var(--txt3);font-style:italic">No hay partidas ingresadas.</p>'; return; }
+  
+  let html = '<div class="tbl-wrap"><table style="width:100%;border-collapse:collapse"><thead><tr style="background:var(--bg2)"><th style="text-align:left;padding:10px">Ítem</th><th style="text-align:left">Descripción</th><th style="text-align:right">P.Unitario</th><th style="text-align:center">Estado</th><th style="text-align:right;padding-right:10px">Acción</th></tr></thead><tbody>';
+  apuItems.forEach(it => {
+    let hasApu = apuData[it.id];
+    html += `<tr style="border-bottom:1px solid var(--border)">
+      <td style="padding:10px;font-family:var(--mono)">${esc(it.num)}</td>
+      <td>${esc(it.name)}</td>
+      <td style="text-align:right;font-family:var(--mono)">${sym()} ${fmtP(N(it.price))}</td>
+      <td style="text-align:center"><span style="font-size:10px;padding:2px 6px;border-radius:10px;background:${hasApu?'var(--green-lt)':'var(--bg2)'};color:${hasApu?'var(--green)':'var(--txt3)'}">${hasApu?'✓ Completo':'Pendiente'}</span></td>
+      <td style="text-align:right;padding-right:10px"><button class="bs apu" onclick="openApu('${it.id}')">Editar APU</button></td>
+    </tr>`;
+  });
+  html += '</tbody></table></div>';
+  cont.innerHTML = html;
+}
+
 function openApu(id){
-  let it=items.find(x=>x.id===id);if(!it)return;
-  if(!apuData[id])apuData[id]={secs:[{rows:[]},{rows:[]},{rows:[]},{rows:[]}],ls:{on:true,afp:10,salud:7,seguro:3,mutual:0.9,sis:1.5,sanna:0.03,otros:0.87}};
-  document.getElementById('ov').style.display='block';
-  document.getElementById('mc').innerHTML=`<div class="modal">
-    <div class="mh"><h3>Análisis de Precio Unitario: ${esc(it.name)}</h3><button class="btn-s" onclick="closeMod()">Cerrar</button></div>
-    <div class="mb" id="apu-edit-body"></div>
-    <div class="mf"><button class="btn-p blue" onclick="closeMod()">Guardar y Cerrar</button></div>
-  </div>`;
-  renderApuEdit(id);
-}
-function renderApuEdit(id){
-  let a=apuData[id],it=items.find(x=>x.id===id);
-  let html='',titles=['Mano de Obra','Materiales','Equipos y Herramientas','Subcontratos'],cls=['mo','mat','eq','sub'];
-  titles.forEach((t,si)=>{
-    let rows=a.secs[si].rows||[];
-    let st=rows.reduce((x,r)=>x+N(r.qty)*N(r.price),0);
-    html+=`<div class="sec-wrap">
-	      <div class="sec-hdr s-${cls[si]}"><span class="sl">${t}</span><span class="st" id="st-${id}-${si}">${fmtP(st)}</span></div>
-	      <table class="at"><thead><tr><th style="width:260px">Descripción</th><th style="width:60px">Unid</th><th class="r" style="width:70px">Rend.</th><th class="r" style="width:90px">P.U. (${sym()})</th><th class="r" style="width:100px">Subtotal (${sym()})</th><th style="width:30px"></th></tr></thead><tbody>`;
-    rows.forEach((r,ri)=>html+=`<tr>
-      <td><input value="${esc(r.desc)}" oninput="uapu('${id}',${si},${ri},'desc',this.value)"/></td>
-      <td><input style="width:65px" value="${esc(r.unit)}" oninput="uapu('${id}',${si},${ri},'unit',this.value)"/></td>
-      <td><input class="r" type="text" value="${fmtQ(N(r.qty))}" oninput="uapu('${id}',${si},${ri},'qty',this.value)" onfocus="this.select()"/></td>
-      <td><input class="r" type="text" value="${fmtP(N(r.price))}" oninput="uapu('${id}',${si},${ri},'price',this.value)" onfocus="this.select()"/></td>
-      <td class="r mn" id="sub-${id}-${si}-${ri}">${fmtP(N(r.qty)*N(r.price))}</td>
-      <td><button class="bs del" onclick="dapu('${id}',${si},${ri})">×</button></td></tr>`);
-    html+=`</tbody></table><button class="bs addp" style="margin-top:4px" onclick="aapu('${id}',${si})">+ Recurso</button></div>`;
-  });
-  let mo=a.secs[0].rows.reduce((x,r)=>x+N(r.qty)*N(r.price),0);
-  let pct=N(a.ls.afp)+N(a.ls.salud)+N(a.ls.seguro)+N(a.ls.mutual)+N(a.ls.sis)+N(a.ls.sanna)+N(a.ls.otros);
-  let lt=a.ls.on?mo*(pct/100):0;
-  html+=`<div class="ls-box"><div class="ls-head"><span class="ls-title">Leyes Sociales</span><input type="checkbox" ${a.ls.on?'checked':''} onchange="apuData['${id}'].ls.on=this.checked;renderApuEdit('${id}')"/></div>
-    <div class="ls-grid">
-      <div class="li"><label>AFP</label><input type="number" value="${a.ls.afp}" oninput="uls('${id}','afp',this.value)" onfocus="this.select()"/></div>
-      <div class="li"><label>Salud</label><input type="number" value="${a.ls.salud}" oninput="uls('${id}','salud',this.value)" onfocus="this.select()"/></div>
-      <div class="li"><label>Seguro</label><input type="number" value="${a.ls.seguro}" oninput="uls('${id}','seguro',this.value)" onfocus="this.select()"/></div>
-      <div class="li"><label>Mutual</label><input type="number" value="${a.ls.mutual}" oninput="uls('${id}','mutual',this.value)" onfocus="this.select()"/></div>
-      <div class="li"><label>SIS</label><input type="number" value="${a.ls.sis}" oninput="uls('${id}','sis',this.value)" onfocus="this.select()"/></div>
-      <div class="li"><label>Otros</label><input type="number" value="${a.ls.otros}" oninput="uls('${id}','otros',this.value)" onfocus="this.select()"/></div>
-    </div><div class="ls-foot"><span class="lt">Total Leyes Sociales (${pct.toFixed(2)}%)</span><span class="lv" id="ls-tot-${id}">${sym()} ${fmtP(lt)}</span></div></div>`;
-  let totalApu=a.secs.reduce((x,s)=>x+s.rows.reduce((y,r)=>y+N(r.qty)*N(r.price),0),0)+lt;
-  html+=`<div style="margin-top:15px;text-align:right;font-size:16px;font-weight:700;color:var(--navy)" id="apu-total-${id}">Precio Unitario Total: ${sym()} ${fmtP(totalApu)}</div>`;
-  document.getElementById('apu-edit-body').innerHTML=html;
-  items.find(x=>x.id===id).price=totalApu;
-  items.find(x=>x.id===id).isApu=true;
-  rb();
-}
-function aapu(id,si){apuData[id].secs[si].rows.push({desc:'',unit:'',qty:1,price:0});renderApuEdit(id);markUnsaved();}
-function uapu(id,si,ri,f,v){
-  if(f==='qty'||f==='price') v=N(v.replace(/\./g,'').replace(',','.'));
-  let a=apuData[id],r=a.secs[si].rows[ri];
-  r[f]=v;
-  if(f==='desc'&&(v.toLowerCase().includes('perdida')||v.toLowerCase().includes('pérdida'))){
-    r.unit='%';
-    if(ri>0){let prev=a.secs[si].rows[ri-1];let prevSubtotal=N(prev.qty)*N(prev.price);if(r.qty===0||r.qty===1)r.qty=10;r.price=prevSubtotal/100;}
-    renderApuEdit(id);
+  let it = items.find(x => x.id === id);
+  if(!apuData[id]) {
+    apuData[id] = {
+      ls: { on: true, afp: 12.5, salud: 7, seguro: 3, mutual: 0.95, sis: 1.5, sanna: 0.03, otros: 0 },
+      secs: [
+        { name: 'Mano de Obra', rows: [] },
+        { name: 'Materiales', rows: [] },
+        { name: 'Equipos', rows: [] },
+        { name: 'Subcontratos', rows: [] }
+      ]
+    };
   }
-  let subEl=document.getElementById(`sub-${id}-${si}-${ri}`);
-  if(subEl)subEl.textContent=fmtP(N(r.qty)*N(r.price));
-  let st=a.secs[si].rows.reduce((x,r)=>x+N(r.qty)*N(r.price),0);
-  let stEl=document.getElementById(`st-${id}-${si}`);
-  if(stEl)stEl.textContent=sym()+' '+fmtP(st);
-  let mo=a.secs[0].rows.reduce((x,r)=>x+N(r.qty)*N(r.price),0);
-  let pct=N(a.ls.afp)+N(a.ls.salud)+N(a.ls.seguro)+N(a.ls.mutual)+N(a.ls.sis)+N(a.ls.sanna)+N(a.ls.otros);
-  let lt=a.ls.on?mo*(pct/100):0;
-  let lsEl=document.getElementById(`ls-tot-${id}`);
-  if(lsEl)lsEl.textContent=sym()+' '+fmtP(lt);
-  let totalApu=a.secs.reduce((x,s)=>x+s.rows.reduce((y,r)=>y+N(r.qty)*N(r.price),0),0)+lt;
-  let totEl=document.getElementById(`apu-total-${id}`);
-  if(totEl)totEl.textContent='Precio Unitario Total: '+sym()+' '+fmtP(totalApu);
-  items.find(x=>x.id===id).price=totalApu;
-  rc();markUnsaved();
+  let a = apuData[id];
+  document.getElementById('ov').style.display = 'block';
+  renderApuModal(id);
 }
-function dapu(id,si,ri){apuData[id].secs[si].rows.splice(ri,1);renderApuEdit(id);markUnsaved();}
-function uls(id,f,v){apuData[id].ls[f]=v;renderApuEdit(id);markUnsaved();}
 
-/* ── TOF (Cubicaciones) — con columna ALTO ── */
-function openTof(id){
-  let it=items.find(x=>x.id===id);if(!it)return;
-  if(!tofData[id])tofData[id]=[];
-  document.getElementById('ov').style.display='block';
-  document.getElementById('mc').innerHTML=`<div class="modal">
-    <div class="mh"><h3>Memoria de Cubicaciones: ${esc(it.name)}</h3><button class="btn-s" onclick="closeMod()">Cerrar</button></div>
-    <div class="mb" id="tof-body"></div>
-    <div class="mf"><button class="btn-p blue" onclick="closeMod()">Guardar y Cerrar</button></div>
-  </div>`;
-  renderTof(id);
-}
-function renderTof(id){
-  let rows=tofData[id],it=items.find(x=>x.id===id);
-  let html=`<div class="tof-hdr"><span>Descripción / Eje</span><span>Cant.</span><span>Ancho</span><span>Largo</span><span>Alto</span><span>Total</span><span></span></div>`;
-  rows.forEach((r,ri)=>{
-    let tot=N(r.n)*N(r.a)*N(r.l)*N(r.h);
-    html+=`<div class="tof-row">
-      <input value="${esc(r.desc)}" oninput="utof('${id}',${ri},'desc',this.value)"/>
-      <input class="r" type="text" value="${fmtQ(N(r.n))}" oninput="utof('${id}',${ri},'n',this.value)" onfocus="this.select()"/>
-      <input class="r" type="text" value="${fmtQ(N(r.a))}" oninput="utof('${id}',${ri},'a',this.value)" onfocus="this.select()"/>
-      <input class="r" type="text" value="${fmtQ(N(r.l))}" oninput="utof('${id}',${ri},'l',this.value)" onfocus="this.select()"/>
-      <input class="r" type="text" value="${fmtQ(N(r.h))}" oninput="utof('${id}',${ri},'h',this.value)" onfocus="this.select()"/>
-      <div class="st" id="tof-sub-${id}-${ri}">${fmtQ(tot)}</div>
-      <button class="bs del" onclick="dtof('${id}',${ri})">×</button></div>`;
+function renderApuModal(id){
+  let it = items.find(x => x.id === id);
+  let a = apuData[id];
+  let mo = a.secs[0].rows.reduce((acc, r) => acc + N(r.qty) * N(r.price), 0);
+  let lsPct = N(a.ls.afp) + N(a.ls.salud) + N(a.ls.seguro) + N(a.ls.mutual) + N(a.ls.sis) + N(a.ls.sanna) + N(a.ls.otros);
+  let lsVal = a.ls.on ? mo * (lsPct / 100) : 0;
+  let total = a.secs.reduce((acc, s) => acc + s.rows.reduce((racc, r) => racc + N(r.qty) * N(r.price), 0), 0) + lsVal;
+
+  let html = `<div class="modal" style="max-width:900px;max-height:95vh">
+    <div class="mh">
+      <h3>Análisis de Precio Unitario <span class="mh-badge">${esc(it.num)}</span></h3>
+      <button class="btn-s" onclick="closeMod()">✕</button>
+    </div>
+    <div class="mb">
+      <div style="margin-bottom:15px;padding:12px;background:var(--navy-lt);border-radius:8px;display:flex;justify-content:space-between;align-items:center">
+        <div><div style="font-size:10px;color:var(--navy);font-weight:600;text-transform:uppercase">Partida</div><div style="font-size:14px;font-weight:600;color:var(--navy)">${esc(it.name)}</div></div>
+        <div style="text-align:right"><div style="font-size:10px;color:var(--navy);font-weight:600;text-transform:uppercase">Total Unitario</div><div style="font-size:18px;font-weight:700;color:var(--navy)">${sym()} ${fmtP(total)} / ${esc(it.unit)}</div></div>
+      </div>
+      <div class="apu-grid">`;
+
+  a.secs.forEach((sec, si) => {
+    html += `<div class="apu-sec">
+      <div class="apu-sec-hdr"><span>${sec.name}</span><span>Subtotal: ${sym()} ${fmtP(sec.rows.reduce((acc, r) => acc + N(r.qty) * N(r.price), 0))}</span></div>
+      <table class="apu-tbl">
+        <thead><tr><th>Descripción</th><th style="width:40px">Unid</th><th style="width:50px">Rend.</th><th style="width:80px">Precio</th><th style="width:20px"></th></tr></thead>
+        <tbody>`;
+    sec.rows.forEach((r, ri) => {
+      html += `<tr>
+        <td><input value="${esc(r.desc)}" oninput="uApuR('${id}',${si},${ri},'desc',this.value)"/></td>
+        <td><input value="${esc(r.unit)}" oninput="uApuR('${id}',${si},${ri},'unit',this.value)"/></td>
+        <td><input class="r" value="${fmtQ(N(r.qty))}" oninput="uApuR('${id}',${si},${ri},'qty',this.value)" onfocus="this.select()"/></td>
+        <td><input class="r" value="${fmtP(N(r.price))}" oninput="uApuR('${id}',${si},${ri},'price',this.value)" onfocus="this.select()"/></td>
+        <td><button class="bs del" onclick="dApuR('${id}',${si},${ri})">×</button></td>
+      </tr>`;
+    });
+    html += `</tbody></table>
+      <button class="bs addp" style="margin:8px" onclick="aApuR('${id}',${si})">+ Recurso</button>
+    </div>`;
   });
-  let total=rows.reduce((x,r)=>x+(N(r.n)*N(r.a)*N(r.l)*N(r.h)),0);
-  html+=`<button class="bs addp" style="margin:10px" onclick="atof('${id}')">+ Agregar Fila</button>
-    <div style="text-align:right;padding:10px;font-size:15px;font-weight:600;color:var(--navy)" id="tof-total-${id}">Total Cubicación: ${fmtQ(total)} ${esc(it.unit)}</div>`;
-  document.getElementById('tof-body').innerHTML=html;
-  it.qty=total;
-  it.isCub=true;
-  rb();
-}
-function atof(id){tofData[id].push({desc:'',n:1,a:1,l:1,h:1});renderTof(id);markUnsaved();}
-function utof(id,ri,f,v){
-  if(f==='n'||f==='a'||f==='l'||f==='h') v=N(v.replace(/\./g,'').replace(',','.'));
-  tofData[id][ri][f]=v;
-  let r=tofData[id][ri];
-  let subEl=document.getElementById(`tof-sub-${id}-${ri}`);
-  if(subEl)subEl.textContent=fmtQ(N(r.n)*N(r.a)*N(r.l)*N(r.h));
-  let total=tofData[id].reduce((x,r)=>x+(N(r.n)*N(r.a)*N(r.l)*N(r.h)),0);
-  let totEl=document.getElementById(`tof-total-${id}`);
-  if(totEl)totEl.textContent='Total Cubicación: '+fmtQ(total)+' '+esc(items.find(x=>x.id===id).unit);
-  items.find(x=>x.id===id).qty=total;
-  rc();markUnsaved();
-}
-function dtof(id,ri){tofData[id].splice(ri,1);renderTof(id);markUnsaved();}
 
-/* ── PRINT ── */
+  html += `</div>
+    <div class="apu-ls">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <label class="chk-opt" style="color:var(--amber);font-weight:700"><input type="checkbox" ${a.ls.on?'checked':''} onchange="uApuLS('${id}','on',this.checked)"/> LEYES SOCIALES (${lsPct.toFixed(2)}%)</label>
+        <span style="font-family:var(--mono);font-weight:700;color:var(--amber)">+ ${sym()} ${fmtP(lsVal)}</span>
+      </div>
+      <div class="apu-ls-grid">
+        <div class="ls-f"><label>AFP</label><input type="number" value="${a.ls.afp}" oninput="uApuLS('${id}','afp',this.value)"/></div>
+        <div class="ls-f"><label>Salud</label><input type="number" value="${a.ls.salud}" oninput="uApuLS('${id}','salud',this.value)"/></div>
+        <div class="ls-f"><label>Seg. Cesantía</label><input type="number" value="${a.ls.seguro}" oninput="uApuLS('${id}','seguro',this.value)"/></div>
+        <div class="ls-f"><label>Mutual</label><input type="number" value="${a.ls.mutual}" oninput="uApuLS('${id}','mutual',this.value)"/></div>
+        <div class="ls-f"><label>SIS</label><input type="number" value="${a.ls.sis}" oninput="uApuLS('${id}','sis',this.value)"/></div>
+        <div class="ls-f"><label>SANNA</label><input type="number" value="${a.ls.sanna}" oninput="uApuLS('${id}','sanna',this.value)"/></div>
+        <div class="ls-f"><label>Otros</label><input type="number" value="${a.ls.otros}" oninput="uApuLS('${id}','otros',this.value)"/></div>
+      </div>
+    </div>
+    </div>
+    <div class="mf">
+      <button class="btn-s" onclick="closeMod()">Cancelar</button>
+      <button class="btn-p blue" onclick="saveApu('${id}',${total})">Aplicar al Presupuesto</button>
+    </div>
+  </div>`;
+  document.getElementById('mc').innerHTML = html;
+}
+
+function aApuR(id,si){apuData[id].secs[si].rows.push({desc:'',unit:'',qty:1,price:0});renderApuModal(id);}
+function dApuR(id,si,ri){apuData[id].secs[si].rows.splice(ri,1);renderApuModal(id);}
+function uApuR(id,si,ri,f,v){if(f==='qty'||f==='price')v=N(v);apuData[id].secs[si].rows[ri][f]=v;renderApuModal(id);}
+function uApuLS(id,f,v){if(f!=='on')v=N(v);apuData[id].ls[f]=v;renderApuModal(id);}
+function saveApu(id,total){
+  items=items.map(it=>{if(it.id===id){it.price=total;it.isApu=true;}return it;});
+  closeMod();rb();markUnsaved();
+}
+
+/* ── CUBICACIONES ── */
+function refreshCubTab(){
+  let cont = document.getElementById('cub-list-container');
+  let cubItems = items.filter(it => it.t==='it');
+  if(!cubItems.length) { cont.innerHTML = '<p style="color:var(--txt3);font-style:italic">No hay partidas ingresadas.</p>'; return; }
+  
+  let html = '<div class="tbl-wrap"><table style="width:100%;border-collapse:collapse"><thead><tr style="background:var(--bg2)"><th style="text-align:left;padding:10px">Ítem</th><th style="text-align:left">Descripción</th><th style="text-align:right">Cantidad</th><th style="text-align:center">Estado</th><th style="text-align:right;padding-right:10px">Acción</th></tr></thead><tbody>';
+  cubItems.forEach(it => {
+    let hasCub = tofData[it.id] && tofData[it.id].length;
+    html += `<tr style="border-bottom:1px solid var(--border)">
+      <td style="padding:10px;font-family:var(--mono)">${esc(it.num)}</td>
+      <td>${esc(it.name)}</td>
+      <td style="text-align:right;font-family:var(--mono)">${fmtQ(N(it.qty))} ${esc(it.unit)}</td>
+      <td style="text-align:center"><span style="font-size:10px;padding:2px 6px;border-radius:10px;background:${hasCub?'var(--magenta-lt)':'var(--bg2)'};color:${hasCub?'var(--magenta)':'var(--txt3)'}">${hasCub?'✓ Cubicada':'Pendiente'}</span></td>
+      <td style="text-align:right;padding-right:10px"><button class="bs cub" onclick="openTof('${it.id}')">Editar Cub.</button></td>
+    </tr>`;
+  });
+  html += '</tbody></table></div>';
+  cont.innerHTML = html;
+}
+
+function openTof(id){
+  if(!tofData[id]) tofData[id] = [];
+  document.getElementById('ov').style.display = 'block';
+  renderTofModal(id);
+}
+
+function renderTofModal(id){
+  let it = items.find(x => x.id === id);
+  let rows = tofData[id];
+  let total = rows.reduce((acc, r) => acc + (N(r.n) * Math.max(1, N(r.a)) * Math.max(1, N(r.l)) * Math.max(1, N(r.h))), 0);
+
+  let html = `<div class="modal" style="max-width:800px">
+    <div class="mh"><h3>Memoria de Cubicaciones <span class="mh-badge">${esc(it.num)}</span></h3><button class="btn-s" onclick="closeMod()">✕</button></div>
+    <div class="mb">
+      <div style="margin-bottom:15px;padding:12px;background:var(--magenta-lt);border-radius:8px;display:flex;justify-content:space-between;align-items:center">
+        <div><div style="font-size:10px;color:var(--magenta);font-weight:600;text-transform:uppercase">Partida</div><div style="font-size:14px;font-weight:600;color:var(--magenta)">${esc(it.name)}</div></div>
+        <div style="text-align:right"><div style="font-size:10px;color:var(--magenta);font-weight:600;text-transform:uppercase">Total Cubicación</div><div style="font-size:18px;font-weight:700;color:var(--magenta)">${fmtQ(total)} ${esc(it.unit)}</div></div>
+      </div>
+      <table class="tof-tbl">
+        <thead><tr><th>Descripción / Eje</th><th style="width:60px">Cant.</th><th style="width:60px">Ancho</th><th style="width:60px">Largo</th><th style="width:60px">Alto</th><th style="width:80px">Subtotal</th><th style="width:30px"></th></tr></thead>
+        <tbody>`;
+  rows.forEach((r, ri) => {
+    let sub = N(r.n) * Math.max(1, N(r.a)) * Math.max(1, N(r.l)) * Math.max(1, N(r.h));
+    html += `<tr>
+      <td><input value="${esc(r.desc)}" oninput="uTofR('${id}',${ri},'desc',this.value)"/></td>
+      <td><input class="r" value="${fmtQ(N(r.n))}" oninput="uTofR('${id}',${ri},'n',this.value)" onfocus="this.select()"/></td>
+      <td><input class="r" value="${fmtQ(N(r.a))}" oninput="uTofR('${id}',${ri},'a',this.value)" onfocus="this.select()"/></td>
+      <td><input class="r" value="${fmtQ(N(r.l))}" oninput="uTofR('${id}',${ri},'l',this.value)" onfocus="this.select()"/></td>
+      <td><input class="r" value="${fmtQ(N(r.h))}" oninput="uTofR('${id}',${ri},'h',this.value)" onfocus="this.select()"/></td>
+      <td class="r mono">${fmtQ(sub)}</td>
+      <td><button class="bs del" onclick="dTofR('${id}',${ri})">×</button></td>
+    </tr>`;
+  });
+  html += `</tbody></table>
+      <button class="bs addp" style="margin-top:10px" onclick="aTofR('${id}')">+ Agregar Fila</button>
+    </div>
+    <div class="mf">
+      <button class="btn-s" onclick="closeMod()">Cancelar</button>
+      <button class="btn-p magenta" onclick="saveTof('${id}',${total})">Aplicar al Presupuesto</button>
+    </div>
+  </div>`;
+  document.getElementById('mc').innerHTML = html;
+}
+
+function aTofR(id){tofData[id].push({desc:'',n:1,a:0,l:0,h:0});renderTofModal(id);}
+function dTofR(id,ri){tofData[id].splice(ri,1);renderTofModal(id);}
+function uTofR(id,ri,f,v){if(f!=='desc')v=N(v);tofData[id][ri][f]=v;renderTofModal(id);}
+function saveTof(id,total){
+  items=items.map(it=>{if(it.id===id){it.qty=total;it.isCub=true;}return it;});
+  closeMod();rb();markUnsaved();
+}
+
+/* ── PRINTING ── */
 function genPrintHtml(){
   var obra=document.getElementById('pObra').value||'Sin nombre';
   var mandante=document.getElementById('pMandante').value;
@@ -964,7 +993,8 @@ function genPrintHtml(){
     '</div>';
 
   var mparts=margins.split(' ');
-  var footer='<div style="text-align:center;font-size:9px;color:#64748b;border-top:1px solid #eee;position:fixed;bottom:8mm;left:'+mparts[3]+';right:'+mparts[3]+';background:#fff;padding:3px 0">'+
+  // CORRECCIÓN 2 y 3: Numeración de página y posición del pie de página
+  var footer='<div style="text-align:center;font-size:9px;color:#64748b;border-top:1px solid #eee;position:fixed;bottom:2mm;left:'+mparts[3]+';right:'+mparts[3]+';background:#fff;padding:3px 0">'+
     '<div style="display:flex;justify-content:space-between;align-items:center;font-size:8px">'+
       '<div style="flex:1;text-align:left">'+esc(CFG.companyAddress)+' | '+esc(CFG.companyPhone)+' | '+esc(CFG.companyEmail)+(CFG.companyWeb?' | '+esc(CFG.companyWeb):'')+'</div>'+
       '<div style="font-weight:600">Pág. <span class="pageNumber"></span></div>'+
@@ -972,13 +1002,16 @@ function genPrintHtml(){
   '</div>';
 
   var html='<html><head><title>Informe PresAI - '+esc(obra)+'</title><style>'+
-    'body{font-family:\'IBM Plex Sans\',sans-serif;margin:0;padding:0;color:#333;counter-reset:page}'+
+    'body{font-family:\'IBM Plex Sans\',sans-serif;margin:0;padding:0;color:#333}'+
     'table{width:100%;border-collapse:collapse}'+
     'th,td{border:1px solid #eee;padding:4px 6px}th{background:#f5f5f5}'+
     '.page-break{page-break-before:always}'+
     '.avoid-break{page-break-inside:avoid}'+
-    '@page{size:'+pageSize+';margin:'+margins+';counter-increment:page}'+
-    '@media print{.pageNumber::after{content:counter(page)}}' +
+    '@page{size:'+pageSize+';margin:'+margins+'}'+
+    '@media print{'+
+      'body { counter-reset: page; }'+
+      '.pageNumber::after { counter-increment: page; content: counter(page); }'+
+    '}'+
   '</style></head><body>';
   
   if(CFG.printCover){
@@ -1127,51 +1160,24 @@ function openSettings(){
         '<label class="chk-opt"><input type="checkbox" '+(CFG.printExecution?'checked':'')+' onchange="CFG.printExecution=this.checked;saveCFG()"> Plazo ejecución</label>'+
         '<label class="chk-opt"><input type="checkbox" '+(CFG.printNotes?'checked':'')+' onchange="CFG.printNotes=this.checked;saveCFG()"> Notas</label>'+
       '</div></div>'+
-
-    /* EMPRESA */
-    '<div class="cfg-section"><h4>Empresa Constructora</h4><div class="cfg-grid">'+
-      '<div class="cfg-field"><label>Nombre</label><input value="'+esc(CFG.companyName)+'" oninput="CFG.companyName=this.value;saveCFG();updBrand()"/></div>'+
-      '<div class="cfg-field"><label>Rubro/Industria</label><input value="'+esc(CFG.companyTagline)+'" oninput="CFG.companyTagline=this.value;saveCFG()"/></div>'+
-      '<div class="cfg-field"><label>Dirección</label><input value="'+esc(CFG.companyAddress)+'" oninput="CFG.companyAddress=this.value;saveCFG()"/></div>'+
-      '<div class="cfg-field"><label>Teléfono / Celular</label><input value="'+esc(CFG.companyPhone)+'" oninput="CFG.companyPhone=this.value;saveCFG()"/></div>'+
-      '<div class="cfg-field"><label>Email</label><input value="'+esc(CFG.companyEmail)+'" oninput="CFG.companyEmail=this.value;saveCFG()"/></div>'+
-      '<div class="cfg-field"><label>Web</label><input value="'+esc(CFG.companyWeb)+'" oninput="CFG.companyWeb=this.value;saveCFG()"/></div>'+
-      '<div class="cfg-field"><label>Color Informe</label><input type="color" value="'+CFG.colorHeader+'" oninput="CFG.colorHeader=this.value;saveCFG();applyColor()"/></div>'+
-      '<div class="cfg-field"><label>Logo</label>'+
-        '<div style="display:flex;gap:10px;align-items:center">'+
-          '<button class="bs" onclick="document.getElementById(\'logoInp\').click()">Subir Logo</button>'+
-          (CFG.logoDataUrl?'<img src="'+CFG.logoDataUrl+'" style="height:30px;border:1px solid #eee"/>':'')+
-        '</div>'+
-        '<input type="file" id="logoInp" style="display:none" onchange="hLogo(this)"/>'+
-      '</div>'+
-    '</div></div>'+
-
-    /* FIRMANTES */
-    '<div class="cfg-section"><h4>Firmantes</h4><div class="cfg-grid">'+
-      '<div class="cfg-field"><label>Rep. Legal</label><input value="'+esc(CFG.repLegal)+'" oninput="CFG.repLegal=this.value;saveCFG()"/></div>'+
-      '<div class="cfg-field"><label>Profesional</label><input value="'+esc(CFG.profName)+'" oninput="CFG.profName=this.value;saveCFG()"/></div>'+
-    '</div></div>'+
-
-    /* IMAGEN PORTADA */
-    '<div class="cfg-section"><h4>Imagen Portada</h4>'+
-      '<div style="display:flex;gap:15px;align-items:center">'+
-        '<button class="bs" onclick="document.getElementById(\'covInp\').click()">Subir Imagen Portada</button>'+
-        (CFG.coverImgUrl?'<img src="'+CFG.coverImgUrl+'" style="height:40px;border:1px solid #eee"/><button class="bs del" onclick="CFG.coverImgUrl=\'\';saveCFG();openSettings()">×</button>':'')+
-      '</div>'+
-      '<input type="file" id="covInp" style="display:none" onchange="hCov(this)"/>'+
     '</div>'+
 
-    /* AUTOSAVE */
-    '<div class="cfg-section"><h4>Guardado Automático</h4><div class="cfg-grid">'+
-      '<label class="chk-opt"><input type="checkbox" '+(CFG.autoSave?'checked':'')+' onchange="CFG.autoSave=this.checked;saveCFG();setupAutoSave()"> Activar Guardado Automático</label>'+
-      '<div class="cfg-field"><label>Intervalo (segundos)</label><input type="number" value="'+CFG.autoSaveInterval+'" oninput="CFG.autoSaveInterval=N(this.value);saveCFG();setupAutoSave()" onfocus="this.select()"/></div>'+
+    /* EMPRESA */
+    '<div class="cfg-section"><h4>Datos de la Empresa</h4><div class="cfg-grid">'+
+      '<div class="cfg-field cfg-field-full"><label>Nombre Empresa</label><input value="'+esc(CFG.companyName)+'" oninput="CFG.companyName=this.value;saveCFG()"/></div>'+
+      '<div class="cfg-field cfg-field-full"><label>Eslogan / Tagline</label><input value="'+esc(CFG.companyTagline)+'" oninput="CFG.companyTagline=this.value;saveCFG()"/></div>'+
+      '<div class="cfg-field cfg-field-full"><label>Dirección</label><input value="'+esc(CFG.companyAddress)+'" oninput="CFG.companyAddress=this.value;saveCFG()"/></div>'+
+      '<div class="cfg-field"><label>Teléfono</label><input value="'+esc(CFG.companyPhone)+'" oninput="CFG.companyPhone=this.value;saveCFG()"/></div>'+
+      '<div class="cfg-field"><label>Email</label><input value="'+esc(CFG.companyEmail)+'" oninput="CFG.companyEmail=this.value;saveCFG()"/></div>'+
+      '<div class="cfg-field"><label>Web</label><input value="'+esc(CFG.companyWeb)+'" oninput="CFG.companyWeb=this.value;saveCFG()"/></div>'+
+      '<div class="cfg-field"><label>Representante Legal</label><input value="'+esc(CFG.repLegal)+'" oninput="CFG.repLegal=this.value;saveCFG()"/></div>'+
     '</div></div>'+
 
-    /* PRORRATEO */
-    '<div class="cfg-section"><h4>Prorrateo</h4><div class="chk-opts">'+
-      '<label class="chk-opt"><input type="checkbox" '+(CFG.ggProrrateado?'checked':'')+' onchange="CFG.ggProrrateado=this.checked;saveCFG();rc()"> Prorratear Gastos Generales en APU</label>'+
-      '<label class="chk-opt"><input type="checkbox" '+(CFG.utilProrrateado?'checked':'')+' onchange="CFG.utilProrrateado=this.checked;saveCFG();rc()"> Prorratear Utilidad en APU</label>'+
-      '<label class="chk-opt"><input type="checkbox" '+(CFG.impProrrateado?'checked':'')+' onchange="CFG.impProrrateado=this.checked;saveCFG();rc()"> Prorratear Imprevistos en APU</label>'+
+    /* LOGO */
+    '<div class="cfg-section"><h4>Logos e Imágenes</h4><div class="cfg-grid">'+
+      '<div class="cfg-field"><label>Logo Empresa (URL o Base64)</label><input value="'+esc(CFG.logoDataUrl)+'" oninput="CFG.logoDataUrl=this.value;saveCFG()" placeholder="https://..."/></div>'+
+      '<div class="cfg-field"><label>Imagen Portada (URL)</label><input value="'+esc(CFG.coverImgUrl)+'" oninput="CFG.coverImgUrl=this.value;saveCFG()" placeholder="https://..."/></div>'+
+      '<div class="cfg-field"><label>Color Principal (Header)</label><input type="color" value="'+CFG.colorHeader+'" oninput="CFG.colorHeader=this.value;saveCFG()"/></div>'+
     '</div></div>'+
 
     '</div>'+
@@ -1179,324 +1185,81 @@ function openSettings(){
   '</div>';
   document.getElementById('mc').innerHTML=html;
 }
-function hLogo(i){let r=new FileReader();r.onload=e=>{CFG.logoDataUrl=e.target.result;saveCFG();updLogoHdr();openSettings();};r.readAsDataURL(i.files[0]);}
-function hCov(i){let r=new FileReader();r.onload=e=>{CFG.coverImgUrl=e.target.result;saveCFG();openSettings();};r.readAsDataURL(i.files[0]);}
 
-/* ── PROJECT MANAGER ── */
-function newProject(){
-  if(isDirty&&!confirm('¿Descartar cambios?'))return;
-  currentProjectId=null;isDirty=false;
-  items=[{id:gid(),t:'ch',num:'1.-',name:'',unit:'',qty:0,price:0,isApu:false,isCub:false},{id:gid(),t:'it',num:'1.1',name:'',unit:'',qty:0,price:0,isApu:false,isCub:false}];
-  ggSubgroups=[];apuData={};tofData={};
-  
-  // Configuración predeterminada solicitada
-  CFG.currency = 'CLP';
-  CFG.pageSize = 'letter';
-  CFG.printCover = true;
-  CFG.printApu = false;
-  CFG.printCub = false;
-  CFG.printGG = false;
-  CFG.autoSave = true;
-  CFG.autoSaveInterval = 120;
-  CFG.coverImgUrl = '';
-  saveCFG();
-
-  ['pObra','pMandante','pUbicacion','pProfesional','pPayment','pExecution'].forEach(id=>document.getElementById(id).value='');
-  document.getElementById('pFecha').value=new Date().toISOString().split('T')[0];
-  rb();renderGGSubgroups();updBrand();closeMod();syncHdr();showApp();openSettings();
+function saveCFG(){
+  localStorage.setItem('presai_cfg', JSON.stringify(CFG));
+}
+function loadCFG(){
+  let saved = localStorage.getItem('presai_cfg');
+  if(saved) CFG = Object.assign(CFG, JSON.parse(saved));
 }
 
-function saveProject(){
-  let obra=document.getElementById('pObra').value.trim();
-  if(!obra){alert('Nombre de obra requerido. Por favor, ingrésalo en ⚙️ Configuración.');openSettings();return;}
-  if(!currentProjectId)currentProjectId='proj_'+Date.now();
-  let p={
-    id:currentProjectId,
-    obra,
-    mandante:document.getElementById('pMandante').value,
-    ubicacion:document.getElementById('pUbicacion').value,
-    profesional:document.getElementById('pProfesional').value,
-    fecha:document.getElementById('pFecha').value,
-    payment:document.getElementById('pPayment').value,
-    execution:document.getElementById('pExecution').value,
-    items,ggSubgroups,apuData,tofData,notes:CFG.notes,extraNotes:CFG.extraNotes,
-    pGG:document.getElementById('pGG').value,
-    pUtil:document.getElementById('pUtil').value,
-    pImp:document.getElementById('pImp').value,
-    pIVA:document.getElementById('pIVA').value,
-    ggFijo:document.getElementById('ggFijo').checked,
-    coverImgUrl:CFG.coverImgUrl
+/* ── CLOUD & EXCEL ── */
+function saveToCloud(){
+  let data = { items, apuData, tofData, ggSubgroups, CFG, 
+    pObra: document.getElementById('pObra').value,
+    pMandante: document.getElementById('pMandante').value,
+    pUbicacion: document.getElementById('pUbicacion').value,
+    pFecha: document.getElementById('pFecha').value,
+    pProfesional: document.getElementById('pProfesional').value,
+    pPayment: document.getElementById('pPayment').value,
+    pExecution: document.getElementById('pExecution').value,
+    pGG: document.getElementById('pGG').value,
+    pUtil: document.getElementById('pUtil').value,
+    pImp: document.getElementById('pImp').value,
+    pIVA: document.getElementById('pIVA').value,
+    ggFijo: document.getElementById('ggFijo').checked
   };
-  lsS('od_proj_'+currentProjectId,p);
-  let idx=getIdx(),e=idx.find(x=>x.id===currentProjectId);
-  if(e){e.obra=obra;e.savedAt=new Date().toISOString();}else idx.unshift({id:currentProjectId,obra,savedAt:new Date().toISOString()});
-  saveIdx(idx);isDirty=false;alert('Guardado');syncHdr();
+  localStorage.setItem('presai_last_project', JSON.stringify(data));
+  document.getElementById('unsaved-dot').style.display = 'none';
+  alert('Proyecto guardado localmente con éxito.');
 }
 
-function openProjects(){
-  let mainApp=document.getElementById('main-app');
-  if(mainApp.style.display==='none'||mainApp.style.display===''){showApp();}
-  let idx=getIdx();
-  document.getElementById('ov').style.display='block';
-  let html='<div class="modal" style="max-width:500px">'+
-    '<div class="mh"><h3>Mis Proyectos</h3><button class="btn-s" onclick="closeMod()">✕</button></div>'+
-    '<div class="mb">'+
-    '<button class="btn-p blue" style="width:100%;margin-bottom:15px" onclick="newProject()">+ Crear Nuevo Proyecto</button>';
-  if(idx.length===0){
-    html+='<div style="padding:20px;text-align:center;color:#94a3b8">No hay proyectos guardados</div>';
-  } else {
-    idx.forEach(p=>{
-      html+='<div style="padding:10px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center">'+
-        '<div onclick="loadP(\''+p.id+'\')" style="cursor:pointer;flex:1"><strong>'+esc(p.obra)+'</strong><br/><small>'+p.savedAt+'</small></div>'+
-        '<div class="proj-menu" style="position:relative">'+
-          '<button class="proj-menu-btn" onclick="this.nextElementSibling.classList.toggle(\'show\')">⋮</button>'+
-          '<div class="proj-menu-content">'+
-            '<div class="proj-menu-item" onclick="dupP(\''+p.id+'\')">📋 Duplicar</div>'+
-            '<div class="proj-menu-item" onclick="renP(\''+p.id+'\')">✏️ Renombrar</div>'+
-            '<div class="proj-menu-item" onclick="exportXlsx(\''+p.id+'\')">📊 Exportar .xlsx</div>'+
-            '<div class="proj-menu-item" onclick="exportJSON(\''+p.id+'\')">📁 Descargar .json</div>'+
-            '<div class="proj-menu-item" onclick="delP(\''+p.id+'\')">🗑️ Eliminar</div>'+
-          '</div>'+
-        '</div>'+
-      '</div>';
-    });
-  }
-  html+='<div style="padding:10px;border-top:1px solid #eee;text-align:center">'+
-    '<button class="btn-p blue" style="width:100%" onclick="document.getElementById(\'importJsonInp\').click()">📂 Importar .json</button>'+
-    '<input type="file" id="importJsonInp" style="display:none" accept=".json" onchange="importJSON(this)"/>'+
-  '</div>';
-  html+='</div></div>';
-  document.getElementById('mc').innerHTML=html;
-}
-
-function loadP(id){
-  let p=lsL('od_proj_'+id);if(!p)return;
-  currentProjectId=id;items=p.items;ggSubgroups=p.ggSubgroups||[];apuData=p.apuData;tofData=p.tofData;
-  CFG.notes=p.notes||[];
-  CFG.extraNotes=p.extraNotes||[];
-  CFG.coverImgUrl=p.coverImgUrl||'';
-  document.getElementById('pObra').value=p.obra;
-  document.getElementById('pMandante').value=p.mandante||'';
-  document.getElementById('pUbicacion').value=p.ubicacion||'';
-  document.getElementById('pProfesional').value=p.profesional||'';
-  document.getElementById('pFecha').value=p.fecha||'';
-  document.getElementById('pPayment').value=p.payment||'';
-  document.getElementById('pExecution').value=p.execution||'';
-  document.getElementById('pGG').value=p.pGG;
-  document.getElementById('pUtil').value=p.pUtil;
-  document.getElementById('pImp').value=p.pImp;
-  document.getElementById('pIVA').value=p.pIVA;
-  document.getElementById('ggFijo').checked=p.ggFijo;
-  rb();renderGGSubgroups();closeMod();syncHdr();showApp();
-}
-
-function dupP(id){
-  let p=lsL('od_proj_'+id);if(!p)return;
-  let newId='proj_'+Date.now();p.id=newId;
-  lsS('od_proj_'+newId,p);
-  let idx=getIdx();idx.unshift({id:newId,obra:p.obra+' (copia)',savedAt:new Date().toISOString()});
-  saveIdx(idx);openProjects();
-}
-function renP(id){
-  let p=lsL('od_proj_'+id);if(!p)return;
-  let newName=prompt('Nuevo nombre:',p.obra);
-  if(newName){p.obra=newName;lsS('od_proj_'+id,p);let idx=getIdx(),e=idx.find(x=>x.id===id);if(e)e.obra=newName;saveIdx(idx);openProjects();}
-}
-function delP(id){if(confirm('¿Eliminar?')){lsD('od_proj_'+id);saveIdx(getIdx().filter(x=>x.id!==id));openProjects();}}
-
-/* ── EXPORT/IMPORT JSON ── */
-function exportJSON(projId){
-  let p=lsL('od_proj_'+projId);
-  if(!p){alert('Proyecto no encontrado');return;}
-  let dataStr=JSON.stringify(p,null,2);
-  let dataBlob=new Blob([dataStr],{type:'application/json'});
-  let url=URL.createObjectURL(dataBlob);
-  let link=document.createElement('a');
-  link.href=url;
-  link.download=p.obra.replace(/[^a-z0-9]/gi,'_')+'.json';
-  link.click();
-  URL.revokeObjectURL(url);
-}
-
-function importJSON(input){
-  let file=input.files[0];
-  if(!file)return;
-  let reader=new FileReader();
-  reader.onload=function(e){
-    try{
-      let p=JSON.parse(e.target.result);
-      if(!p.obra||!p.items){alert('Archivo JSON inválido');return;}
-      let newId='proj_'+Date.now();
-      p.id=newId;
-      lsS('od_proj_'+newId,p);
-      let idx=getIdx();
-      idx.unshift({id:newId,obra:p.obra,savedAt:new Date().toISOString()});
-      saveIdx(idx);
-      alert('Proyecto importado correctamente: '+p.obra);
-      openProjects();
-    }catch(err){
-      alert('Error al importar: '+err.message);
-    }
-  };
-  reader.readAsText(file);
-  input.value='';
-}
-
-function closeMod(){
-  document.getElementById('ov').style.display='none';
-  refreshApuTab();
-  refreshCubTab();
-}
-
-function sw(id,el){
-  document.querySelectorAll('.pnl').forEach(p=>p.classList.remove('on'));
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
-  document.getElementById('p-'+id).classList.add('on');
-  el.classList.add('on');
-  document.getElementById('gg-quick-add').style.display = (id === 'gg') ? 'block' : 'none';
-  if(id === 'notes') refreshNotesTab();
-}
-function syncHdr(){
-  let el=document.getElementById('pObra');if(!el)return;
-  document.getElementById('hdrProj').style.display='flex';
-  document.getElementById('hdrProjName').textContent=el.value||'Proyecto';
-}
-function markUnsaved(){isDirty=true;}
-
-function refreshApuTab(){
-  let grid=document.getElementById('apu-list-grid'),empty=document.getElementById('apu-list-empty');
-  let apus=items.filter(it=>it.t==='it'&&apuData[it.id]);
-  if(!apus.length){grid.style.display='none';empty.style.display='block';}
-  else{
-    grid.style.display='grid';empty.style.display='none';
-    grid.innerHTML=apus.map(it=>`<div class="tot-card" style="cursor:pointer" onclick="openApu('${it.id}')">
-      <div style="font-weight:600;color:var(--navy)">${it.num} ${esc(it.name)}</div>
-      <div style="text-align:right;font-family:var(--mono)">${sym()} ${fmtP(it.price)}</div>
-    </div>`).join('');
-  }
-}
-
-function refreshCubTab(){
-  let grid=document.getElementById('cub-list-grid'),empty=document.getElementById('cub-list-empty');
-  let cubs=items.filter(it=>it.t==='it'&&tofData[it.id]&&tofData[it.id].length);
-  if(!cubs.length){grid.style.display='none';empty.style.display='block';}
-  else{
-    grid.style.display='grid';empty.style.display='none';
-    grid.innerHTML=cubs.map(it=>{
-      let total=tofData[it.id].reduce((x,r)=>x+(N(r.n)*Math.max(1,N(r.a))*Math.max(1,N(r.l))*Math.max(1,N(r.h))),0);
-      return `<div class="tot-card" style="cursor:pointer" onclick="openTof('${it.id}')">
-        <div style="font-weight:600;color:var(--magenta)">${it.num} ${esc(it.name)}</div>
-        <div style="text-align:right;font-family:var(--mono)">${fmtQ(total)} ${esc(it.unit)}</div>
-      </div>`;
-    }).join('');
-  }
-}
-
-function refreshNotesTab(){
-  let container = document.getElementById('notes-list');
-  let partidas = items.filter(it => it.t === 'it');
-  if(!CFG.notes) CFG.notes = [];
-  if(!CFG.extraNotes) CFG.extraNotes = [];
-  
-  // Sincronizar notas de partidas
-  while(CFG.notes.length < partidas.length) CFG.notes.push('');
-  if(CFG.notes.length > partidas.length) CFG.notes = CFG.notes.slice(0, partidas.length);
-
-  let html = CFG.notes.map((note, i) => `
-    <div style="display:flex;gap:10px;align-items:center">
-      <span style="font-weight:600;color:var(--navy);width:25px">${i+1}.</span>
-      <input class="ri" style="border-bottom:1px solid var(--border)" value="${esc(note)}" 
-        oninput="CFG.notes[${i}]=this.value;markUnsaved()" placeholder="Nota para partida ${partidas[i].num}..."/>
-    </div>
-  `).join('');
-
-  html += CFG.extraNotes.map((note, i) => `
-    <div style="display:flex;gap:10px;align-items:center">
-      <span style="font-weight:600;color:var(--navy);width:25px">${CFG.notes.length + i + 1}.</span>
-      <input class="ri" style="border-bottom:1px solid var(--border)" value="${esc(note)}" 
-        oninput="CFG.extraNotes[${i}]=this.value;markUnsaved()" placeholder="Nota adicional..."/>
-      <button class="bs del" onclick="delExtraNote(${i})">×</button>
-    </div>
-  `).join('');
-
-  container.innerHTML = html;
-}
-
-function addExtraNote(){
-  if(!CFG.extraNotes) CFG.extraNotes = [];
-  CFG.extraNotes.push('');
-  refreshNotesTab();
-  markUnsaved();
-}
-
-function delExtraNote(i){
-  CFG.extraNotes.splice(i, 1);
-  refreshNotesTab();
-  markUnsaved();
-}
-
-function setupAutoSave(){
-  if(autoSaveInterval)clearInterval(autoSaveInterval);
-  if(CFG.autoSave&&currentProjectId){
-    autoSaveInterval=setInterval(()=>{if(isDirty)saveProject();},CFG.autoSaveInterval*1000);
-  }
-}
-
-function showApp(){
-  document.getElementById('wow-screen').style.display='none';
-  document.getElementById('main-app').style.display='flex';
-}
-function hideApp(){
-  document.getElementById('wow-screen').style.display='flex';
-  document.getElementById('main-app').style.display='none';
-}
-
-/* ── EXPORT XLSX ── */
-function exportXlsx(projId){
-  let p=lsL('od_proj_'+projId);
-  if(!p){alert('Proyecto no encontrado');return;}
-
+function exportToExcel(){
   const wb = XLSX.utils.book_new();
-  const pitems = p.items||[];
-  const pGGSubs = p.ggSubgroups||[];
-  const pApuData = p.apuData||{};
-  const pTofData = p.tofData||{};
-  const pGGpct = parseFloat(p.pGG)||0;
-  const pUtilpct = parseFloat(p.pUtil)||0;
-  const pImppct = parseFloat(p.pImp)||0;
-  const pIVApct = parseFloat(p.pIVA)||19;
-  const ggFijo = p.ggFijo||false;
-
-  // 1. PORTADA
-  if(CFG.printCover){
-    const wsPortada = XLSX.utils.aoa_to_sheet([
-      ['PROYECTO:', p.obra],
-      ['MANDANTE:', p.mandante],
-      ['UBICACIÓN:', p.ubicacion],
-      ['FECHA:', p.fecha]
-    ]);
-    XLSX.utils.book_append_sheet(wb, wsPortada, "Portada");
-  }
+  const p = {
+    obra: document.getElementById('pObra').value,
+    mandante: document.getElementById('pMandante').value,
+    ubicacion: document.getElementById('pUbicacion').value,
+    fecha: document.getElementById('pFecha').value,
+    profesional: document.getElementById('pProfesional').value
+  };
+  
+  // 1. PORTADA / RESUMEN
+  const resData = [
+    ['PRESUPUESTO DE OBRA'],
+    [''],
+    ['Obra:', p.obra],
+    ['Mandante:', p.mandante],
+    ['Ubicación:', p.ubicacion],
+    ['Fecha:', p.fecha],
+    ['Profesional:', p.profesional],
+    [''],
+    ['RESUMEN DE COSTOS'],
+  ];
+  const wsRes = XLSX.utils.aoa_to_sheet(resData);
+  XLSX.utils.book_append_sheet(wb, wsRes, "Resumen");
 
   // 2. PRESUPUESTO
-  const presData = [['Ítem', 'Descripción', 'Unid', 'Cantidad', 'P. Unit.', 'Total']];
-  let cn=0, itn=0, cc=0;
-  const numbered = pitems.map(it => {
-    if(it.t==='ch'){cn++; itn=0; cc=cn; return Object.assign({}, it, {num: cn+'.-'});}
-    itn++; return Object.assign({}, it, {num: cc+'.'+itn});
+  const pitems = items;
+  const pApuData = apuData;
+  const pTofData = tofData;
+  const pGGSubs = ggSubgroups;
+  const pGGpct = N(document.getElementById('pGG').value);
+  const pUtilpct = N(document.getElementById('pUtil').value);
+  const pImppct = N(document.getElementById('pImp').value);
+  const pIVApct = N(document.getElementById('pIVA').value);
+  const ggFijo = document.getElementById('ggFijo').checked;
+
+  const presData = [['Ítem', 'Descripción', 'Unid', 'Cantidad', 'P.Unitario', 'Total']];
+  pitems.forEach(it => {
+    if(it.t==='ch') presData.push([it.num, it.name, '', '', '', '']);
+    else presData.push([it.num, it.name, it.unit, parseFloat(it.qty)||0, parseFloat(it.price)||0, {f: `D${presData.length+1}*E${presData.length+1}`}]);
   });
 
-  numbered.forEach(it => {
-    if(it.t==='ch'){
-      presData.push([it.num, it.name, '', '', '', 0]);
-    } else {
-      presData.push([it.num, it.name, it.unit||'', parseFloat(it.qty)||0, parseFloat(it.price)||0, {f: `D${presData.length+1}*E${presData.length+1}`}]);
-    }
-  });
-
-  const dc = pitems.reduce((a,it)=>it.t==='it'?a+(parseFloat(it.qty)||0)*(parseFloat(it.price)||0):a,0);
-  const ggV = ggFijo?dc*(pGGpct/100):pGGSubs.reduce((a,sg)=>a+sg.items.reduce((b,it)=>b+(parseFloat(it.qty)||0)*(parseFloat(it.tiempoUso)||0)*(parseFloat(it.price)||0),0),0);
-  const util = (dc+ggV)*(pUtilpct/100);
+  const dc = pitems.reduce((a,it)=>it.t==='it'?a+N(it.qty)*N(it.price):a,0);
+  const ggV = ggFijo?dc*(pGGpct/100):pGGSubs.reduce((a,sg)=>a+sg.items.reduce((b,it)=>b+N(it.qty)*N(it.tiempoUso)*N(it.price),0),0);
+  const util = dc*(pUtilpct/100);
   const imp = dc*(pImppct/100);
   const net = dc+ggV+util+imp;
   const iva = net*(pIVApct/100);
