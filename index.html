@@ -431,7 +431,7 @@ const CFG_DEF = {
   repLegal:'', repLegalRut:'', profName:'', profRut:'',
   colorHeader:'#1e3a5f', logoDataUrl:'', coverImgUrl:'',
   printCover:true, printApu:true, printCub:true, printGG:false,
-  printPayment:true, printExecution:true, printNotes:true,
+  printPayment:true, printExecution:true, printNotes:true, printBudgetNum:false,
   pageSize:'letter', apuPrintMode:'continuo', cubPrintMode:'continuo',
   autoSave:true, autoSaveInterval:300, ggProrrateado:false, utilProrrateado:false, impProrrateado:false,
   impPorApu:false, impVisible:false,
@@ -865,10 +865,17 @@ function genPrintHtml(){
   var pageSize=CFG.pageSize==='legal'?'legal':'letter';
   var margins=pageSize==='legal'?'12mm 12mm 22mm 12mm':'10mm 10mm 20mm 10mm';
 
+  var now = new Date();
+  var pad = (n) => n.toString().padStart(2, '0');
+  var budgetNumStr = pad(now.getHours()) + pad(now.getMinutes()) + pad(now.getSeconds()) + '-' + pad(now.getMonth() + 1) + now.getFullYear();
+  
   var runHdr='<div style="display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid '+color+';padding-bottom:8px;margin-bottom:14px">' +
     '<div style="display:flex;align-items:center;gap:10px">'+(CFG.logoDataUrl?'<img src="'+CFG.logoDataUrl+'" style="max-height:35px;max-width:80px;object-fit:contain;margin:0"/>':'')+
     '<div><div style="font-size:11px;font-weight:700;color:'+color+'">'+esc(CFG.companyName)+'</div><div style="font-size:8px;color:#64748b">'+esc(CFG.companyTagline)+'</div></div></div>'+
-    '<div style="text-align:right"><div style="font-size:12px;font-weight:600;color:'+color+'">'+esc(obra)+'</div><div style="font-size:8px;color:#94a3b8;font-family:monospace">'+esc(mandante)+' · '+esc(fecha)+'</div></div></div>';
+    '<div style="text-align:right"><div style="font-size:12px;font-weight:600;color:'+color+'">'+esc(obra)+'</div>'+
+    '<div style="font-size:8px;color:#94a3b8;font-family:monospace">'+esc(mandante)+' · '+esc(fecha)+'</div>'+
+    (CFG.printBudgetNum ? '<div style="font-size:8px;color:#94a3b8;font-family:monospace">'+budgetNumStr+'</div>' : '')+
+    '</div></div>';
 
   var trows='';
   items.forEach(it=>{
@@ -956,7 +963,7 @@ function genPrintHtml(){
     '</div>';
 
   var mparts=margins.split(' ');
-  var footer='<div style="text-align:center;font-size:9px;color:#64748b;border-top:1px solid #eee;position:fixed;bottom:'+mparts[2]+';left:'+mparts[3]+';right:'+mparts[3]+';background:#fff;padding:3px 0">'+
+  var footer='<div style="text-align:center;font-size:9px;color:#64748b;border-top:1px solid #eee;position:fixed;bottom:8mm;left:'+mparts[3]+';right:'+mparts[3]+';background:#fff;padding:3px 0">'+
     '<div style="display:flex;justify-content:space-between;align-items:center;font-size:8px">'+
       '<div style="flex:1;text-align:left">'+esc(CFG.companyAddress)+' | '+esc(CFG.companyPhone)+' | '+esc(CFG.companyEmail)+(CFG.companyWeb?' | '+esc(CFG.companyWeb):'')+'</div>'+
       '<div style="font-weight:600">Pág. <span class="pageNumber"></span></div>'+
@@ -970,7 +977,7 @@ function genPrintHtml(){
     '.page-break{page-break-before:always}'+
     '.avoid-break{page-break-inside:avoid}'+
     '@page{size:'+pageSize+';margin:'+margins+'}'+
-    '@media print{body{counter-reset:page 0}.pageNumber::after{content:counter(page)}}'+
+    '@media print{body{counter-reset:page}.pageNumber::after{counter-increment:page;content:counter(page)}}' +
   '</style></head><body>';
   
   if(CFG.printCover){
@@ -983,7 +990,7 @@ function genPrintHtml(){
         '<p><strong>Ubicación:</strong> '+esc(ubic)+'</p>'+
         '<p><strong>Fecha:</strong> '+esc(fecha)+'</p>'+
       '</div>'+
-    '</div>';
+    '</div><div style="page-break-after:always"></div>';
   }
 
   html+='<div style="padding:10mm;padding-bottom:30mm">'+runHdr+
@@ -1093,6 +1100,10 @@ function openSettings(){
       '<div class="cfg-field"><label>Tamaño de Hoja</label><select onchange="CFG.pageSize=this.value;saveCFG()">'+
         '<option value="letter" '+(CFG.pageSize==='letter'?'selected':'')+'>Carta (Letter)</option>'+
         '<option value="legal" '+(CFG.pageSize==='legal'?'selected':'')+'>Oficio (Legal)</option>'+
+      '</select></div>'+
+      '<div class="cfg-field"><label>Numeración Presupuesto</label><select onchange="CFG.printBudgetNum=(this.value===\'on\');saveCFG()">'+
+        '<option value="off" '+(!CFG.printBudgetNum? 'selected':'')+'>Off</option>'+
+        '<option value="on" '+(CFG.printBudgetNum? 'selected':'')+'>On</option>'+
       '</select></div>'+
     '</div>'+
     '<div style="margin-top:15px;margin-bottom:30px"><label style="font-size:11px;font-weight:600;color:var(--navy);text-transform:uppercase;display:block;margin-bottom:8px">Impresión</label>'+
