@@ -95,12 +95,12 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
 
 /* ── BUDGET TABLE ── */
 .tbl-wrap{background:var(--bg);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:12px}
-.tbl-hdr{display:grid;grid-template-columns:50px minmax(120px,1fr) 64px 90px 120px 120px 140px;background:var(--bg2);border-bottom:1px solid var(--border2);padding:0 8px}
+.tbl-hdr{display:grid;grid-template-columns:40px minmax(150px,1fr) 50px 70px 100px 100px 80px;background:var(--bg2);border-bottom:1px solid var(--border2);padding:0 8px}
 .tbl-hdr span{padding:9px 6px;font-size:9px;font-weight:600;color:var(--txt2);text-transform:uppercase;letter-spacing:.6px}
 .tbl-hdr .r{text-align:right}
 .row-ch,.row-it{display:grid;border-bottom:1px solid var(--border);padding:0 8px;align-items:center}
-.row-ch{grid-template-columns:50px minmax(120px,1fr) 64px 90px 120px 120px 140px;background:rgba(30,58,95,.05);border-bottom:1px solid var(--border2)}
-.row-it{grid-template-columns:50px minmax(120px,1fr) 64px 90px 120px 120px 140px}
+.row-ch{grid-template-columns:40px minmax(150px,1fr) 50px 70px 100px 100px 80px;background:rgba(30,58,95,.05);border-bottom:1px solid var(--border2)}
+.row-it{grid-template-columns:40px minmax(150px,1fr) 50px 70px 100px 100px 80px}
 .row-it:hover{background:#f6f8ff}.row-ch:hover{background:rgba(30,58,95,.08)}
 .ri{font-family:var(--ff);font-size:13px;color:var(--txt);background:transparent;border:none;outline:none;width:100%;padding:10px 6px;line-height:1.3}
 .ri::placeholder{color:var(--txt3);font-style:italic}.ri:focus::placeholder{opacity:0}
@@ -680,7 +680,7 @@ function renderGGSubgroups(){
         <button class="bs del" onclick="delGGSubgroup(${sgi})">×</button>
       </div>
       <table class="gg-table">
-        <thead><tr><th style="width:260px">Descripción</th><th style="width:50px">Unid</th><th style="width:60px">Cant.</th><th style="width:80px">Tiempo Uso</th><th style="width:80px">Precio (${sym()})</th><th style="width:80px">Subtotal (${sym()})</th><th style="width:30px"></th></tr></thead>
+        <thead><tr><th style="width:35%">Descripción</th><th style="width:8%">Unid</th><th style="width:10%">Cant.</th><th style="width:12%">Tiempo Uso</th><th style="width:12%">Precio (${sym()})</th><th style="width:15%">Subtotal (${sym()})</th><th style="width:8%"></th></tr></thead>
         <tbody>`;
     
     sg.items.forEach((it, iti) => {
@@ -904,7 +904,7 @@ function genPrintHtml(){
 
   var ggHtml='';
   if(CFG.printGG&&ggSubgroups.length>0){
-    ggHtml='<div style="padding:10mm;padding-bottom:10mm;page-break-after:always">'+runHdr+'<h3 style="font-size:14px;color:'+color+';border-bottom:2px solid #eee;padding-bottom:5px;margin-bottom:15px">Gastos Generales Detallados</h3>';
+    ggHtml='<div style="padding:10mm;padding-bottom:10mm;page-break-after:auto">'+runHdr+'<h3 style="font-size:14px;color:'+color+';border-bottom:2px solid #eee;padding-bottom:5px;margin-bottom:15px">Gastos Generales Detallados</h3>';
     ggSubgroups.forEach(sg=>{
       let sgTotal=sg.items.reduce((a,it)=>a+N(it.qty)*N(it.price),0);
       ggHtml+='<div style="margin-bottom:20px;border:1px solid #eee;border-radius:5px;overflow:hidden"><div style="background:#f9f9f9;padding:8px;font-weight:600;color:'+color+'">'+esc(sg.name)+' - '+s+' '+fmtB(sgTotal)+'</div>'+
@@ -919,7 +919,7 @@ function genPrintHtml(){
 
   var apuHtml='';
   if(CFG.printApu){
-    apuHtml='<div style="padding:10mm;padding-bottom:10mm;page-break-after:always">'+runHdr+'<h3 style="font-size:14px;color:'+color+';border-bottom:2px solid #eee;padding-bottom:5px;margin-bottom:15px">Análisis de Precios Unitarios</h3>';
+    apuHtml='<div style="padding:10mm;padding-bottom:10mm;page-break-after:auto">'+runHdr+'<h3 style="font-size:14px;color:'+color+';border-bottom:2px solid #eee;padding-bottom:5px;margin-bottom:15px">Análisis de Precios Unitarios</h3>';
     items.forEach(it=>{
       if(it.t!=='it'||!apuData[it.id])return;
       let a=apuData[it.id],mo=a.secs[0].rows.reduce((x,r)=>x+N(r.qty)*N(r.price),0);
@@ -940,7 +940,7 @@ function genPrintHtml(){
 
   var cubHtml='';
   if(CFG.printCub){
-    cubHtml='<div style="padding:10mm;padding-bottom:10mm;page-break-after:always">'+runHdr+'<h3 style="font-size:14px;color:'+color+';border-bottom:2px solid #eee;padding-bottom:5px;margin-bottom:15px">Memoria de Cubicaciones</h3>';
+    cubHtml='<div style="padding:10mm;padding-bottom:10mm;page-break-after:auto">'+runHdr+'<h3 style="font-size:14px;color:'+color+';border-bottom:2px solid #eee;padding-bottom:5px;margin-bottom:15px">Memoria de Cubicaciones</h3>';
     items.forEach(it=>{
       if(it.t!=='it'||!tofData[it.id]||!tofData[it.id].length)return;
       let rows=tofData[it.id],total=rows.reduce((x,r)=>x+(N(r.n)*Math.max(1,N(r.a))*Math.max(1,N(r.l))*Math.max(1,N(r.h))),0);
@@ -973,7 +973,7 @@ function genPrintHtml(){
     extraInfo += '</div>';
   }
 
-  var signatures='<div style="display:flex;justify-content:space-around;margin-top:80px;page-break-inside:avoid">'+
+  var signatures='<div style="display:flex;justify-content:space-around;margin-top:80px;page-break-inside:avoid;page-break-before:auto">'+
     '<div style="text-align:center;width:200px;border-top:1px solid #333;padding-top:10px"><div style="font-size:10px;font-weight:700">REPRESENTANTE LEGAL</div><div style="font-size:9px">'+esc(CFG.repLegal)+'</div></div>'+
     '<div style="text-align:center;width:200px;border-top:1px solid #333;padding-top:10px"><div style="font-size:10px;font-weight:700">PROFESIONAL A CARGO</div><div style="font-size:9px">'+esc(CFG.profName||profesional)+'</div></div>'+
     '</div>';
@@ -1009,7 +1009,7 @@ function genPrintHtml(){
     '</div>';
   }
 
-  html+='<div style="padding:10mm;padding-bottom:30mm;page-break-after:always">'+runHdr+
+  html+='<div style="padding:10mm;padding-bottom:30mm;page-break-after:auto">'+runHdr+
     '<h3 style="font-size:14px;color:'+color+';border-bottom:2px solid #eee;padding-bottom:5px;margin-bottom:15px">Presupuesto Detallado</h3>'+
     '<table><thead><tr style="background:#f9f9f9"><th>Ítem</th><th>Descripción</th><th style="text-align:center">Unid</th><th style="text-align:right">Cant.</th><th style="text-align:right">P.Unit. ('+s+')</th><th style="text-align:right">Total ('+s+')</th></tr></thead><tbody>'+trows+'</tbody></table>'+
     '<div style="width:250px;margin-left:auto;margin-top:20px;font-size:11px">'+
