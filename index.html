@@ -588,6 +588,22 @@ function initEvents(){
     });
     rc();markUnsaved();
   });
+  document.getElementById('brows').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      var inp = e.target;
+      if (inp.dataset && inp.dataset.field === 'name') {
+        var row = inp.closest('.row-it');
+        if (row) {
+          var unitInp = row.querySelector('input[data-field="unit"]');
+          if (unitInp) {
+            e.preventDefault();
+            unitInp.focus();
+            unitInp.select();
+          }
+        }
+      }
+    }
+  });
 }
 
 function addItToChapter(chId){
@@ -964,7 +980,7 @@ function genPrintHtml(){
     '</div>';
 
   var mparts=margins.split(' ');
-  var footer='<div style="text-align:center;font-size:9px;color:#64748b;border-top:1px solid #eee;position:fixed;bottom:8mm;left:'+mparts[3]+';right:'+mparts[3]+';background:#fff;padding:3px 0">'+
+  var footer='<div style="text-align:center;font-size:9px;color:#64748b;border-top:1px solid #eee;position:fixed;bottom:2mm;left:'+mparts[3]+';right:'+mparts[3]+';background:#fff;padding:3px 0">'+
     '<div style="display:flex;justify-content:space-between;align-items:center;font-size:8px">'+
       '<div style="flex:1;text-align:left">'+esc(CFG.companyAddress)+' | '+esc(CFG.companyPhone)+' | '+esc(CFG.companyEmail)+(CFG.companyWeb?' | '+esc(CFG.companyWeb):'')+'</div>'+
       '<div style="font-weight:600">Pág. <span class="pageNumber"></span></div>'+
@@ -972,13 +988,16 @@ function genPrintHtml(){
   '</div>';
 
   var html='<html><head><title>Informe PresAI - '+esc(obra)+'</title><style>'+
-    'body{font-family:\'IBM Plex Sans\',sans-serif;margin:0;padding:0;color:#333;counter-reset:page}'+
+    'body{font-family:\'IBM Plex Sans\',sans-serif;margin:0;padding:0;color:#333}'+
     'table{width:100%;border-collapse:collapse}'+
     'th,td{border:1px solid #eee;padding:4px 6px}th{background:#f5f5f5}'+
     '.page-break{page-break-before:always}'+
     '.avoid-break{page-break-inside:avoid}'+
-    '@page{size:'+pageSize+';margin:'+margins+';counter-increment:page}'+
-    '@media print{.pageNumber::after{content:counter(page)}}' +
+    '@page{size:'+pageSize+';margin:'+margins+'}'+
+    '@media print{'+
+      'body { counter-reset: page; }'+
+      '.pageNumber::after { counter-increment: page; content: counter(page); }'+
+    '}'+
   '</style></head><body>';
   
   if(CFG.printCover){
