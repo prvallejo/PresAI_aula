@@ -904,7 +904,7 @@ function genPrintHtml(){
 
   var ggHtml='';
   if(CFG.printGG&&ggSubgroups.length>0){
-    ggHtml='<div style="page-break-before:always;padding:10mm;padding-bottom:30mm">'+runHdr+'<h3 style="font-size:14px;color:'+color+';border-bottom:2px solid #eee;padding-bottom:5px;margin-bottom:15px">Gastos Generales Detallados</h3>';
+    ggHtml='<div style="padding:10mm;padding-bottom:30mm;page-break-after:always">'+runHdr+'<h3 style="font-size:14px;color:'+color+';border-bottom:2px solid #eee;padding-bottom:5px;margin-bottom:15px">Gastos Generales Detallados</h3>';
     ggSubgroups.forEach(sg=>{
       let sgTotal=sg.items.reduce((a,it)=>a+N(it.qty)*N(it.price),0);
       ggHtml+='<div style="margin-bottom:20px;border:1px solid #eee;border-radius:5px;overflow:hidden"><div style="background:#f9f9f9;padding:8px;font-weight:600;color:'+color+'">'+esc(sg.name)+' - '+s+' '+fmtB(sgTotal)+'</div>'+
@@ -919,7 +919,7 @@ function genPrintHtml(){
 
   var apuHtml='';
   if(CFG.printApu){
-    apuHtml='<div style="page-break-before:always;padding:10mm;padding-bottom:30mm">'+runHdr+'<h3 style="font-size:14px;color:'+color+';border-bottom:2px solid #eee;padding-bottom:5px;margin-bottom:15px">Análisis de Precios Unitarios</h3>';
+    apuHtml='<div style="padding:10mm;padding-bottom:30mm;page-break-after:always">'+runHdr+'<h3 style="font-size:14px;color:'+color+';border-bottom:2px solid #eee;padding-bottom:5px;margin-bottom:15px">Análisis de Precios Unitarios</h3>';
     items.forEach(it=>{
       if(it.t!=='it'||!apuData[it.id])return;
       let a=apuData[it.id],mo=a.secs[0].rows.reduce((x,r)=>x+N(r.qty)*N(r.price),0);
@@ -940,7 +940,7 @@ function genPrintHtml(){
 
   var cubHtml='';
   if(CFG.printCub){
-    cubHtml='<div style="page-break-before:always;padding:10mm;padding-bottom:30mm">'+runHdr+'<h3 style="font-size:14px;color:'+color+';border-bottom:2px solid #eee;padding-bottom:5px;margin-bottom:15px">Memoria de Cubicaciones</h3>';
+    cubHtml='<div style="padding:10mm;padding-bottom:30mm;page-break-after:always">'+runHdr+'<h3 style="font-size:14px;color:'+color+';border-bottom:2px solid #eee;padding-bottom:5px;margin-bottom:15px">Memoria de Cubicaciones</h3>';
     items.forEach(it=>{
       if(it.t!=='it'||!tofData[it.id]||!tofData[it.id].length)return;
       let rows=tofData[it.id],total=rows.reduce((x,r)=>x+(N(r.n)*Math.max(1,N(r.a))*Math.max(1,N(r.l))*Math.max(1,N(r.h))),0);
@@ -1171,6 +1171,7 @@ function openSettings(tab){
       '<input type="file" id="covInp" style="display:none" onchange="hCov(this)"/>'+
     '</div>'+
     '</div></div>'+
+    '</div></div>'+  /* fin mb padding:0 y cfg-tab-pnl empresa */
 
     /* ── PANEL MONEDA ── */
     '<div class="cfg-tab-pnl '+(tab==='moneda'?'on':'')+'" id="cfg-pnl-moneda">'+
