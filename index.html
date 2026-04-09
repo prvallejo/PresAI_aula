@@ -559,9 +559,9 @@ function rb(){
     var qtyClass=it.isCub?'ri r magenta':'ri r';
     var priceClass=it.isApu?'ri r magenta':'ri r';
     return `<div class="row-it" data-id="${it.id}">
-      <input class="ri mono" data-field="num" data-id="${it.id}" placeholder="N°" value="${esc(it.num)}" autocomplete="off"/>
-      <input class="ri" data-field="name" data-id="${it.id}" placeholder="Descripción..." value="${esc(it.name)}" autocomplete="off"/>
-      <input class="ri" data-field="unit" data-id="${it.id}" placeholder="Unid" value="${esc(it.unit)}" autocomplete="off"/>
+      <input class="ri mono" data-field="num" data-id="${it.id}" placeholder="N°" value="${esc(it.num)}" onfocus="this.select()" autocomplete="off"/>
+      <input class="ri" data-field="name" data-id="${it.id}" placeholder="Descripción..." value="${esc(it.name)}" onfocus="this.select()" autocomplete="off"/>
+      <input class="ri" data-field="unit" data-id="${it.id}" placeholder="Unid" value="${esc(it.unit)}" onfocus="this.select()" autocomplete="off"/>
       <input class="${qtyClass}" data-field="qty" data-id="${it.id}" placeholder="0" value="${fmtQ(N(it.qty))}" onfocus="this.select()" autocomplete="off"/>
       <input class="${priceClass}" data-field="price" data-id="${it.id}" placeholder="P.Unit." value="${fmtP(N(it.price))}" onfocus="this.select()" autocomplete="off"/>
       <span class="span-tot ${it.isApu||it.isCub?'magenta':''}">${fmtB(tot)}</span>
@@ -1075,7 +1075,7 @@ function swCfgTab(id){
 }
 
 function openSettings(tab){
-  tab = tab || 'config';
+  tab = tab || 'proyecto';
   document.getElementById('ov').style.display='block';
   let obra=document.getElementById('pObra').value;
   let mandante=document.getElementById('pMandante').value;
@@ -1086,44 +1086,27 @@ function openSettings(tab){
   let execution=document.getElementById('pExecution').value;
 
   let html='<div class="modal" style="max-width:760px;max-height:90vh;overflow-y:auto">'+
-    '<div class="mh"><h3>⚙️ PresAI — Configuración y Ayuda</h3><button class="btn-s" onclick="closeMod()">✕</button></div>'+
+    '<div class="mh"><h3>⚙️ PresAI — Configuración</h3><button class="btn-s" onclick="closeMod()">✕</button></div>'+
     '<div class="mb">'+
     '<div class="cfg-tabs">'+
-      '<div class="cfg-tab '+(tab==='config'?'on':'')+'" id="cfg-tab-config" onclick="swCfgTab(\'config\')">⚙️ Configuración</div>'+
-      '<div class="cfg-tab '+(tab==='help'?'on':'')+'" id="cfg-tab-help" onclick="swCfgTab(\'help\')">❔ Ayuda</div>'+
+      '<div class="cfg-tab '+(tab==='proyecto'?'on':'')+'" id="cfg-tab-proyecto" onclick="swCfgTab(\'proyecto\')">📂 Proyecto</div>'+
+      '<div class="cfg-tab '+(tab==='empresa'?'on':'')+'" id="cfg-tab-empresa" onclick="swCfgTab(\'empresa\')">🏢 Empresa</div>'+
+      '<div class="cfg-tab '+(tab==='moneda'?'on':'')+'" id="cfg-tab-moneda" onclick="swCfgTab(\'moneda\')">💱 Moneda</div>'+
+      '<div class="cfg-tab '+(tab==='ayuda'?'on':'')+'" id="cfg-tab-ayuda" onclick="swCfgTab(\'ayuda\')">❔ Ayuda</div>'+
     '</div>'+
-    '<div class="cfg-tab-pnl '+(tab==='config'?'on':'')+'" id="cfg-pnl-config">'+
+
+    /* ── PANEL PROYECTO ── */
+    '<div class="cfg-tab-pnl '+(tab==='proyecto'?'on':'')+'" id="cfg-pnl-proyecto">'+
     '<div class="mb" style="padding:0">'+
-
-    /* PROYECTO */
     '<div class="cfg-section"><h4>Proyecto</h4><div class="cfg-grid">'+
-      '<div class="cfg-field cfg-field-full"><label>Nombre de la Obra / Proyecto</label><input id="cfg-obra" value="'+esc(obra)+'" oninput="document.getElementById(\'pObra\').value=this.value;syncHdr();markUnsaved()"/></div>'+
-      '<div class="cfg-field"><label>Mandante / Cliente</label><input id="cfg-mandante" value="'+esc(mandante)+'" oninput="document.getElementById(\'pMandante\').value=this.value;markUnsaved()"/></div>'+
-      '<div class="cfg-field"><label>Ubicación</label><input id="cfg-ubicacion" value="'+esc(ubicacion)+'" oninput="document.getElementById(\'pUbicacion\').value=this.value;markUnsaved()"/></div>'+
-      '<div class="cfg-field"><label>Profesional a cargo</label><input id="cfg-profesional" value="'+esc(profesional)+'" oninput="document.getElementById(\'pProfesional\').value=this.value;markUnsaved()"/></div>'+
+      '<div class="cfg-field cfg-field-full"><label>Nombre de la Obra / Proyecto</label><input id="cfg-obra" value="'+esc(obra)+'" onfocus="this.select()" oninput="document.getElementById(\'pObra\').value=this.value;syncHdr();markUnsaved()"/></div>'+
+      '<div class="cfg-field"><label>Mandante / Cliente</label><input id="cfg-mandante" value="'+esc(mandante)+'" onfocus="this.select()" oninput="document.getElementById(\'pMandante\').value=this.value;markUnsaved()"/></div>'+
+      '<div class="cfg-field"><label>Ubicación</label><input id="cfg-ubicacion" value="'+esc(ubicacion)+'" onfocus="this.select()" oninput="document.getElementById(\'pUbicacion\').value=this.value;markUnsaved()"/></div>'+
+      '<div class="cfg-field"><label>Profesional a cargo</label><input id="cfg-profesional" value="'+esc(profesional)+'" onfocus="this.select()" oninput="document.getElementById(\'pProfesional\').value=this.value;markUnsaved()"/></div>'+
       '<div class="cfg-field"><label>Fecha</label><input type="date" id="cfg-fecha" value="'+esc(fecha)+'" oninput="document.getElementById(\'pFecha\').value=this.value;markUnsaved()"/></div>'+
-      '<div class="cfg-field"><label>Forma de Pago</label><input id="cfg-payment" value="'+esc(payment)+'" oninput="document.getElementById(\'pPayment\').value=this.value;markUnsaved()"/></div>'+
-      '<div class="cfg-field"><label>Plazo ejecución</label><input id="cfg-execution" value="'+esc(execution)+'" oninput="document.getElementById(\'pExecution\').value=this.value;markUnsaved()"/></div>'+
+      '<div class="cfg-field"><label>Forma de Pago</label><input id="cfg-payment" value="'+esc(payment)+'" onfocus="this.select()" oninput="document.getElementById(\'pPayment\').value=this.value;markUnsaved()"/></div>'+
+      '<div class="cfg-field"><label>Plazo ejecución</label><input id="cfg-execution" value="'+esc(execution)+'" onfocus="this.select()" oninput="document.getElementById(\'pExecution\').value=this.value;markUnsaved()"/></div>'+
     '</div></div>'+
-
-    /* MONEDA */
-    '<div class="cfg-section"><h4>Moneda y Decimales</h4><div class="cfg-grid">'+
-      '<div class="cfg-field"><label>Moneda</label><select onchange="CFG.currency=this.value;if(this.value===\'CLP\')CFG.parity=1;saveCFG();rb();rc();openSettings();">'+
-        '<option value="CLP" '+(CFG.currency==='CLP'?'selected':'')+'>CLP ($)</option>'+
-        '<option value="USD" '+(CFG.currency==='USD'?'selected':'')+'>USD (US$)</option>'+
-        '<option value="UF" '+(CFG.currency==='UF'?'selected':'')+'>UF</option>'+
-      '</select></div>'+
-      '<div class="cfg-field"><label>Paridad (1 '+sym()+' = ? CLP)</label><input type="number" value="'+CFG.parity+'" oninput="CFG.parity=N(this.value);saveCFG();rc()" onfocus="this.select()"/></div>'+
-      '<div class="cfg-field"><label>Dec. Cantidades</label><input type="number" value="'+CFG.decimalsQty+'" oninput="CFG.decimalsQty=N(this.value);saveCFG();rb()" onfocus="this.select()"/></div>'+
-      '<div class="cfg-field"><label>Dec. P.Unit (APU)</label><input type="number" value="'+CFG.decimalsPrice+'" oninput="CFG.decimalsPrice=N(this.value);saveCFG();rb()" onfocus="this.select()"/></div>'+
-      '<div class="cfg-field"><label>Dec. Totales</label><input type="number" value="'+CFG.decimalsBudget+'" oninput="CFG.decimalsBudget=N(this.value);saveCFG();rb()" onfocus="this.select()"/></div>'+
-      '<div class="cfg-field"><label>Separador Decimal</label><select onchange="CFG.decimalSeparator=this.value;saveCFG();rb();rc();openSettings();">'+
-        '<option value="." '+(CFG.decimalSeparator==='.'?'selected':'')+'>Punto (.)</option>'+
-        '<option value="," '+(CFG.decimalSeparator===','?'selected':'')+'>Coma (,)</option>'+
-      '</select></div>'+
-    '</div></div>'+
-
-    /* IMPRESIÓN */
     '<div class="cfg-section"><h4>Formato de Impresión</h4><div class="cfg-grid">'+
       '<div class="cfg-field"><label>Tamaño de Hoja</label><select onchange="CFG.pageSize=this.value;saveCFG()">'+
         '<option value="letter" '+(CFG.pageSize==='letter'?'selected':'')+'>Carta (Letter)</option>'+
@@ -1132,36 +1115,39 @@ function openSettings(tab){
     '</div>'+
     '<div style="margin-top:15px;margin-bottom:30px"><label style="font-size:11px;font-weight:600;color:var(--navy);text-transform:uppercase;display:block;margin-bottom:10px">Secciones a Imprimir</label>'+
       '<div style="display:grid;grid-template-columns:180px 140px;gap:8px 0;align-items:center">'+
-        '<label class="chk-opt" style="margin:0"><input type="checkbox" '+(CFG.printCover?'checked':'')+' onchange="CFG.printCover=this.checked;saveCFG()"> Portada</label>'+
+        '<label class="chk-opt" style="margin:0"><input type="checkbox" '+(CFG.printCover?'checked':'')+'  onchange="CFG.printCover=this.checked;saveCFG()"> Portada</label>'+
         '<span></span>'+
-        '<label class="chk-opt" style="margin:0"><input type="checkbox" '+(CFG.printApu?'checked':'')+' onchange="CFG.printApu=this.checked;saveCFG()"/> APUs</label>'+
+        '<label class="chk-opt" style="margin:0"><input type="checkbox" '+(CFG.printApu?'checked':'')+'  onchange="CFG.printApu=this.checked;saveCFG()"/> APUs</label>'+
         '<select onchange="CFG.apuPrintMode=this.value;saveCFG()" style="padding:4px 7px;border-radius:4px;border:1px solid var(--border2);font-size:11px;width:130px">'+
           '<option value="continuo" '+(CFG.apuPrintMode==='continuo'?'selected':'')+'>Continuo</option>'+
           '<option value="por hoja" '+(CFG.apuPrintMode==='por hoja'?'selected':'')+'>Por hoja</option>'+
         '</select>'+
-        '<label class="chk-opt" style="margin:0"><input type="checkbox" '+(CFG.printCub?'checked':'')+' onchange="CFG.printCub=this.checked;saveCFG()"/> Cubicaciones</label>'+
+        '<label class="chk-opt" style="margin:0"><input type="checkbox" '+(CFG.printCub?'checked':'')+'  onchange="CFG.printCub=this.checked;saveCFG()"/> Cubicaciones</label>'+
         '<select onchange="CFG.cubPrintMode=this.value;saveCFG()" style="padding:4px 7px;border-radius:4px;border:1px solid var(--border2);font-size:11px;width:130px">'+
           '<option value="continuo" '+(CFG.cubPrintMode==='continuo'?'selected':'')+'>Continuo</option>'+
           '<option value="por hoja" '+(CFG.cubPrintMode==='por hoja'?'selected':'')+'>Por hoja</option>'+
         '</select>'+
-        '<label class="chk-opt" style="margin:0"><input type="checkbox" '+(CFG.printGG?'checked':'')+' onchange="CFG.printGG=this.checked;saveCFG()"> Gastos Generales</label>'+
+        '<label class="chk-opt" style="margin:0"><input type="checkbox" '+(CFG.printGG?'checked':'')+'  onchange="CFG.printGG=this.checked;saveCFG()"> Gastos Generales</label>'+
         '<span></span>'+
-        '<label class="chk-opt" style="margin:0"><input type="checkbox" '+(CFG.printPayment?'checked':'')+' onchange="CFG.printPayment=this.checked;saveCFG()"> Forma de pago</label>'+
+        '<label class="chk-opt" style="margin:0"><input type="checkbox" '+(CFG.printPayment?'checked':'')+'  onchange="CFG.printPayment=this.checked;saveCFG()"> Forma de pago</label>'+
         '<span></span>'+
-        '<label class="chk-opt" style="margin:0"><input type="checkbox" '+(CFG.printExecution?'checked':'')+' onchange="CFG.printExecution=this.checked;saveCFG()"> Plazo ejecución</label>'+
+        '<label class="chk-opt" style="margin:0"><input type="checkbox" '+(CFG.printExecution?'checked':'')+'  onchange="CFG.printExecution=this.checked;saveCFG()"> Plazo ejecución</label>'+
         '<span></span>'+
-        '<label class="chk-opt" style="margin:0"><input type="checkbox" '+(CFG.printNotes?'checked':'')+' onchange="CFG.printNotes=this.checked;saveCFG()"> Notas</label>'+
+        '<label class="chk-opt" style="margin:0"><input type="checkbox" '+(CFG.printNotes?'checked':'')+'  onchange="CFG.printNotes=this.checked;saveCFG()"> Notas</label>'+
         '<span></span>'+
       '</div></div>'+
+    '</div></div>'+
 
-    /* EMPRESA */
+    /* ── PANEL EMPRESA ── */
+    '<div class="cfg-tab-pnl '+(tab==='empresa'?'on':'')+'" id="cfg-pnl-empresa">'+
+    '<div class="mb" style="padding:0">'+
     '<div class="cfg-section"><h4>Empresa Constructora</h4><div class="cfg-grid">'+
-      '<div class="cfg-field"><label>Nombre</label><input value="'+esc(CFG.companyName)+'" oninput="CFG.companyName=this.value;saveCFG();updBrand()"/></div>'+
-      '<div class="cfg-field"><label>Rubro/Industria</label><input value="'+esc(CFG.companyTagline)+'" oninput="CFG.companyTagline=this.value;saveCFG()"/></div>'+
-      '<div class="cfg-field"><label>Dirección</label><input value="'+esc(CFG.companyAddress)+'" oninput="CFG.companyAddress=this.value;saveCFG()"/></div>'+
-      '<div class="cfg-field"><label>Teléfono / Celular</label><input value="'+esc(CFG.companyPhone)+'" oninput="CFG.companyPhone=this.value;saveCFG()"/></div>'+
-      '<div class="cfg-field"><label>Email</label><input value="'+esc(CFG.companyEmail)+'" oninput="CFG.companyEmail=this.value;saveCFG()"/></div>'+
-      '<div class="cfg-field"><label>Web</label><input value="'+esc(CFG.companyWeb)+'" oninput="CFG.companyWeb=this.value;saveCFG()"/></div>'+
+      '<div class="cfg-field"><label>Nombre</label><input value="'+esc(CFG.companyName)+'" onfocus="this.select()" oninput="CFG.companyName=this.value;saveCFG();updBrand()"/></div>'+
+      '<div class="cfg-field"><label>Rubro/Industria</label><input value="'+esc(CFG.companyTagline)+'" onfocus="this.select()" oninput="CFG.companyTagline=this.value;saveCFG()"/></div>'+
+      '<div class="cfg-field"><label>Dirección</label><input value="'+esc(CFG.companyAddress)+'" onfocus="this.select()" oninput="CFG.companyAddress=this.value;saveCFG()"/></div>'+
+      '<div class="cfg-field"><label>Teléfono / Celular</label><input value="'+esc(CFG.companyPhone)+'" onfocus="this.select()" oninput="CFG.companyPhone=this.value;saveCFG()"/></div>'+
+      '<div class="cfg-field"><label>Email</label><input value="'+esc(CFG.companyEmail)+'" onfocus="this.select()" oninput="CFG.companyEmail=this.value;saveCFG()"/></div>'+
+      '<div class="cfg-field"><label>Web</label><input value="'+esc(CFG.companyWeb)+'" onfocus="this.select()" oninput="CFG.companyWeb=this.value;saveCFG()"/></div>'+
       '<div class="cfg-field"><label>Color Informe</label><input type="color" value="'+CFG.colorHeader+'" oninput="CFG.colorHeader=this.value;saveCFG();applyColor()"/></div>'+
       '<div class="cfg-field"><label>Logo</label>'+
         '<div style="display:flex;gap:10px;align-items:center">'+
@@ -1171,41 +1157,50 @@ function openSettings(tab){
         '<input type="file" id="logoInp" style="display:none" onchange="hLogo(this)"/>'+
       '</div>'+
     '</div></div>'+
-
-    /* FIRMANTES */
     '<div class="cfg-section"><h4>Firmantes</h4><div class="cfg-grid">'+
-      '<div class="cfg-field"><label>Rep. Legal</label><input value="'+esc(CFG.repLegal)+'" oninput="CFG.repLegal=this.value;saveCFG()"/></div>'+
-      '<div class="cfg-field"><label>Profesional</label><input value="'+esc(CFG.profName)+'" oninput="CFG.profName=this.value;saveCFG()"/></div>'+
+      '<div class="cfg-field"><label>Rep. Legal</label><input value="'+esc(CFG.repLegal)+'" onfocus="this.select()" oninput="CFG.repLegal=this.value;saveCFG()"/></div>'+
+      '<div class="cfg-field"><label>Profesional</label><input value="'+esc(CFG.profName)+'" onfocus="this.select()" oninput="CFG.profName=this.value;saveCFG()"/></div>'+
     '</div></div>'+
-
-    /* IMAGEN PORTADA */
     '<div class="cfg-section"><h4>Imagen Portada</h4>'+
       '<div style="display:flex;gap:15px;align-items:center">'+
         '<button class="bs" onclick="document.getElementById(\'covInp\').click()">Subir Imagen Portada</button>'+
-        (CFG.coverImgUrl?'<img src="'+CFG.coverImgUrl+'" style="height:40px;border:1px solid #eee"/><button class="bs del" onclick="CFG.coverImgUrl=\'\';saveCFG();openSettings()">×</button>':'')+
+        (CFG.coverImgUrl?'<img src="'+CFG.coverImgUrl+'" style="height:40px;border:1px solid #eee"/><button class="bs del" onclick="CFG.coverImgUrl=\'\';saveCFG();openSettings(\'empresa\')">×</button>':'')+
       '</div>'+
       '<input type="file" id="covInp" style="display:none" onchange="hCov(this)"/>'+
     '</div>'+
+    '</div></div>'+
 
-    /* AUTOSAVE */
+    /* ── PANEL MONEDA ── */
+    '<div class="cfg-tab-pnl '+(tab==='moneda'?'on':'')+'" id="cfg-pnl-moneda">'+
+    '<div class="mb" style="padding:0">'+
+    '<div class="cfg-section"><h4>Moneda y Decimales</h4><div class="cfg-grid">'+
+      '<div class="cfg-field"><label>Moneda</label><select onchange="CFG.currency=this.value;if(this.value===\'CLP\')CFG.parity=1;saveCFG();rb();rc();openSettings(\'moneda\');">'+
+        '<option value="CLP" '+(CFG.currency==='CLP'?'selected':'')+'>CLP ($)</option>'+
+        '<option value="USD" '+(CFG.currency==='USD'?'selected':'')+'>USD (US$)</option>'+
+        '<option value="UF" '+(CFG.currency==='UF'?'selected':'')+'>UF</option>'+
+      '</select></div>'+
+      '<div class="cfg-field"><label>Paridad (1 '+sym()+' = ? CLP)</label><input type="number" value="'+CFG.parity+'" onfocus="this.select()" oninput="CFG.parity=N(this.value);saveCFG();rc()"/></div>'+
+      '<div class="cfg-field"><label>Dec. Cantidades</label><input type="number" value="'+CFG.decimalsQty+'" onfocus="this.select()" oninput="CFG.decimalsQty=N(this.value);saveCFG();rb()"/></div>'+
+      '<div class="cfg-field"><label>Dec. P.Unit (APU)</label><input type="number" value="'+CFG.decimalsPrice+'" onfocus="this.select()" oninput="CFG.decimalsPrice=N(this.value);saveCFG();rb()"/></div>'+
+      '<div class="cfg-field"><label>Dec. Totales</label><input type="number" value="'+CFG.decimalsBudget+'" onfocus="this.select()" oninput="CFG.decimalsBudget=N(this.value);saveCFG();rb()"/></div>'+
+      '<div class="cfg-field"><label>Separador Decimal</label><select onchange="CFG.decimalSeparator=this.value;saveCFG();rb();rc();openSettings(\'moneda\');">'+
+        '<option value="." '+(CFG.decimalSeparator==='.'?'selected':'')+'>Punto (.)</option>'+
+        '<option value="," '+(CFG.decimalSeparator===','?'selected':'')+'>Coma (,)</option>'+
+      '</select></div>'+
+    '</div></div>'+
     '<div class="cfg-section"><h4>Guardado Automático</h4><div class="cfg-grid">'+
-      '<label class="chk-opt"><input type="checkbox" '+(CFG.autoSave?'checked':'')+' onchange="CFG.autoSave=this.checked;saveCFG();setupAutoSave()"> Activar Guardado Automático</label>'+
-      '<div class="cfg-field"><label>Intervalo (segundos)</label><input type="number" value="'+CFG.autoSaveInterval+'" oninput="CFG.autoSaveInterval=N(this.value);saveCFG();setupAutoSave()" onfocus="this.select()"/></div>'+
+      '<label class="chk-opt"><input type="checkbox" '+(CFG.autoSave?'checked':'')+'  onchange="CFG.autoSave=this.checked;saveCFG();setupAutoSave()"> Activar Guardado Automático</label>'+
+      '<div class="cfg-field"><label>Intervalo (segundos)</label><input type="number" value="'+CFG.autoSaveInterval+'" onfocus="this.select()" oninput="CFG.autoSaveInterval=N(this.value);saveCFG();setupAutoSave()"/></div>'+
     '</div></div>'+
-
-    /* PRORRATEO */
     '<div class="cfg-section"><h4>Prorrateo</h4><div class="chk-opts">'+
-      '<label class="chk-opt"><input type="checkbox" '+(CFG.ggProrrateado?'checked':'')+' onchange="CFG.ggProrrateado=this.checked;saveCFG();rc()"> Prorratear Gastos Generales en APU</label>'+
-      '<label class="chk-opt"><input type="checkbox" '+(CFG.utilProrrateado?'checked':'')+' onchange="CFG.utilProrrateado=this.checked;saveCFG();rc()"> Prorratear Utilidad en APU</label>'+
-      '<label class="chk-opt"><input type="checkbox" '+(CFG.impProrrateado?'checked':'')+' onchange="CFG.impProrrateado=this.checked;saveCFG();rc()"> Prorratear Imprevistos en APU</label>'+
+      '<label class="chk-opt"><input type="checkbox" '+(CFG.ggProrrateado?'checked':'')+'  onchange="CFG.ggProrrateado=this.checked;saveCFG();rc()"> Prorratear Gastos Generales en APU</label>'+
+      '<label class="chk-opt"><input type="checkbox" '+(CFG.utilProrrateado?'checked':'')+'  onchange="CFG.utilProrrateado=this.checked;saveCFG();rc()"> Prorratear Utilidad en APU</label>'+
+      '<label class="chk-opt"><input type="checkbox" '+(CFG.impProrrateado?'checked':'')+'  onchange="CFG.impProrrateado=this.checked;saveCFG();rc()"> Prorratear Imprevistos en APU</label>'+
     '</div></div>'+
-
-    '</div>'+  /* fin cfg-section prorrateo */
-    '</div>'+  /* fin mb padding:0 */
-    '</div>'+  /* fin cfg-tab-pnl config */
+    '</div></div>'+
 
     /* ── PANEL AYUDA ── */
-    '<div class="cfg-tab-pnl '+(tab==='help'?'on':'')+'" id="cfg-pnl-help" style="max-height:60vh;overflow-y:auto">'+
+    '<div class="cfg-tab-pnl '+(tab==='ayuda'?'on':'')+'" id="cfg-pnl-ayuda" style="max-height:60vh;overflow-y:auto">'+
     '<div class="help-content">'+
 
     /* BIENVENIDA */
