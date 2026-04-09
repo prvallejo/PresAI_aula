@@ -1089,8 +1089,8 @@ function openSettings(tab){
     '<div class="mh"><h3>⚙️ PresAI — Configuración y Ayuda</h3><button class="btn-s" onclick="closeMod()">✕</button></div>'+
     '<div class="mb">'+
     '<div class="cfg-tabs">'+
-      '<div class="cfg-tab '+(tab==='config'?'on':''+'"')+'" id="cfg-tab-config" onclick="swCfgTab(\"config\")">⚙️ Configuración</div>'+
-      '<div class="cfg-tab '+(tab==='help'?'on':''+'"')+'" id="cfg-tab-help" onclick="swCfgTab(\"help\")">❔ Ayuda</div>'+
+      '<div class="cfg-tab '+(tab==='config'?'on':'')+' id="cfg-tab-config" onclick="swCfgTab(\"config\")">⚙️ Configuración</div>'+
+      '<div class="cfg-tab '+(tab==='help'?'on':'')+' id="cfg-tab-help" onclick="swCfgTab(\"help\")">❔ Ayuda</div>'+
     '</div>'+
     '<div class="cfg-tab-pnl '+(tab==='config'?'on':'')+'" id="cfg-pnl-config">'+
     '<div class="mb" style="padding:0">'+
@@ -1205,7 +1205,7 @@ function openSettings(tab){
     '</div>'+  /* fin cfg-tab-pnl config */
 
     /* ── PANEL AYUDA ── */
-    '<div class="cfg-tab-pnl '+(tab==='help'?'on':''+'"')+' id="cfg-pnl-help" style="max-height:60vh;overflow-y:auto">'+
+    '<div class="cfg-tab-pnl '+(tab==='help'?'on':'')+' id="cfg-pnl-help" style="max-height:60vh;overflow-y:auto">'+
     '<div class="help-content">'+
 
     /* BIENVENIDA */
