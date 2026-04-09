@@ -904,7 +904,7 @@ function genPrintHtml(){
 
   var ggHtml='';
   if(CFG.printGG&&ggSubgroups.length>0){
-    ggHtml='<div style="padding:10mm;padding-bottom:30mm;page-break-after:always">'+runHdr+'<h3 style="font-size:14px;color:'+color+';border-bottom:2px solid #eee;padding-bottom:5px;margin-bottom:15px">Gastos Generales Detallados</h3>';
+    ggHtml='<div style="padding:10mm;padding-bottom:10mm;page-break-after:always">'+runHdr+'<h3 style="font-size:14px;color:'+color+';border-bottom:2px solid #eee;padding-bottom:5px;margin-bottom:15px">Gastos Generales Detallados</h3>';
     ggSubgroups.forEach(sg=>{
       let sgTotal=sg.items.reduce((a,it)=>a+N(it.qty)*N(it.price),0);
       ggHtml+='<div style="margin-bottom:20px;border:1px solid #eee;border-radius:5px;overflow:hidden"><div style="background:#f9f9f9;padding:8px;font-weight:600;color:'+color+'">'+esc(sg.name)+' - '+s+' '+fmtB(sgTotal)+'</div>'+
@@ -919,7 +919,7 @@ function genPrintHtml(){
 
   var apuHtml='';
   if(CFG.printApu){
-    apuHtml='<div style="padding:10mm;padding-bottom:30mm;page-break-after:always">'+runHdr+'<h3 style="font-size:14px;color:'+color+';border-bottom:2px solid #eee;padding-bottom:5px;margin-bottom:15px">Análisis de Precios Unitarios</h3>';
+    apuHtml='<div style="padding:10mm;padding-bottom:10mm;page-break-after:always">'+runHdr+'<h3 style="font-size:14px;color:'+color+';border-bottom:2px solid #eee;padding-bottom:5px;margin-bottom:15px">Análisis de Precios Unitarios</h3>';
     items.forEach(it=>{
       if(it.t!=='it'||!apuData[it.id])return;
       let a=apuData[it.id],mo=a.secs[0].rows.reduce((x,r)=>x+N(r.qty)*N(r.price),0);
@@ -940,7 +940,7 @@ function genPrintHtml(){
 
   var cubHtml='';
   if(CFG.printCub){
-    cubHtml='<div style="padding:10mm;padding-bottom:30mm;page-break-after:always">'+runHdr+'<h3 style="font-size:14px;color:'+color+';border-bottom:2px solid #eee;padding-bottom:5px;margin-bottom:15px">Memoria de Cubicaciones</h3>';
+    cubHtml='<div style="padding:10mm;padding-bottom:10mm;page-break-after:always">'+runHdr+'<h3 style="font-size:14px;color:'+color+';border-bottom:2px solid #eee;padding-bottom:5px;margin-bottom:15px">Memoria de Cubicaciones</h3>';
     items.forEach(it=>{
       if(it.t!=='it'||!tofData[it.id]||!tofData[it.id].length)return;
       let rows=tofData[it.id],total=rows.reduce((x,r)=>x+(N(r.n)*Math.max(1,N(r.a))*Math.max(1,N(r.l))*Math.max(1,N(r.h))),0);
@@ -1009,7 +1009,7 @@ function genPrintHtml(){
     '</div>';
   }
 
-  html+='<div style="padding:10mm;padding-bottom:30mm">'+runHdr+
+  html+='<div style="padding:10mm;padding-bottom:30mm;page-break-after:always">'+runHdr+
     '<h3 style="font-size:14px;color:'+color+';border-bottom:2px solid #eee;padding-bottom:5px;margin-bottom:15px">Presupuesto Detallado</h3>'+
     '<table><thead><tr style="background:#f9f9f9"><th>Ítem</th><th>Descripción</th><th style="text-align:center">Unid</th><th style="text-align:right">Cant.</th><th style="text-align:right">P.Unit. ('+s+')</th><th style="text-align:right">Total ('+s+')</th></tr></thead><tbody>'+trows+'</tbody></table>'+
     '<div style="width:250px;margin-left:auto;margin-top:20px;font-size:11px">'+
@@ -1022,11 +1022,11 @@ function genPrintHtml(){
       '<div style="display:flex;justify-content:space-between;padding:5px 0;border-top:2px solid #333;font-weight:700;font-size:14px;color:'+color+'"><span>TOTAL GENERAL</span><span>'+s+' '+fmtB(grand)+'</span></div>'+
     '</div>'+
     '<p style="font-size:9px;font-style:italic;text-align:right;margin-top:5px">'+numToWords(grand)+'</p>'+
-    (ggHtml||apuHtml||cubHtml||extraInfo?'':signatures)+'</div>'+
-    ggHtml+apuHtml+cubHtml+extraInfo+
-    (ggHtml||apuHtml||cubHtml||extraInfo?'<div style="padding:10mm;padding-bottom:30mm;position:relative;min-height:200px">'+signatures+'</div>':'')+
-    footer+
-  '</body></html>';
+    '</div>';
+    
+  html += ggHtml + apuHtml + cubHtml + extraInfo;
+  html += '<div style="padding:10mm;padding-bottom:30mm;position:relative;page-break-inside:avoid">' + signatures + '</div>';
+  html += footer + '</body></html>';
 
   return html;
 }
