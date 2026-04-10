@@ -449,7 +449,7 @@ const CFG_DEF = {
   repLegal:'', repLegalRut:'', profName:'', profRut:'',
   colorHeader:'#1e3a5f', logoDataUrl:'', coverImgUrl:'',
   printCover:true, printApu:true, printCub:true, printGG:false,
-  printPayment:true, printExecution:true, printNotes:true, printBudgetNum:false, printPcts:true, printNoteImages:true,
+  printPayment:true, printExecution:true, printNotes:true, printBudgetNum:false, printPcts:true, printNoteImages:true, printItemNotes:true,
   pageSize:'letter', apuPrintMode:'continuo', cubPrintMode:'continuo',
   autoSave:true, autoSaveInterval:300, ggProrrateado:false, utilProrrateado:false, impProrrateado:false,
   impPorApu:false, impVisible:false,
@@ -592,8 +592,14 @@ function rb(){
     var qtyClass=it.isCub?'ri r magenta':'ri r';
     var priceClass=it.isApu?'ri r magenta':'ri r';
     return `<div class="row-it" data-id="${it.id}">
-      <input class="ri mono" data-field="num" data-id="${it.id}" placeholder="N°" value="${esc(it.num)}" autocomplete="off"/>
-      <input class="ri" data-field="name" data-id="${it.id}" placeholder="Descripción..." value="${esc(it.name)}" autocomplete="off"/>
+      <div style="display:flex;align-items:center;gap:4px">
+        <button class="bs" style="padding:2px 5px;font-size:10px;font-weight:700;color:${it.note?'var(--magenta)':'#94a3b8'};border-color:${it.note?'var(--magenta)':'#e2e8f0'}" onclick="openItemNote('${it.id}')">T</button>
+        <input class="ri mono" style="width:40px" data-field="num" data-id="${it.id}" placeholder="N°" value="${esc(it.num)}" autocomplete="off"/>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column">
+        <input class="ri" data-field="name" data-id="${it.id}" placeholder="Descripción..." value="${esc(it.name)}" autocomplete="off"/>
+        ${it.note ? `<div style="font-size:10px;color:#64748b;font-style:italic;margin-top:2px;padding-left:4px;line-height:1.2">${esc(it.note)}</div>` : ''}
+      </div>
       <input class="ri" style="width:55px" data-field="unit" data-id="${it.id}" placeholder="Unid" value="${esc(it.unit)}" autocomplete="off"/>
 	      <input class="${qtyClass}" data-field="qty" data-id="${it.id}" placeholder="0" value="${fmtQBudget(N(it.qty))}" onfocus="this.select()" autocomplete="off"/>
       <input class="${priceClass}" data-field="price" data-id="${it.id}" placeholder="P.Unit." value="${fmtP(N(it.price))}" onfocus="this.select()" autocomplete="off"/>
@@ -957,7 +963,7 @@ function genPrintHtml(){
     if(it.t==='ch'){
       trows+='<tr style="background:'+color+'18"><td colspan="2" style="font-weight:700;color:'+color+';padding:6px 8px;font-size:10px">'+esc(it.num)+'&nbsp;&nbsp;'+esc(it.name)+'</td><td></td><td></td><td></td><td style="text-align:right;font-family:monospace;font-weight:700;color:'+color+';padding:6px 8px">'+fmtB(ct[it.id]||0)+'</td></tr>';
     } else {
-	      trows+='<tr><td style="font-family:monospace;font-size:9px;padding:5px 8px;color:#475569">'+esc(it.num)+'</td><td style="padding:5px 8px">'+esc(it.name)+'</td><td style="text-align:center;padding:5px 8px;font-size:9px">'+esc(it.unit)+'</td><td style="text-align:right;font-family:monospace;padding:5px 8px">'+fmtQBudget(N(it.qty))+'</td><td style="text-align:right;font-family:monospace;padding:5px 8px">'+fmtP(N(it.price))+'</td><td style="text-align:right;font-family:monospace;padding:5px 8px;font-weight:500">'+fmtB(N(it.qty)*N(it.price))+'</td></tr>';
+	      trows+='<tr><td style="font-family:monospace;font-size:9px;padding:5px 8px;color:#475569">'+esc(it.num)+'</td><td style="padding:5px 8px">'+esc(it.name)+(CFG.printItemNotes && it.note ? '<div style="font-size:8px;color:#64748b;font-style:italic;margin-top:2px">'+esc(it.note)+'</div>' : '')+'</td><td style="text-align:center;padding:5px 8px;font-size:9px">'+esc(it.unit)+'</td><td style="text-align:right;font-family:monospace;padding:5px 8px">'+fmtQBudget(N(it.qty))+'</td><td style="text-align:right;font-family:monospace;padding:5px 8px">'+fmtP(N(it.price))+'</td><td style="text-align:right;font-family:monospace;padding:5px 8px;font-weight:500">'+fmtB(N(it.qty)*N(it.price))+'</td></tr>';
     }
   });
 
@@ -1196,6 +1202,7 @@ function openSettings(activeTab){
         '<label class="chk-opt"><input type="checkbox" '+(CFG.printPayment?'checked':'')+' onchange="CFG.printPayment=this.checked;saveCFG()"> Forma de pago</label>'+
         '<label class="chk-opt"><input type="checkbox" '+(CFG.printExecution?'checked':'')+' onchange="CFG.printExecution=this.checked;saveCFG()"> Plazo ejecución</label>'+
         '<label class="chk-opt"><input type="checkbox" '+(CFG.printNotes?'checked':'')+' onchange="CFG.printNotes=this.checked;saveCFG()"> Notas</label>'+
+	        '<label class="chk-opt" style="margin-left:20px"><input type="checkbox" '+(CFG.printItemNotes?'checked':'')+' onchange="CFG.printItemNotes=this.checked;saveCFG();rb()"> Texto en partidas</label>'+
 	        '<div style="margin-left:20px;display:flex;align-items:center;gap:10px">'+
 	          '<span style="font-size:11px;color:var(--txt2)">Imágenes</span>'+
 	          '<select onchange="CFG.printNoteImages=(this.value===\'on\');saveCFG()" style="padding:2px 4px;border-radius:4px;border:1px solid var(--border2);font-size:11px">'+
@@ -1359,7 +1366,7 @@ function saveProject(){
     cfgPrintCover:CFG.printCover, cfgPrintApu:CFG.printApu,
     cfgPrintCub:CFG.printCub, cfgPrintGG:CFG.printGG,
     cfgPrintPayment:CFG.printPayment, cfgPrintExecution:CFG.printExecution,
-    cfgPrintNotes:CFG.printNotes, cfgPrintBudgetNum:CFG.printBudgetNum, cfgPrintNoteImages:CFG.printNoteImages,
+    cfgPrintNotes:CFG.printNotes, cfgPrintBudgetNum:CFG.printBudgetNum, cfgPrintNoteImages:CFG.printNoteImages, cfgPrintItemNotes:CFG.printItemNotes,
     cfgPageSize:CFG.pageSize, cfgApuPrintMode:CFG.apuPrintMode,
     cfgCubPrintMode:CFG.cubPrintMode, cfgCurrency:CFG.currency,
 	    cfgParity:CFG.parity, cfgDecimalsQty:CFG.decimalsQty, cfgDecimalsQtyBudget:CFG.decimalsQtyBudget,
@@ -1436,6 +1443,7 @@ function loadP(id){
   if(p.cfgPrintExecution!=null) CFG.printExecution=p.cfgPrintExecution;
   if(p.cfgPrintNotes!=null) CFG.printNotes=p.cfgPrintNotes;
   if(p.cfgPrintNoteImages!=null) CFG.printNoteImages=p.cfgPrintNoteImages;
+  if(p.cfgPrintItemNotes!=null) CFG.printItemNotes=p.cfgPrintItemNotes;
   if(p.cfgPrintBudgetNum!=null) CFG.printBudgetNum=p.cfgPrintBudgetNum;
   if(p.cfgPageSize!=null) CFG.pageSize=p.cfgPageSize;
   if(p.cfgApuPrintMode!=null) CFG.apuPrintMode=p.cfgApuPrintMode;
@@ -1662,6 +1670,32 @@ function delNoteImg(idx){
   }
 }
 
+function openItemNote(id){
+  let it=items.find(x=>x.id===id);if(!it)return;
+  document.getElementById('ov').style.display='block';
+  document.getElementById('mc').innerHTML=`<div class="modal" style="max-width:400px">
+    <div class="mh"><h3>Texto Especial: ${esc(it.num)}</h3><button class="btn-s" onclick="closeMod()">✕</button></div>
+    <div class="mb">
+      <label style="font-size:11px;color:var(--txt2);margin-bottom:8px;display:block">Este texto se imprimirá bajo la descripción de la partida (máx. 350 caracteres).</label>
+      <textarea id="item-note-text" style="width:100%;height:120px;padding:10px;border:1px solid var(--border);border-radius:6px;font-size:13px;resize:none" maxlength="350" placeholder="Escribe aquí la nota especial...">${it.note||''}</textarea>
+      <div id="char-count" style="text-align:right;font-size:10px;color:#94a3b8;margin-top:4px">${(it.note||'').length}/350</div>
+    </div>
+    <div class="mf" style="display:flex;justify-content:space-between">
+      <button class="btn-p del" onclick="saveItemNote('${id}', '')">Borrar</button>
+      <button class="btn-p blue" onclick="saveItemNote('${id}', document.getElementById('item-note-text').value)">Guardar</button>
+    </div>
+  </div>`;
+  document.getElementById('item-note-text').oninput = function(){
+    document.getElementById('char-count').textContent = this.value.length + '/350';
+  };
+  document.getElementById('item-note-text').focus();
+}
+
+function saveItemNote(id, text){
+  items = items.map(it => it.id === id ? Object.assign({}, it, {note: text.trim()}) : it);
+  rb(); markUnsaved(); closeMod();
+}
+
 function addExtraNote(){
   if(!CFG.extraNotes) CFG.extraNotes = [];
   CFG.extraNotes.push('');
@@ -1708,7 +1742,7 @@ function saveProjectSilent(){
     cfgPrintCover:CFG.printCover, cfgPrintApu:CFG.printApu,
     cfgPrintCub:CFG.printCub, cfgPrintGG:CFG.printGG,
     cfgPrintPayment:CFG.printPayment, cfgPrintExecution:CFG.printExecution,
-    cfgPrintNotes:CFG.printNotes, cfgPrintBudgetNum:CFG.printBudgetNum, cfgPrintNoteImages:CFG.printNoteImages,
+    cfgPrintNotes:CFG.printNotes, cfgPrintBudgetNum:CFG.printBudgetNum, cfgPrintNoteImages:CFG.printNoteImages, cfgPrintItemNotes:CFG.printItemNotes,
     cfgPageSize:CFG.pageSize, cfgApuPrintMode:CFG.apuPrintMode,
     cfgCubPrintMode:CFG.cubPrintMode, cfgCurrency:CFG.currency,
 	    cfgParity:CFG.parity, cfgDecimalsQty:CFG.decimalsQty, cfgDecimalsQtyBudget:CFG.decimalsQtyBudget,
