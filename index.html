@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
 <title>PresAI — Presupuesto de Obra</title>
 <style>
@@ -898,7 +899,20 @@ function genPrintHtml(){
   var pGG=N(document.getElementById('pGG').value),pU=N(document.getElementById('pUtil').value),pImp=N(document.getElementById('pImp').value),pIVA=N(document.getElementById('pIVA').value);
   var ggV=ggF?dc*(pGG/100):ggSubgroups.reduce((a,sg)=>a+sg.items.reduce((b,it)=>b+N(it.qty)*N(it.tiempoUso)*N(it.price),0),0);
   var util=dc*(pU/100),imp=dc*(pImp/100),net=dc+ggV+util+imp,iva=net*(pIVA/100),grand=net+iva;
-  var grandDisplay=(CFG.currency!=='CLP'&&CFG.parity>0)?grand/CFG.parity:grand;
+	  var grandDisplay=(CFG.currency!=='CLP'&&CFG.parity>0)?grand/CFG.parity:grand;
+
+	  // Generar QR
+	  var qrHtml = '';
+	  try {
+	    var qr = qrcode(0, 'M');
+	    qr.addData(window.location.href);
+	    qr.make();
+	    qrHtml = '<div style="text-align:center;margin-top:20px;">' + 
+	             '<div style="font-size:8px;color:#64748b;margin-bottom:4px;text-transform:uppercase;letter-spacing:1px">Validar Informe</div>' +
+	             qr.createImgTag(3) + 
+	             '</div>';
+	  } catch(e) { console.error('Error generando QR', e); }
+
 
   var pageSize=CFG.pageSize==='legal'?'legal':'letter';
   var margins=pageSize==='legal'?'12mm 12mm 22mm 12mm':'10mm 10mm 20mm 10mm';
@@ -1038,9 +1052,9 @@ apuHtml+='<tr style="background:#fffdf0"><td colspan="4" style="padding:3px 8px"
       '<div style="display:flex;justify-content:space-between;padding:5px 0;border-top:2px solid #333;font-weight:700;font-size:14px;color:'+color+'"><span>TOTAL GENERAL</span><span>'+s+' '+fmtB(grand)+'</span></div>'+
     '</div>'+
     '<p style="font-size:9px;font-style:italic;text-align:right;margin-top:5px">'+numToWords(grandDisplay)+'</p>'+
-    (ggHtml||apuHtml||cubHtml||extraInfo?'':signatures)+'</div>'+
-    ggHtml+apuHtml+cubHtml+extraInfo+
-    (ggHtml||apuHtml||cubHtml||extraInfo?'<div style="padding:10mm;padding-bottom:30mm;position:relative;min-height:200px">'+signatures+'</div>':'')+
+	    (ggHtml||apuHtml||cubHtml||extraInfo?'':qrHtml+signatures)+'</div>'+
+	    ggHtml+apuHtml+cubHtml+extraInfo+
+	    (ggHtml||apuHtml||cubHtml||extraInfo?'<div style="padding:10mm;padding-bottom:30mm;position:relative;min-height:200px">'+qrHtml+signatures+'</div>':'')+
   '</body></html>';
 
   return html;
