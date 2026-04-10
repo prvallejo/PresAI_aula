@@ -449,7 +449,7 @@ const CFG_DEF = {
   repLegal:'', repLegalRut:'', profName:'', profRut:'',
   colorHeader:'#1e3a5f', logoDataUrl:'', coverImgUrl:'',
   printCover:true, printApu:true, printCub:true, printGG:false,
-  printPayment:true, printExecution:true, printNotes:true, printBudgetNum:false,
+  printPayment:true, printExecution:true, printNotes:true, printBudgetNum:false, printPcts:true,
   pageSize:'letter', apuPrintMode:'continuo', cubPrintMode:'continuo',
   autoSave:true, autoSaveInterval:300, ggProrrateado:false, utilProrrateado:false, impProrrateado:false,
   impPorApu:false, impVisible:false,
@@ -670,9 +670,9 @@ function rc(){
   
   var html=`<div class="tr2"><span class="tl">Costo Directo</span><span class="tv">${sym()} ${fmtB(dc)}</span></div>`;
   
-  if(!CFG.ggProrrateado){
-    html+=`<div class="tr2"><span class="tl">Gastos Generales${ggF?' ('+pGG+'%)':''}</span><span class="tv">${sym()} ${fmtB(ggV)}</span></div>`;
-  } else {
+if(!CFG.ggProrrateado){
+	    html+=`<div class="tr2"><span class="tl">Gastos Generales (${pGG}%)</span><span class="tv">${sym()} ${fmtB(ggV)}</span></div>`;
+	  } else {
     html+=`<div class="tr2 prorate"><span class="tl">Gastos Generales ($ ${fmtB(ggV)} prorrateados)</span></div>`;
   }
   
@@ -1060,8 +1060,8 @@ apuHtml+='<tr style="background:#fffdf0"><td colspan="4" style="padding:3px 8px"
     '<table><thead><tr style="background:#f9f9f9"><th>Ítem</th><th>Descripción</th><th style="text-align:center">Unid</th><th style="text-align:right">Cant.</th><th style="text-align:right">P.Unit. ('+s+')</th><th style="text-align:right">Total ('+s+')</th></tr></thead><tbody>'+trows+'</tbody></table>'+
     '<div style="width:250px;margin-left:auto;margin-top:20px;font-size:11px">'+
       '<div style="display:flex;justify-content:space-between;padding:3px 0"><span>Costo Directo</span><span>'+s+' '+fmtB(dc)+'</span></div>'+
-      (!CFG.ggProrrateado?'<div style="display:flex;justify-content:space-between;padding:3px 0"><span>Gastos Generales</span><span>'+s+' '+fmtB(ggV)+'</span></div>':'')+
-      (!CFG.utilProrrateado?'<div style="display:flex;justify-content:space-between;padding:3px 0"><span>Utilidad</span><span>'+s+' '+fmtB(util)+'</span></div>':'')+
+(!CFG.ggProrrateado?'<div style="display:flex;justify-content:space-between;padding:3px 0"><span>Gastos Generales'+(CFG.printPcts?' ('+pGG+'%)':'')+'</span><span>'+s+' '+fmtB(ggV)+'</span></div>':'')+
+	      (!CFG.utilProrrateado?'<div style="display:flex;justify-content:space-between;padding:3px 0"><span>Utilidad'+(CFG.printPcts?' ('+pU+'%)':'')+'</span><span>'+s+' '+fmtB(util)+'</span></div>':'')+
       (!CFG.impProrrateado&&pImp>0?'<div style="display:flex;justify-content:space-between;padding:3px 0"><span>Imprevistos</span><span>'+s+' '+fmtB(imp)+'</span></div>':'')+
       '<div style="display:flex;justify-content:space-between;padding:5px 0;border-top:1px solid #333;font-weight:700;font-size:13px;color:'+color+'"><span>TOTAL NETO</span><span>'+s+' '+fmtB(net)+'</span></div>'+
       '<div style="display:flex;justify-content:space-between;padding:3px 0"><span>IVA</span><span>'+s+' '+fmtB(iva)+'</span></div>'+
@@ -1241,6 +1241,10 @@ function openSettings(activeTab){
         '<option value="." '+(CFG.decimalSeparator==='.'?'selected':'')+'>Punto (.)</option>'+
         '<option value="," '+(CFG.decimalSeparator===','?'selected':'')+'>Coma (,)</option>'+
       '</select></div>'+
+      '<div class="cfg-field"><label>Mostrar porcentajes en informe</label><select onchange="CFG.printPcts=(this.value===\'on\');saveCFG();openSettings(\'moneda\');">'+
+        '<option value="on" '+(CFG.printPcts? 'selected':'')+'>Si</option>'+
+        '<option value="off" '+(!CFG.printPcts? 'selected':'')+'>No</option>'+
+      '</select></div>'+
     '</div></div>';
 
   let html='<div class="modal" style="max-width:700px;max-height:90vh;overflow-y:auto">'+
@@ -1330,9 +1334,9 @@ function saveProject(){
     cfgPageSize:CFG.pageSize, cfgApuPrintMode:CFG.apuPrintMode,
     cfgCubPrintMode:CFG.cubPrintMode, cfgCurrency:CFG.currency,
 	    cfgParity:CFG.parity, cfgDecimalsQty:CFG.decimalsQty, cfgDecimalsQtyBudget:CFG.decimalsQtyBudget,
-	    cfgDecimalsPrice:CFG.decimalsPrice, cfgDecimalsBudget:CFG.decimalsBudget,
-    cfgDecimalSeparator:CFG.decimalSeparator
-  };
+cfgDecimalsPrice:CFG.decimalsPrice, cfgDecimalsBudget:CFG.decimalsBudget,
+	    cfgDecimalSeparator:CFG.decimalSeparator, cfgPrintPcts:CFG.printPcts
+	  };
   lsS('od_proj_'+currentProjectId,p);
   let idx=getIdx(),e=idx.find(x=>x.id===currentProjectId);
   if(e){e.obra=obra;e.savedAt=new Date().toISOString();}else idx.unshift({id:currentProjectId,obra,savedAt:new Date().toISOString()});
@@ -1411,8 +1415,9 @@ function loadP(id){
 	  if(p.cfgDecimalsQtyBudget!=null) CFG.decimalsQtyBudget=p.cfgDecimalsQtyBudget;
 	  if(p.cfgDecimalsPrice!=null) CFG.decimalsPrice=p.cfgDecimalsPrice;
   if(p.cfgDecimalsBudget!=null) CFG.decimalsBudget=p.cfgDecimalsBudget;
-  if(p.cfgDecimalSeparator!=null) CFG.decimalSeparator=p.cfgDecimalSeparator;
-  saveCFG();
+if(p.cfgDecimalSeparator!=null) CFG.decimalSeparator=p.cfgDecimalSeparator;
+	  if(p.cfgPrintPcts!=null) CFG.printPcts=p.cfgPrintPcts;
+	  saveCFG();
   document.getElementById('pObra').value=p.obra;
   document.getElementById('pMandante').value=p.mandante||'';
   document.getElementById('pUbicacion').value=p.ubicacion||'';
