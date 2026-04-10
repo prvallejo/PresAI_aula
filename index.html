@@ -449,7 +449,7 @@ const CFG_DEF = {
   repLegal:'', repLegalRut:'', profName:'', profRut:'',
   colorHeader:'#1e3a5f', logoDataUrl:'', coverImgUrl:'',
   printCover:true, printApu:true, printCub:true, printGG:false,
-  printPayment:true, printExecution:true, printNotes:true, printBudgetNum:false, printPcts:true,
+  printPayment:true, printExecution:true, printNotes:true, printBudgetNum:false, printPcts:true, printNoteImages:true,
   pageSize:'letter', apuPrintMode:'continuo', cubPrintMode:'continuo',
   autoSave:true, autoSaveInterval:300, ggProrrateado:false, utilProrrateado:false, impProrrateado:false,
   impPorApu:false, impVisible:false,
@@ -1023,10 +1023,26 @@ apuHtml+='<tr style="background:#fffdf0"><td colspan="4" style="padding:3px 8px"
     if(CFG.printExecution && execution) extraInfo += '<p style="font-size:11px;margin-bottom:10px"><strong>Plazo de Ejecución:</strong> '+esc(execution)+'</p>';
     if(CFG.printNotes){
       let allNotes = (CFG.notes||[]).concat(CFG.extraNotes||[]).filter(n => n.trim());
-      if(allNotes.length > 0){
-        extraInfo += '<div style="margin-top:20px"><h4 style="font-size:12px;color:'+color+';margin-bottom:10px">Notas al Presupuesto:</h4><ol style="font-size:10px;padding-left:20px">';
-        allNotes.forEach(n => { extraInfo += '<li style="margin-bottom:5px">'+esc(n)+'</li>'; });
-        extraInfo += '</ol></div>';
+      let hasImages = CFG.printNoteImages && CFG.noteImages && CFG.noteImages.length > 0;
+      if(allNotes.length > 0 || hasImages){
+        extraInfo += '<div style="margin-top:20px"><h4 style="font-size:12px;color:'+color+';margin-bottom:10px">Notas al Presupuesto:</h4>';
+        if(allNotes.length > 0) {
+          extraInfo += '<ol style="font-size:10px;padding-left:20px">';
+          allNotes.forEach(n => { extraInfo += '<li style="margin-bottom:5px">'+esc(n)+'</li>'; });
+          extraInfo += '</ol>';
+        }
+        if(hasImages) {
+          extraInfo += '<div style="margin-top:20px;display:grid;grid-template-columns:repeat(2,1fr);gap:15px">';
+          CFG.noteImages.forEach(img => {
+            let associatedPartida = img.partidaIdx >= 0 && img.partidaIdx < items.filter(it=>it.t==='it').length ? items.filter(it=>it.t==='it')[img.partidaIdx] : null;
+            extraInfo += '<div style="border:1px solid #eee;padding:10px;border-radius:5px;text-align:center;page-break-inside:avoid">'+
+              '<img src="'+img.data+'" style="max-width:100%;max-height:150px;object-fit:contain;margin-bottom:5px"/>'+
+              (associatedPartida ? '<div style="font-size:9px;color:#64748b;font-weight:600">Partida: '+esc(associatedPartida.num)+'</div>' : '')+
+              '</div>';
+          });
+          extraInfo += '</div>';
+        }
+        extraInfo += '</div>';
       }
     }
     extraInfo += '</div>';
@@ -1180,6 +1196,13 @@ function openSettings(activeTab){
         '<label class="chk-opt"><input type="checkbox" '+(CFG.printPayment?'checked':'')+' onchange="CFG.printPayment=this.checked;saveCFG()"> Forma de pago</label>'+
         '<label class="chk-opt"><input type="checkbox" '+(CFG.printExecution?'checked':'')+' onchange="CFG.printExecution=this.checked;saveCFG()"> Plazo ejecución</label>'+
         '<label class="chk-opt"><input type="checkbox" '+(CFG.printNotes?'checked':'')+' onchange="CFG.printNotes=this.checked;saveCFG()"> Notas</label>'+
+	        '<div style="margin-left:20px;display:flex;align-items:center;gap:10px">'+
+	          '<span style="font-size:11px;color:var(--txt2)">Imágenes</span>'+
+	          '<select onchange="CFG.printNoteImages=(this.value===\'on\');saveCFG()" style="padding:2px 4px;border-radius:4px;border:1px solid var(--border2);font-size:11px">'+
+	            '<option value="on" '+(CFG.printNoteImages? 'selected':'')+'>Si</option>'+
+	            '<option value="off" '+(!CFG.printNoteImages? 'selected':'')+'>No</option>'+
+	          '</select>'+
+	        '</div>'+
       '</div></div>'+
     '</div>'+
 
@@ -1319,7 +1342,7 @@ function saveProject(){
     fecha:document.getElementById('pFecha').value,
     payment:document.getElementById('pPayment').value,
     execution:document.getElementById('pExecution').value,
-    items,ggSubgroups,apuData,tofData,notes:CFG.notes,extraNotes:CFG.extraNotes,
+    items,ggSubgroups,apuData,tofData,notes:CFG.notes,extraNotes:CFG.extraNotes,noteImages:CFG.noteImages,
     pGG:document.getElementById('pGG').value,
     pUtil:document.getElementById('pUtil').value,
     pImp:document.getElementById('pImp').value,
@@ -1336,7 +1359,7 @@ function saveProject(){
     cfgPrintCover:CFG.printCover, cfgPrintApu:CFG.printApu,
     cfgPrintCub:CFG.printCub, cfgPrintGG:CFG.printGG,
     cfgPrintPayment:CFG.printPayment, cfgPrintExecution:CFG.printExecution,
-    cfgPrintNotes:CFG.printNotes, cfgPrintBudgetNum:CFG.printBudgetNum,
+    cfgPrintNotes:CFG.printNotes, cfgPrintBudgetNum:CFG.printBudgetNum, cfgPrintNoteImages:CFG.printNoteImages,
     cfgPageSize:CFG.pageSize, cfgApuPrintMode:CFG.apuPrintMode,
     cfgCubPrintMode:CFG.cubPrintMode, cfgCurrency:CFG.currency,
 	    cfgParity:CFG.parity, cfgDecimalsQty:CFG.decimalsQty, cfgDecimalsQtyBudget:CFG.decimalsQtyBudget,
@@ -1390,6 +1413,7 @@ function loadP(id){
   currentProjectId=id;items=p.items;ggSubgroups=p.ggSubgroups||[];apuData=p.apuData;tofData=p.tofData;
   CFG.notes=p.notes||[];
   CFG.extraNotes=p.extraNotes||[];
+  CFG.noteImages=p.noteImages||[];
   CFG.coverImgUrl=p.coverImgUrl||'';
   /* Restaurar CFG empresa, firmantes e impresión si existen en el proyecto */
   if(p.cfgCompanyName!=null) CFG.companyName=p.cfgCompanyName;
@@ -1411,6 +1435,7 @@ function loadP(id){
   if(p.cfgPrintPayment!=null) CFG.printPayment=p.cfgPrintPayment;
   if(p.cfgPrintExecution!=null) CFG.printExecution=p.cfgPrintExecution;
   if(p.cfgPrintNotes!=null) CFG.printNotes=p.cfgPrintNotes;
+  if(p.cfgPrintNoteImages!=null) CFG.printNoteImages=p.cfgPrintNoteImages;
   if(p.cfgPrintBudgetNum!=null) CFG.printBudgetNum=p.cfgPrintBudgetNum;
   if(p.cfgPageSize!=null) CFG.pageSize=p.cfgPageSize;
   if(p.cfgApuPrintMode!=null) CFG.apuPrintMode=p.cfgApuPrintMode;
@@ -1546,29 +1571,95 @@ function refreshNotesTab(){
   let partidas = items.filter(it => it.t === 'it');
   if(!CFG.notes) CFG.notes = [];
   if(!CFG.extraNotes) CFG.extraNotes = [];
+  if(!CFG.noteImages) CFG.noteImages = [];
   
   // Sincronizar notas de partidas
   while(CFG.notes.length < partidas.length) CFG.notes.push('');
   if(CFG.notes.length > partidas.length) CFG.notes = CFG.notes.slice(0, partidas.length);
 
-  let html = CFG.notes.map((note, i) => `
-    <div style="display:flex;gap:10px;align-items:center">
+  let html = '<div style="display:flex;flex-direction:column;gap:20px">';
+  
+  // Sección de Notas de Partidas
+  html += '<div><h4 style="font-size:12px;color:var(--navy);margin-bottom:10px;text-transform:uppercase;letter-spacing:1px">Notas por Partida</h4>';
+  html += CFG.notes.map((note, i) => `
+    <div style="display:flex;gap:10px;align-items:center;margin-bottom:8px">
       <span style="font-weight:600;color:var(--navy);width:25px">${i+1}.</span>
       <input class="ri" style="border-bottom:1px solid var(--border)" value="${esc(note)}" 
         oninput="CFG.notes[${i}]=this.value;markUnsaved()" placeholder="Nota para partida ${partidas[i].num}..."/>
     </div>
   `).join('');
+  html += '</div>';
 
+  // Sección de Notas Adicionales
+  html += '<div><h4 style="font-size:12px;color:var(--navy);margin-bottom:10px;text-transform:uppercase;letter-spacing:1px">Notas Adicionales</h4>';
   html += CFG.extraNotes.map((note, i) => `
-    <div style="display:flex;gap:10px;align-items:center">
+    <div style="display:flex;gap:10px;align-items:center;margin-bottom:8px">
       <span style="font-weight:600;color:var(--navy);width:25px">${CFG.notes.length + i + 1}.</span>
       <input class="ri" style="border-bottom:1px solid var(--border)" value="${esc(note)}" 
         oninput="CFG.extraNotes[${i}]=this.value;markUnsaved()" placeholder="Nota adicional..."/>
       <button class="bs del" onclick="delExtraNote(${i})">×</button>
     </div>
   `).join('');
+  html += '</div>';
+
+  // Sección de Imágenes
+  html += '<div><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">'+
+          '<h4 style="font-size:12px;color:var(--navy);text-transform:uppercase;letter-spacing:1px">Imágenes Asociadas</h4>'+
+          '<button class="bs addp" onclick="document.getElementById(\'noteImgInp\').click()">+ Agregar Imagen</button>'+
+          '<input type="file" id="noteImgInp" style="display:none" accept=".jpg,.jpeg,.bmp" onchange="hNoteImg(this)"/>'+
+          '</div>';
+  
+  if(CFG.noteImages.length === 0) {
+    html += '<div style="padding:20px;text-align:center;color:var(--txt3);border:1px dashed var(--border);border-radius:8px;font-size:11px">No hay imágenes cargadas. Máximo 100KB por imagen.</div>';
+  } else {
+    html += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:15px">';
+    CFG.noteImages.forEach((img, idx) => {
+      let associatedPartida = img.partidaIdx >= 0 && img.partidaIdx < partidas.length ? partidas[img.partidaIdx] : null;
+      html += `<div style="border:1px solid var(--border);border-radius:8px;padding:10px;background:#fff;display:flex;flex-direction:column;gap:8px">
+        <div style="position:relative;height:120px;background:#f8fafc;border-radius:4px;overflow:hidden;display:flex;align-items:center;justify-content:center">
+          <img src="${img.data}" style="max-width:100%;max-height:100%;object-fit:contain"/>
+          <button class="bs del" style="position:absolute;top:5px;right:5px;padding:2px 6px" onclick="delNoteImg(${idx})">×</button>
+        </div>
+        <div style="font-size:10px;color:var(--txt2)">
+          <div style="margin-bottom:4px;font-weight:600">Asociar a Partida:</div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <input type="range" min="-1" max="${partidas.length-1}" value="${img.partidaIdx}" 
+              oninput="CFG.noteImages[${idx}].partidaIdx=parseInt(this.value);refreshNotesTab();markUnsaved()" style="flex:1"/>
+            <span style="width:40px;text-align:right;font-weight:700;color:var(--navy)">${associatedPartida ? associatedPartida.num : 'Ning.'}</span>
+          </div>
+        </div>
+      </div>`;
+    });
+    html += '</div>';
+  }
+  html += '</div></div>';
 
   container.innerHTML = html;
+}
+
+function hNoteImg(inp){
+  if(!inp.files || !inp.files[0]) return;
+  let file = inp.files[0];
+  if(file.size > 100 * 1024) { alert('La imagen supera el límite de 100KB'); inp.value=''; return; }
+  let reader = new FileReader();
+  reader.onload = e => {
+    if(!CFG.noteImages) CFG.noteImages = [];
+    let partidas = items.filter(it => it.t === 'it');
+    if(CFG.noteImages.length >= partidas.length) {
+      alert('No puedes agregar más imágenes que partidas en el presupuesto.');
+      inp.value=''; return;
+    }
+    CFG.noteImages.push({ data: e.target.result, partidaIdx: -1 });
+    refreshNotesTab(); markUnsaved(); inp.value='';
+  };
+  reader.readAsDataURL(file);
+}
+
+function delNoteImg(idx){
+  if(confirm('¿Eliminar imagen?')) {
+    CFG.noteImages.splice(idx, 1);
+    refreshNotesTab(); markUnsaved();
+  }
 }
 
 function addExtraNote(){
@@ -1601,7 +1692,7 @@ function saveProjectSilent(){
     fecha:document.getElementById('pFecha').value,
     payment:document.getElementById('pPayment').value,
     execution:document.getElementById('pExecution').value,
-    items,ggSubgroups,apuData,tofData,notes:CFG.notes,extraNotes:CFG.extraNotes,
+    items,ggSubgroups,apuData,tofData,notes:CFG.notes,extraNotes:CFG.extraNotes,noteImages:CFG.noteImages,
     pGG:document.getElementById('pGG').value,
     pUtil:document.getElementById('pUtil').value,
     pImp:document.getElementById('pImp').value,
@@ -1617,7 +1708,7 @@ function saveProjectSilent(){
     cfgPrintCover:CFG.printCover, cfgPrintApu:CFG.printApu,
     cfgPrintCub:CFG.printCub, cfgPrintGG:CFG.printGG,
     cfgPrintPayment:CFG.printPayment, cfgPrintExecution:CFG.printExecution,
-    cfgPrintNotes:CFG.printNotes, cfgPrintBudgetNum:CFG.printBudgetNum,
+    cfgPrintNotes:CFG.printNotes, cfgPrintBudgetNum:CFG.printBudgetNum, cfgPrintNoteImages:CFG.printNoteImages,
     cfgPageSize:CFG.pageSize, cfgApuPrintMode:CFG.apuPrintMode,
     cfgCubPrintMode:CFG.cubPrintMode, cfgCurrency:CFG.currency,
 	    cfgParity:CFG.parity, cfgDecimalsQty:CFG.decimalsQty, cfgDecimalsQtyBudget:CFG.decimalsQtyBudget,
