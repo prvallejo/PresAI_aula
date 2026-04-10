@@ -493,6 +493,7 @@ function fmtQ(n){return fmtN(n,CFG.decimalsQty);}
 function fmtQBudget(n){return fmtN(n,CFG.decimalsQtyBudget);}
 function fmtP(n){return fmtNPrice(n,CFG.decimalsPrice);}
 function fmtB(n){return fmtNPrice(n,CFG.decimalsBudget);}
+function fmtGG(n){return fmtNPrice(n,CFG.decimalsPrice);}
 function esc(s){return(s||'').toString().replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
 
 /* ── numToWords — soporta decimales para UF y USD ── */
@@ -689,7 +690,7 @@ function renderGGSubgroups(){
     html += `<div class="gg-subgroup">
       <div class="gg-subgroup-hdr">
         <span class="gg-subgroup-name">${esc(sg.name)}</span>
-        <span class="gg-subgroup-total" data-gg-total="${sgi}">${fmtB(sgTotal)}</span>
+	        <span class="gg-subgroup-total" data-gg-total="${sgi}">${fmtGG(sgTotal)}</span>
         <button class="bs del" onclick="delGGSubgroup(${sgi})">×</button>
       </div>
       <table class="gg-table">
@@ -704,7 +705,7 @@ function renderGGSubgroups(){
         <td><input class="r" type="text" value="${fmtQ(N(it.qty))}" oninput="uGGItem(${sgi},${iti},'qty',this.value)" onfocus="this.select()"/></td>
         <td><input class="r" type="text" value="${fmtQ(N(it.tiempoUso))}" oninput="uGGItem(${sgi},${iti},'tiempoUso',this.value)" onfocus="this.select()"/></td>
         <td><input class="r" type="text" value="${fmtP(N(it.price))}" oninput="uGGItem(${sgi},${iti},'price',this.value)" onfocus="this.select()"/></td>
-        <td class="r mono" data-gg-sub="${sgi}-${iti}">${fmtB(sub)}</td>
+	        <td class="r mono" data-gg-sub="${sgi}-${iti}">${fmtGG(sub)}</td>
         <td><button class="bs del" onclick="delGGItem(${sgi},${iti})">×</button></td>
       </tr>`;
     });
@@ -743,19 +744,19 @@ function uGGItem(sgi,iti,f,v){
   let r=ggSubgroups[sgi].items[iti];
   let sub=N(r.qty)*N(r.tiempoUso)*N(r.price);
   let subEl=document.querySelector(`[data-gg-sub="${sgi}-${iti}"]`);
-  if(subEl) subEl.textContent=fmtB(sub);
-  let sgTotal=ggSubgroups[sgi].items.reduce((a,it)=>a+N(it.qty)*N(it.tiempoUso)*N(it.price),0);
-  let sgTotEl=document.querySelector(`[data-gg-total="${sgi}"]`);
-  if(sgTotEl) sgTotEl.textContent=fmtB(sgTotal);
+	  if(subEl) subEl.textContent=fmtGG(sub);
+	  let sgTotal=ggSubgroups[sgi].items.reduce((a,it)=>a+N(it.qty)*N(it.tiempoUso)*N(it.price),0);
+	  let sgTotEl=document.querySelector(`[data-gg-total="${sgi}"]`);
+	  if(sgTotEl) sgTotEl.textContent=fmtGG(sgTotal);
   updateGGTotal(); rc(); markUnsaved();
 }
 function delGGItem(sgi,iti){
   ggSubgroups[sgi].items.splice(iti,1); renderGGSubgroups(); rc(); markUnsaved();
 }
 function updateGGTotal(){
-  let total=ggSubgroups.reduce((a,sg)=>a+sg.items.reduce((b,it)=>b+N(it.qty)*N(it.tiempoUso)*N(it.price),0),0);
-  document.getElementById('gg-total-label').textContent=`Total Gastos Generales: ${sym()} ${fmtB(total)}`;
-}
+	  let total=ggSubgroups.reduce((a,sg)=>a+sg.items.reduce((b,it)=>b+N(it.qty)*N(it.tiempoUso)*N(it.price),0),0);
+	  document.getElementById('gg-total-label').textContent=`Total Gastos Generales: ${sym()} ${fmtGG(total)}`;
+	}
 
 /* ── APU ── */
 function openApu(id){
@@ -931,11 +932,11 @@ function genPrintHtml(){
       let sgTotal=sg.items.reduce((a,it)=>a+N(it.qty)*N(it.price),0);
       ggHtml+='<div style="margin-bottom:20px;border:1px solid #eee;border-radius:5px;overflow:hidden"><div style="background:#f9f9f9;padding:8px;font-weight:600;color:'+color+'">'+esc(sg.name)+' - '+s+' '+fmtB(sgTotal)+'</div>'+
         '<table style="width:100%;border-collapse:collapse;font-size:9px"><thead><tr style="background:#fcfcfc"><th style="text-align:left;padding:4px 8px">Descripción</th><th style="text-align:right">Unid</th><th style="text-align:right">Cant.</th><th style="text-align:right">T.Uso</th><th style="text-align:right">Precio ('+s+')</th><th style="text-align:right;padding-right:8px">Subtotal ('+s+')</th></tr></thead><tbody>';
-      sg.items.forEach(it=>ggHtml+='<tr style="border-top:1px solid #f5f5f5"><td style="padding:3px 8px">'+esc(it.desc)+'</td><td style="text-align:right">'+esc(it.unit)+'</td><td style="text-align:right">'+fmtQ(N(it.qty))+'</td><td style="text-align:right">'+fmtQ(N(it.tiempoUso))+'</td><td style="text-align:right">'+s+' '+fmtP(N(it.price))+'</td><td style="text-align:right;padding-right:8px">'+s+' '+fmtB(N(it.qty)*N(it.tiempoUso)*N(it.price))+'</td></tr>');
-      ggHtml+='</tbody></table></div>';
-    });
-    var totalGG = ggSubgroups.reduce((a, sg) => a + sg.items.reduce((b, it) => b + N(it.qty) * N(it.tiempoUso) * N(it.price), 0), 0);
-    ggHtml += `<div style="text-align:right;margin-top:20px;padding:10px;background:#f0f4f8;border-radius:5px;font-weight:700;color:${color};font-size:12px">TOTAL GASTOS GENERALES: ${s} ${fmtB(totalGG)}</div>`;
+	      sg.items.forEach(it=>ggHtml+='<tr style="border-top:1px solid #f5f5f5"><td style="padding:3px 8px">'+esc(it.desc)+'</td><td style="text-align:right">'+esc(it.unit)+'</td><td style="text-align:right">'+fmtQ(N(it.qty))+'</td><td style="text-align:right">'+fmtQ(N(it.tiempoUso))+'</td><td style="text-align:right">'+s+' '+fmtP(N(it.price))+'</td><td style="text-align:right;padding-right:8px">'+s+' '+fmtGG(N(it.qty)*N(it.tiempoUso)*N(it.price))+'</td></tr>');
+	      ggHtml+='</tbody></table></div>';
+	    });
+	    var totalGG = ggSubgroups.reduce((a, sg) => a + sg.items.reduce((b, it) => b + N(it.qty) * N(it.tiempoUso) * N(it.price), 0), 0);
+	    ggHtml += `<div style="text-align:right;margin-top:20px;padding:10px;background:#f0f4f8;border-radius:5px;font-weight:700;color:${color};font-size:12px">TOTAL GASTOS GENERALES: ${s} ${fmtGG(totalGG)}</div>`;
     ggHtml+='</div>';
   }
 
@@ -1110,7 +1111,7 @@ function openSettings(){
 
     /* MONEDA */
     '<div class="cfg-section"><h4>Moneda y Decimales</h4><div class="cfg-grid">'+
-      '<div class="cfg-field"><label>Moneda</label><select onchange="CFG.currency=this.value;if(this.value===\'CLP\')CFG.parity=1;saveCFG();rb();rc();renderGGSubgroups();openSettings();">'+
+	      '<div class="cfg-field"><label>Moneda</label><select onchange="CFG.currency=this.value;if(this.value===\'CLP\'){CFG.parity=1;CFG.decimalsQty=2;CFG.decimalsQtyBudget=0;CFG.decimalsPrice=0;CFG.decimalsBudget=0;}saveCFG();rb();rc();renderGGSubgroups();openSettings();">'+
         '<option value="CLP" '+(CFG.currency==='CLP'?'selected':'')+'>CLP ($)</option>'+
         '<option value="USD" '+(CFG.currency==='USD'?'selected':'')+'>USD (US$)</option>'+
         '<option value="UF" '+(CFG.currency==='UF'?'selected':'')+'>UF</option>'+
@@ -1219,9 +1220,14 @@ function newProject(){
   items=[{id:gid(),t:'ch',num:'1.-',name:'',unit:'',qty:0,price:0,isApu:false,isCub:false},{id:gid(),t:'it',num:'1.1',name:'',unit:'',qty:0,price:0,isApu:false,isCub:false}];
   ggSubgroups=[];apuData={};tofData={};
   
-  // Configuración predeterminada solicitada
-  CFG.currency = 'CLP';
-  CFG.pageSize = 'letter';
+	  // Configuración predeterminada solicitada
+	  CFG.currency = 'CLP';
+	  CFG.parity = 1;
+	  CFG.decimalsQty = 2;
+	  CFG.decimalsQtyBudget = 0;
+	  CFG.decimalsPrice = 0;
+	  CFG.decimalsBudget = 0;
+	  CFG.pageSize = 'letter';
   CFG.printCover = true;
   CFG.printApu = false;
   CFG.printCub = false;
