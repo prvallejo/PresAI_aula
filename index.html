@@ -479,14 +479,19 @@ function parseNum(v){
 function sym(){return CFG.currency==='USD'?'US$':CFG.currency==='UF'?'UF':'$';}
 function fmtN(n,d){
   let locale = CFG.decimalSeparator === ',' ? 'de-DE' : 'en-US';
+  let dec = (CFG.currency === 'UF') ? (d != null ? d : 2) : (CFG.currency === 'USD') ? (d != null ? d : 2) : (d != null ? d : 0);
+  return n.toLocaleString(locale,{minimumFractionDigits:dec,maximumFractionDigits:dec});
+}
+function fmtNPrice(n,d){
+  let locale = CFG.decimalSeparator === ',' ? 'de-DE' : 'en-US';
   let par = (CFG.currency !== 'CLP' && CFG.parity > 0) ? CFG.parity : 1;
   let v = n / par;
   let dec = (CFG.currency === 'UF') ? (d != null ? d : 2) : (CFG.currency === 'USD') ? (d != null ? d : 2) : (d != null ? d : 0);
   return v.toLocaleString(locale,{minimumFractionDigits:dec,maximumFractionDigits:dec});
 }
 function fmtQ(n){return fmtN(n,CFG.decimalsQty);}
-function fmtP(n){return fmtN(n,CFG.decimalsPrice);}
-function fmtB(n){return fmtN(n,CFG.decimalsBudget);}
+function fmtP(n){return fmtNPrice(n,CFG.decimalsPrice);}
+function fmtB(n){return fmtNPrice(n,CFG.decimalsBudget);}
 function esc(s){return(s||'').toString().replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
 
 /* ── numToWords — soporta decimales para UF y USD ── */
