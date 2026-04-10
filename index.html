@@ -12,7 +12,7 @@
   --ff:'IBM Plex Sans',sans-serif;--mono:'IBM Plex Mono',monospace;
   --navy:#1e3a5f;--navy-lt:#e8eef7;--amber:#b45309;--amber-lt:#fffbeb;
   --green:#166534;--green-lt:#dcfce7;--magenta:#d946ef;--magenta-lt:#f3e8ff;
-  --red:#991b1b;--red-lt:#fef2f2;--border:#e2e8f0;--border2:#cbd5e1;
+  --red:#991b1b;--red-lt:#fef2f2;--salmon:#fa8072;--border:#e2e8f0;--border2:#cbd5e1;
   --bg:#fff;--bg2:#f8fafc;--bg3:#f1f5f9;--txt:#0f172a;--txt2:#64748b;--txt3:#94a3b8;
 }
 body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3);min-height:100vh}
@@ -162,6 +162,7 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
 .gg-subgroup-hdr{display:flex;justify-content:space-between;align-items:center;padding-bottom:10px;border-bottom:1px solid var(--border2);margin-bottom:10px}
 .gg-subgroup-name{font-weight:600;color:var(--navy);font-size:12px}
 .gg-subgroup-total{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--amber)}
+.gg-sym-salmon{color:var(--salmon);font-weight:bold;margin-right:2px}
 .gg-table{width:100%;border-collapse:collapse;font-size:11px}
 .gg-table th{background:var(--bg2);padding:6px;text-align:left;font-weight:600;color:var(--txt2);border-bottom:1px solid var(--border2);font-size:9px;text-transform:uppercase;vertical-align:middle}
 .gg-table td{padding:5px 6px;border-bottom:1px solid var(--border);vertical-align:middle}
@@ -309,14 +310,10 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
       <button class="hbtn" onclick="openProjects()"><svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg> Proyectos</button>
       <button class="hbtn" onclick="newProject()"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Nuevo</button>
       <button class="hbtn" onclick="saveProject()"><svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Guardar</button>
-      <button class="hbtn" onclick="previewReport()"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Vista Previa</button>
-      <button class="hbtn green" onclick="doPrint()"><svg viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Imprimir</button>
-      <button class="hbtn" onclick="openHelp()"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
-      <button class="hbtn" onclick="openSettings()"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button>
-    </div>
-  </header>
-
-  <nav class="tabs no-print">
+      <button class="hbtn" onclick="previewReport()"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> V	      '<div class="hbtn green" onclick="doPrint()"><svg viewBox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v8H6z"/></svg>Imprimir</div>'+
+	      '<div class="hbtn" onclick="openSettings()"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>'+
+	      '<div class="hbtn" onclick="closeApp()" title="Cerrar Aplicación"><svg viewBox="0 0 24 24" style="stroke:#f87171"><path d="M18 6L6 18M6 6l12 12"/></svg></div>'+
+	    '</div>';nav class="tabs no-print">
     <div class="tabs-list">
       <div class="tab on" onclick="sw('bud',this)">Presupuesto</div>
       <div class="tab" onclick="sw('gg',this)">Gastos Generales</div>
@@ -694,7 +691,7 @@ function renderGGSubgroups(){
         <button class="bs del" onclick="delGGSubgroup(${sgi})">×</button>
       </div>
       <table class="gg-table">
-        <thead><tr><th style="width:260px">Descripción</th><th style="width:50px">Unid</th><th style="width:60px">Cant.</th><th style="width:80px">Tiempo Uso</th><th style="width:80px">Precio (${sym()})</th><th style="width:80px">Subtotal (${sym()})</th><th style="width:30px"></th></tr></thead>
+	        <thead><tr><th style="width:260px">Descripción</th><th style="width:50px">Unid</th><th style="width:60px">Cant.</th><th style="width:80px">Tiempo Uso</th><th style="width:80px">Precio (${sym()})</th><th style="width:80px">Subtotal (<span class="gg-sym-salmon">${sym()}</span>)</th><th style="width:30px"></th></tr></thead>
         <tbody>`;
     
     sg.items.forEach((it, iti) => {
@@ -1075,12 +1072,22 @@ function openHelp(){
     <div class="mh"><h3>❔ Ayuda PresAI</h3><button class="btn-s" onclick="closeMod()">Cerrar</button></div>
     <div class="mb help-content" id="help-body"></div>
   </div>`;
-  document.getElementById('help-body').innerHTML=`
-    <div class="help-section"><h5>📋 Pestaña Presupuesto</h5><p>Ingresa las partidas de construcción. Cada partida tiene unidad, cantidad y precio unitario. Los datos del proyecto (nombre obra, mandante, etc.) se configuran en ⚙️.</p></div>
-    <div class="help-section"><h5>💰 Gastos Generales</h5><p>Organiza los gastos generales por subgrupos. Cada subgrupo contiene gastos con Cantidad, Tiempo de Uso y Precio.</p></div>
-    <div class="help-section"><h5>📊 Análisis Unitarios (APU)</h5><p>Desglosa el costo de cada partida en Mano de Obra, Materiales, Equipos y Subcontratos. Incluye Leyes Sociales automáticamente.</p></div>
-    <div class="help-section"><h5>📐 Cubicaciones</h5><p>Define la cantidad mediante mediciones: Cantidad × Ancho × Largo × Alto.</p></div>
-  `;
+	  document.getElementById('help-body').innerHTML=`
+	    <div class="help-section"><h5>📋 Pestaña Presupuesto</h5><p>Ingresa las partidas de construcción. Cada partida tiene unidad, cantidad y precio unitario. Los datos del proyecto (nombre obra, mandante, etc.) se configuran en ⚙️.</p></div>
+	    <div class="help-section"><h5>💰 Gastos Generales</h5><p>Organiza los gastos generales por subgrupos. Cada subgrupo contiene gastos con Cantidad, Tiempo de Uso y Precio.</p></div>
+	    <div class="help-section"><h5>📊 Análisis Unitarios (APU)</h5><p>Desglosa el costo de cada partida en Mano de Obra, Materiales, Equipos y Subcontratos. Incluye Leyes Sociales automáticamente.</p></div>
+	    <div class="help-section"><h5>📐 Cubicaciones</h5><p>Define la cantidad mediante mediciones: Cantidad × Ancho × Largo × Alto.</p></div>
+	  `;
+}
+
+function closeApp(){
+  if(confirm('¿Estás seguro de que deseas cerrar la aplicación? Los cambios no guardados podrían perderse.')){
+    window.close();
+    // Fallback si window.close() es bloqueado
+    setTimeout(() => {
+      window.location.href = "about:blank";
+    }, 300);
+  }
 }
 
 /* ── SETTINGS ── */
@@ -1094,9 +1101,14 @@ function openSettings(){
   let payment=document.getElementById('pPayment').value;
   let execution=document.getElementById('pExecution').value;
 
-  let html='<div class="modal" style="max-width:700px;max-height:90vh;overflow-y:auto">'+
-    '<div class="mh"><h3>⚙️ Configuración PresAI</h3><button class="btn-s" onclick="closeMod()">✕</button></div>'+
-    '<div class="mb">'+
+	  let html='<div class="modal" style="max-width:700px;max-height:90vh;overflow-y:auto">'+
+	    '<div class="mh"><h3>⚙️ Configuración PresAI</h3><button class="btn-s" onclick="closeMod()">✕</button></div>'+
+	    '<div class="tabs" style="position:static; border-bottom:1px solid var(--border2)">'+
+	      '<div class="tab on" id="tab-cfg-gen" onclick="document.getElementById(\'cfg-content-gen\').style.display=\'block\';document.getElementById(\'cfg-content-help\').style.display=\'none\';this.classList.add(\'on\');document.getElementById(\'tab-cfg-help\').classList.remove(\'on\')">General</div>'+
+	      '<div class="tab" id="tab-cfg-help" onclick="document.getElementById(\'cfg-content-gen\').style.display=\'none\';document.getElementById(\'cfg-content-help\').style.display=\'block\';this.classList.add(\'on\');document.getElementById(\'tab-cfg-gen\').classList.remove(\'on\')">Ayuda / Info</div>'+
+	    '</div>'+
+	    '<div class="mb">'+
+	    '<div id="cfg-content-gen">'+
 
     /* PROYECTO */
     '<div class="cfg-section"><h4>Proyecto</h4><div class="cfg-grid">'+
@@ -1107,9 +1119,16 @@ function openSettings(){
       '<div class="cfg-field"><label>Fecha</label><input type="date" id="cfg-fecha" value="'+esc(fecha)+'" oninput="document.getElementById(\'pFecha\').value=this.value;markUnsaved()"/></div>'+
       '<div class="cfg-field"><label>Forma de Pago</label><input id="cfg-payment" value="'+esc(payment)+'" oninput="document.getElementById(\'pPayment\').value=this.value;markUnsaved()"/></div>'+
       '<div class="cfg-field"><label>Plazo ejecución</label><input id="cfg-execution" value="'+esc(execution)+'" oninput="document.getElementById(\'pExecution\').value=this.value;markUnsaved()"/></div>'+
-    '</div></div>'+
-
-    /* MONEDA */
+	    '</div></div>'+
+	    '</div>'+ // Cierre de cfg-content-gen
+	    '<div id="cfg-content-help" style="display:none">'+
+	      '<div class="help-section"><h5>📋 Pestaña Presupuesto</h5><p>Ingresa las partidas de construcción. Cada partida tiene unidad, cantidad y precio unitario. Los datos del proyecto (nombre obra, mandante, etc.) se configuran en ⚙️.</p></div>'+
+	      '<div class="help-section"><h5>💰 Gastos Generales</h5><p>Organiza los gastos generales por subgrupos. Cada subgrupo contiene gastos con Cantidad, Tiempo de Uso y Precio.</p></div>'+
+	      '<div class="help-section"><h5>📊 Análisis Unitarios (APU)</h5><p>Desglosa el costo de cada partida en Mano de Obra, Materiales, Equipos y Subcontratos. Incluye Leyes Sociales automáticamente.</p></div>'+
+	      '<div class="help-section"><h5>📐 Cubicaciones</h5><p>Define la cantidad mediante mediciones: Cantidad × Ancho × Largo × Alto.</p></div>'+
+	    '</div>'+
+	
+	    /* MONEDA */
     '<div class="cfg-section"><h4>Moneda y Decimales</h4><div class="cfg-grid">'+
 	      '<div class="cfg-field"><label>Moneda</label><select onchange="CFG.currency=this.value;if(this.value===\'CLP\'){CFG.parity=1;CFG.decimalsQty=2;CFG.decimalsQtyBudget=0;CFG.decimalsPrice=0;CFG.decimalsBudget=0;}saveCFG();rb();rc();renderGGSubgroups();openSettings();">'+
         '<option value="CLP" '+(CFG.currency==='CLP'?'selected':'')+'>CLP ($)</option>'+
@@ -1118,9 +1137,9 @@ function openSettings(){
       '</select></div>'+
       '<div class="cfg-field"><label>Paridad (1 '+sym()+' = ? CLP)</label><input type="number" value="'+CFG.parity+'" oninput="CFG.parity=N(this.value);saveCFG();rb();rc();renderGGSubgroups()" onfocus="this.select()"/></div>'+
 	      '<div class="cfg-field"><label>Dec. Cant. (Presup.)</label><input type="number" value="'+CFG.decimalsQtyBudget+'" oninput="CFG.decimalsQtyBudget=N(this.value);saveCFG();rb()" onfocus="this.select()"/></div>'+
-	      '<div class="cfg-field"><label>Dec. Cant. (Otros)</label><input type="number" value="'+CFG.decimalsQty+'" oninput="CFG.decimalsQty=N(this.value);saveCFG();rb()" onfocus="this.select()"/></div>'+
-      '<div class="cfg-field"><label>Dec. P.Unit (APU)</label><input type="number" value="'+CFG.decimalsPrice+'" oninput="CFG.decimalsPrice=N(this.value);saveCFG();rb()" onfocus="this.select()"/></div>'+
-      '<div class="cfg-field"><label>Dec. Totales</label><input type="number" value="'+CFG.decimalsBudget+'" oninput="CFG.decimalsBudget=N(this.value);saveCFG();rb()" onfocus="this.select()"/></div>'+
+	      '<div class="cfg-field"><label>Dec. Cant. (Otros)</label><input type="number" value="'+CFG.decimalsQty+'" oninput="CFG.decimalsQty=N(this.value);saveCFG();rb();renderGGSubgroups()" onfocus="this.select()"/></div>'+
+	      '<div class="cfg-field"><label>Dec. P.Unit.</label><input type="number" value="'+CFG.decimalsPrice+'" oninput="CFG.decimalsPrice=N(this.value);saveCFG();rb();renderGGSubgroups()" onfocus="this.select()"/></div>'+
+	      '<div class="cfg-field"><label>Dec. Totales</label><input type="number" value="'+CFG.decimalsBudget+'" oninput="CFG.decimalsBudget=N(this.value);saveCFG();rb();renderGGSubgroups()" onfocus="this.select()"/></div>'+
       '<div class="cfg-field"><label>Separador Decimal</label><select onchange="CFG.decimalSeparator=this.value;saveCFG();rb();rc();openSettings();">'+
         '<option value="." '+(CFG.decimalSeparator==='.'?'selected':'')+'>Punto (.)</option>'+
         '<option value="," '+(CFG.decimalSeparator===','?'selected':'')+'>Coma (,)</option>'+
