@@ -928,10 +928,10 @@ function genPrintHtml(){
   var ggHtml='';
   if(CFG.printGG&&ggSubgroups.length>0){
     ggHtml='<div style="page-break-before:always;padding:10mm;padding-bottom:30mm">'+runHdr+'<h3 style="font-size:14px;color:'+color+';border-bottom:2px solid #eee;padding-bottom:5px;margin-bottom:15px">Gastos Generales Detallados</h3>';
-    ggSubgroups.forEach(sg=>{
-      let sgTotal=sg.items.reduce((a,it)=>a+N(it.qty)*N(it.price),0);
-      ggHtml+='<div style="margin-bottom:20px;border:1px solid #eee;border-radius:5px;overflow:hidden"><div style="background:#f9f9f9;padding:8px;font-weight:600;color:'+color+'">'+esc(sg.name)+' - '+fmtGG(sgTotal)+'</div>'+
-        '<table style="width:100%;border-collapse:collapse;font-size:9px"><thead><tr style="background:#fcfcfc"><th style="text-align:left;padding:4px 8px">Descripción</th><th style="text-align:right">Unid</th><th style="text-align:right">Cant.</th><th style="text-align:right">T.Uso</th><th style="text-align:right">Precio ('+s+')</th><th style="text-align:right;padding-right:8px">Subtotal ('+s+')</th></tr></thead><tbody>';
+	    ggSubgroups.forEach(sg=>{
+	      let sgTotal=sg.items.reduce((a,it)=>a+N(it.qty)*N(it.tiempoUso)*N(it.price),0);
+	      ggHtml+='<div style="margin-bottom:20px;border:1px solid #eee;border-radius:5px;overflow:hidden"><div style="background:#f9f9f9;padding:8px;display:flex;justify-content:space-between;font-weight:600;color:'+color+'"><span>'+esc(sg.name)+'</span><span>'+s+' '+fmtGG(sgTotal)+'</span></div>'+
+	        '<table style="width:100%;border-collapse:collapse;font-size:9px"><thead><tr style="background:#fcfcfc"><th style="text-align:left;padding:4px 8px">Descripción</th><th style="text-align:right">Unid</th><th style="text-align:right">Cant.</th><th style="text-align:right">T.Uso</th><th style="text-align:right">Precio ('+s+')</th><th style="text-align:right;padding-right:8px">Subtotal ('+s+')</th></tr></thead><tbody>';
 	      sg.items.forEach(it=>ggHtml+='<tr style="border-top:1px solid #f5f5f5"><td style="padding:3px 8px">'+esc(it.desc)+'</td><td style="text-align:right">'+esc(it.unit)+'</td><td style="text-align:right">'+fmtQ(N(it.qty))+'</td><td style="text-align:right">'+fmtQ(N(it.tiempoUso))+'</td><td style="text-align:right">'+fmtP(N(it.price))+'</td><td style="text-align:right;padding-right:8px">'+fmtGG(N(it.qty)*N(it.tiempoUso)*N(it.price))+'</td></tr>');
 	      ggHtml+='</tbody></table></div>';
 	    });
@@ -950,7 +950,7 @@ function genPrintHtml(){
       let lt=a.ls.on?mo*(pct/100):0,tot=a.secs.reduce((x,s)=>x+s.rows.reduce((y,r)=>y+N(r.qty)*N(r.price),0),0)+lt;
       apuHtml+=(CFG.apuPrintMode==='por hoja'?'<div style="page-break-before:always;padding:10mm;padding-bottom:30mm">':'')+
         '<div style="margin-bottom:20px;border:1px solid #eee;border-radius:5px;overflow:hidden">'+
-        '<div style="background:#f9f9f9;padding:8px;display:flex;justify-content:space-between;font-weight:600;color:'+color+'"><span>'+esc(it.num)+' — '+esc(it.name)+'</span><span>'+fmtP(tot)+' / '+esc(it.unit)+'</span></div>'+
+	        '<div style="background:#f9f9f9;padding:8px;display:flex;justify-content:space-between;font-weight:600;color:'+color+'"><span>'+esc(it.num)+' — '+esc(it.name)+'</span><span>'+s+' '+fmtP(tot)+' / '+esc(it.unit)+'</span></div>'+
         '<table style="width:100%;border-collapse:collapse;font-size:9px"><thead><tr style="background:#fcfcfc;color:#666"><th style="text-align:left;padding:4px 8px">Recurso</th><th style="text-align:right">Unid</th><th style="text-align:right">Rend.</th><th style="text-align:right">P.U. ('+s+')</th><th style="text-align:right;padding-right:8px">Subtotal ('+s+')</th></tr></thead><tbody>';
       ['Mano de Obra','Materiales','Equipos','Subcontratos'].forEach((tn,si)=>{
         a.secs[si].rows.forEach(r=>apuHtml+='<tr style="border-top:1px solid #f5f5f5"><td style="padding:3px 8px">'+esc(r.desc)+' <small style="color:#999">('+tn+')</small></td><td style="text-align:right">'+esc(r.unit)+'</td><td style="text-align:right">'+fmtQ(N(r.qty))+'</td><td style="text-align:right">'+fmtP(N(r.price))+'</td><td style="text-align:right;padding-right:8px">'+fmtB(N(r.qty)*N(r.price))+'</td></tr>');
