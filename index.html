@@ -956,7 +956,9 @@ function genPrintHtml(){
     '</div>'+
     '<div style="text-align:right;font-size:9px;line-height:1.4"><div style="font-size:11px;font-weight:600;color:'+color+'">'+esc(obra)+'</div>'+
     '<div style="color:#64748b">'+esc(CFG.companyAddress)+'</div>'+
-    '<div style="color:#94a3b8">'+esc(fecha)+'</div></div></div>';
+    '<div style="color:#94a3b8">'+esc(fecha)+'</div>'+
+	    ((CFG.currency==='USD'||CFG.currency==='UF')?'<div style="font-size:10px;font-weight:700;color:'+color+';margin-top:4px">1 '+sym()+' = '+fmtN(CFG.parity,2)+' CLP</div>':'')+
+	    '</div></div>';
 
   var trows='';
   items.forEach(it=>{
