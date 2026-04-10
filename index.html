@@ -360,14 +360,14 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
         <div id="totals" class="totals-left"></div>
         <div class="cfg-side no-print">
           <div class="cfg-lbl">Parámetros de Cálculo</div>
-          <div style="display:flex;flex-direction:column;gap:2px">
-            <label style="font-size:9px;color:var(--txt3);cursor:pointer;display:flex;align-items:center;gap:3px">
-              <input type="checkbox" id="ggFijo" onchange="rc();markUnsaved()"/> Usar % fijo
-            </label>
-            <div class="cr">
+          <div class="cr">
+            <div style="display:flex;align-items:center;gap:6px">
               <label>Gastos Generales (%)</label>
-              <input type="number" id="pGG" value="15" oninput="rc();markUnsaved()" onfocus="this.select()"/>
+              <label style="font-size:9px;color:var(--txt3);cursor:pointer;display:flex;align-items:center;gap:3px;white-space:nowrap">
+                <input type="checkbox" id="ggFijo" onchange="rc();markUnsaved()"/> Usar % fijo
+              </label>
             </div>
+            <input type="number" id="pGG" value="15" oninput="rc();markUnsaved()" onfocus="this.select()"/>
           </div>
           <div class="cr"><label>Utilidad (%)</label><input type="number" id="pUtil" value="12" oninput="rc();markUnsaved()" onfocus="this.select()"/></div>
           <div class="cr"><label>Imprevistos (%)</label><input type="number" id="pImp" value="0" oninput="rc();markUnsaved()" onfocus="this.select()"/></div>
