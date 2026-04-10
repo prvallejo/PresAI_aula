@@ -360,12 +360,12 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
         <div id="totals" class="totals-left"></div>
         <div class="cfg-side no-print">
           <div class="cfg-lbl">Parámetros de Cálculo</div>
-          <div class="cr" style="flex-direction:column;align-items:flex-end;gap:2px">
+          <div style="display:flex;flex-direction:column;gap:2px">
             <label style="font-size:9px;color:var(--txt3);cursor:pointer;display:flex;align-items:center;gap:3px">
               <input type="checkbox" id="ggFijo" onchange="rc();markUnsaved()"/> Usar % fijo
             </label>
-            <div style="display:flex;align-items:center;justify-content:space-between;width:100%;gap:6px">
-              <label style="font-size:11px;color:var(--txt2)">Gastos Generales (%)</label>
+            <div class="cr">
+              <label>Gastos Generales (%)</label>
               <input type="number" id="pGG" value="15" oninput="rc();markUnsaved()" onfocus="this.select()"/>
             </div>
           </div>
