@@ -668,11 +668,14 @@ function rc(){
   var ggV=ggF?dc*(pGG/100):ggSubgroups.reduce((a,sg)=>a+sg.items.reduce((b,it)=>b+N(it.qty)*N(it.tiempoUso)*N(it.price),0),0);
   var util=dc*(pU/100),imp=dc*(pImp/100),net=dc+ggV+util+imp,iva=net*(pIVA/100),grand=net+iva;
   
+  // Calcular % real de GG si no es fijo
+  var pGGReal = ggF ? pGG : (dc > 0 ? (ggV / dc) * 100 : 0);
+  
   var html=`<div class="tr2"><span class="tl">Costo Directo</span><span class="tv">${sym()} ${fmtB(dc)}</span></div>`;
   
-if(!CFG.ggProrrateado){
-	    html+=`<div class="tr2"><span class="tl">Gastos Generales (${pGG}%)</span><span class="tv">${sym()} ${fmtB(ggV)}</span></div>`;
-	  } else {
+  if(!CFG.ggProrrateado){
+    html+=`<div class="tr2"><span class="tl">Gastos Generales (${pGGReal.toFixed(2)}%)</span><span class="tv">${sym()} ${fmtB(ggV)}</span></div>`;
+  } else {
     html+=`<div class="tr2 prorate"><span class="tl">Gastos Generales ($ ${fmtB(ggV)} prorrateados)</span></div>`;
   }
   
@@ -916,6 +919,9 @@ function genPrintHtml(){
   var ggV=ggF?dc*(pGG/100):ggSubgroups.reduce((a,sg)=>a+sg.items.reduce((b,it)=>b+N(it.qty)*N(it.tiempoUso)*N(it.price),0),0);
   var util=dc*(pU/100),imp=dc*(pImp/100),net=dc+ggV+util+imp,iva=net*(pIVA/100),grand=net+iva;
 	  var grandDisplay=(CFG.currency!=='CLP'&&CFG.parity>0)?grand/CFG.parity:grand;
+  
+  // Calcular % real de GG si no es fijo
+  var pGGReal = ggF ? pGG : (dc > 0 ? (ggV / dc) * 100 : 0);
 
 	  // Generar QR
 	  var qrHtml = '';
@@ -1060,7 +1066,7 @@ apuHtml+='<tr style="background:#fffdf0"><td colspan="4" style="padding:3px 8px"
     '<table><thead><tr style="background:#f9f9f9"><th>Ítem</th><th>Descripción</th><th style="text-align:center">Unid</th><th style="text-align:right">Cant.</th><th style="text-align:right">P.Unit. ('+s+')</th><th style="text-align:right">Total ('+s+')</th></tr></thead><tbody>'+trows+'</tbody></table>'+
     '<div style="width:250px;margin-left:auto;margin-top:20px;font-size:11px">'+
       '<div style="display:flex;justify-content:space-between;padding:3px 0"><span>Costo Directo</span><span>'+s+' '+fmtB(dc)+'</span></div>'+
-(!CFG.ggProrrateado?'<div style="display:flex;justify-content:space-between;padding:3px 0"><span>Gastos Generales'+(CFG.printPcts?' ('+pGG+'%)':'')+'</span><span>'+s+' '+fmtB(ggV)+'</span></div>':'')+
+(!CFG.ggProrrateado?'<div style="display:flex;justify-content:space-between;padding:3px 0"><span>Gastos Generales'+(CFG.printPcts?' ('+pGGReal.toFixed(2)+'%)':'')+'</span><span>'+s+' '+fmtB(ggV)+'</span></div>':'')+
 	      (!CFG.utilProrrateado?'<div style="display:flex;justify-content:space-between;padding:3px 0"><span>Utilidad'+(CFG.printPcts?' ('+pU+'%)':'')+'</span><span>'+s+' '+fmtB(util)+'</span></div>':'')+
       (!CFG.impProrrateado&&pImp>0?'<div style="display:flex;justify-content:space-between;padding:3px 0"><span>Imprevistos</span><span>'+s+' '+fmtB(imp)+'</span></div>':'')+
       '<div style="display:flex;justify-content:space-between;padding:5px 0;border-top:1px solid #333;font-weight:700;font-size:13px;color:'+color+'"><span>TOTAL NETO</span><span>'+s+' '+fmtB(net)+'</span></div>'+
