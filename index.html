@@ -479,7 +479,7 @@ function parseNum(v){
 function sym(){return CFG.currency==='USD'?'US$':CFG.currency==='UF'?'UF':'$';}
 function fmtN(n,d){
   let locale = CFG.decimalSeparator === ',' ? 'de-DE' : 'en-US';
-  let dec = (CFG.currency === 'UF') ? (d != null ? d : 2) : (CFG.currency === 'USD') ? (d != null ? d : 2) : (d != null ? d : 0);
+  let dec = (d != null ? d : CFG.decimalsQty);
   return n.toLocaleString(locale,{minimumFractionDigits:dec,maximumFractionDigits:dec});
 }
 function fmtNPrice(n,d){
