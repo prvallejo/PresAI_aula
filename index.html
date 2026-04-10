@@ -426,7 +426,7 @@ const GG_SUBGROUP_OPTIONS = [
 ];
 
 const CFG_DEF = {
-  currency:'CLP', parity:1, decimalsQty:2, decimalsPrice:0, decimalsBudget:0,
+  currency:'CLP', parity:1, decimalsQty:2, decimalsQtyBudget:2, decimalsPrice:0, decimalsBudget:0,
   companyName:'', companyTagline:'Construcción Civil · Chile', notes:[],
   companyRut:'', companyAddress:'', companyPhone:'', companyEmail:'', companyWeb:'', decimalSeparator:'.',
   repLegal:'', repLegalRut:'', profName:'', profRut:'',
@@ -490,6 +490,7 @@ function fmtNPrice(n,d){
   return v.toLocaleString(locale,{minimumFractionDigits:dec,maximumFractionDigits:dec});
 }
 function fmtQ(n){return fmtN(n,CFG.decimalsQty);}
+function fmtQBudget(n){return fmtN(n,CFG.decimalsQtyBudget);}
 function fmtP(n){return fmtNPrice(n,CFG.decimalsPrice);}
 function fmtB(n){return fmtNPrice(n,CFG.decimalsBudget);}
 function esc(s){return(s||'').toString().replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
@@ -576,7 +577,7 @@ function rb(){
       <input class="ri mono" data-field="num" data-id="${it.id}" placeholder="N°" value="${esc(it.num)}" autocomplete="off"/>
       <input class="ri" data-field="name" data-id="${it.id}" placeholder="Descripción..." value="${esc(it.name)}" autocomplete="off"/>
       <input class="ri" style="width:55px" data-field="unit" data-id="${it.id}" placeholder="Unid" value="${esc(it.unit)}" autocomplete="off"/>
-      <input class="${qtyClass}" data-field="qty" data-id="${it.id}" placeholder="0" value="${fmtQ(N(it.qty))}" onfocus="this.select()" autocomplete="off"/>
+	      <input class="${qtyClass}" data-field="qty" data-id="${it.id}" placeholder="0" value="${fmtQBudget(N(it.qty))}" onfocus="this.select()" autocomplete="off"/>
       <input class="${priceClass}" data-field="price" data-id="${it.id}" placeholder="P.Unit." value="${fmtP(N(it.price))}" onfocus="this.select()" autocomplete="off"/>
       <span class="span-tot ${it.isApu||it.isCub?'magenta':''}">${fmtB(tot)}</span>
       <span class="span-acts no-print">
@@ -596,9 +597,9 @@ function initEvents(){
     var id=inp.dataset.id,f=inp.dataset.field,v=inp.value;
     var it = items.find(x => x.id === id);
     if(f==='qty' && it.isCub && (v==='' ||  parseNum(v) === 0)) {
-      if(!confirm('campo con detalle cubicación y borrado irreversible, confirma?')) {
-        inp.value = fmtQ(N(it.qty)); return;
-      } else {
+	      if(!confirm('campo con detalle cubicación y borrado irreversible, confirma?')) {
+	        inp.value = fmtQBudget(N(it.qty)); return;
+	      } else {
         it.isCub = false; delete tofData[id]; inp.classList.remove('magenta');
         rb(); // Redibujar para quitar el check visual
       }
@@ -919,7 +920,7 @@ function genPrintHtml(){
     if(it.t==='ch'){
       trows+='<tr style="background:'+color+'18"><td colspan="2" style="font-weight:700;color:'+color+';padding:6px 8px;font-size:10px">'+esc(it.num)+'&nbsp;&nbsp;'+esc(it.name)+'</td><td></td><td></td><td></td><td style="text-align:right;font-family:monospace;font-weight:700;color:'+color+';padding:6px 8px">'+s+' '+fmtB(ct[it.id]||0)+'</td></tr>';
     } else {
-      trows+='<tr><td style="font-family:monospace;font-size:9px;padding:5px 8px;color:#475569">'+esc(it.num)+'</td><td style="padding:5px 8px">'+esc(it.name)+'</td><td style="text-align:center;padding:5px 8px;font-size:9px">'+esc(it.unit)+'</td><td style="text-align:right;font-family:monospace;padding:5px 8px">'+fmtQ(N(it.qty))+'</td><td style="text-align:right;font-family:monospace;padding:5px 8px">'+s+' '+fmtP(N(it.price))+'</td><td style="text-align:right;font-family:monospace;padding:5px 8px;font-weight:500">'+s+' '+fmtB(N(it.qty)*N(it.price))+'</td></tr>';
+	      trows+='<tr><td style="font-family:monospace;font-size:9px;padding:5px 8px;color:#475569">'+esc(it.num)+'</td><td style="padding:5px 8px">'+esc(it.name)+'</td><td style="text-align:center;padding:5px 8px;font-size:9px">'+esc(it.unit)+'</td><td style="text-align:right;font-family:monospace;padding:5px 8px">'+fmtQBudget(N(it.qty))+'</td><td style="text-align:right;font-family:monospace;padding:5px 8px">'+s+' '+fmtP(N(it.price))+'</td><td style="text-align:right;font-family:monospace;padding:5px 8px;font-weight:500">'+s+' '+fmtB(N(it.qty)*N(it.price))+'</td></tr>';
     }
   });
 
@@ -1115,7 +1116,8 @@ function openSettings(){
         '<option value="UF" '+(CFG.currency==='UF'?'selected':'')+'>UF</option>'+
       '</select></div>'+
       '<div class="cfg-field"><label>Paridad (1 '+sym()+' = ? CLP)</label><input type="number" value="'+CFG.parity+'" oninput="CFG.parity=N(this.value);saveCFG();rb();rc();renderGGSubgroups()" onfocus="this.select()"/></div>'+
-      '<div class="cfg-field"><label>Dec. Cantidades</label><input type="number" value="'+CFG.decimalsQty+'" oninput="CFG.decimalsQty=N(this.value);saveCFG();rb()" onfocus="this.select()"/></div>'+
+	      '<div class="cfg-field"><label>Dec. Cant. (Presup.)</label><input type="number" value="'+CFG.decimalsQtyBudget+'" oninput="CFG.decimalsQtyBudget=N(this.value);saveCFG();rb()" onfocus="this.select()"/></div>'+
+	      '<div class="cfg-field"><label>Dec. Cant. (Otros)</label><input type="number" value="'+CFG.decimalsQty+'" oninput="CFG.decimalsQty=N(this.value);saveCFG();rb()" onfocus="this.select()"/></div>'+
       '<div class="cfg-field"><label>Dec. P.Unit (APU)</label><input type="number" value="'+CFG.decimalsPrice+'" oninput="CFG.decimalsPrice=N(this.value);saveCFG();rb()" onfocus="this.select()"/></div>'+
       '<div class="cfg-field"><label>Dec. Totales</label><input type="number" value="'+CFG.decimalsBudget+'" oninput="CFG.decimalsBudget=N(this.value);saveCFG();rb()" onfocus="this.select()"/></div>'+
       '<div class="cfg-field"><label>Separador Decimal</label><select onchange="CFG.decimalSeparator=this.value;saveCFG();rb();rc();openSettings();">'+
@@ -1267,8 +1269,8 @@ function saveProject(){
     cfgPrintNotes:CFG.printNotes, cfgPrintBudgetNum:CFG.printBudgetNum,
     cfgPageSize:CFG.pageSize, cfgApuPrintMode:CFG.apuPrintMode,
     cfgCubPrintMode:CFG.cubPrintMode, cfgCurrency:CFG.currency,
-    cfgParity:CFG.parity, cfgDecimalsQty:CFG.decimalsQty,
-    cfgDecimalsPrice:CFG.decimalsPrice, cfgDecimalsBudget:CFG.decimalsBudget,
+	    cfgParity:CFG.parity, cfgDecimalsQty:CFG.decimalsQty, cfgDecimalsQtyBudget:CFG.decimalsQtyBudget,
+	    cfgDecimalsPrice:CFG.decimalsPrice, cfgDecimalsBudget:CFG.decimalsBudget,
     cfgDecimalSeparator:CFG.decimalSeparator
   };
   lsS('od_proj_'+currentProjectId,p);
@@ -1345,8 +1347,9 @@ function loadP(id){
   if(p.cfgCubPrintMode!=null) CFG.cubPrintMode=p.cfgCubPrintMode;
   if(p.cfgCurrency!=null) CFG.currency=p.cfgCurrency;
   if(p.cfgParity!=null) CFG.parity=p.cfgParity;
-  if(p.cfgDecimalsQty!=null) CFG.decimalsQty=p.cfgDecimalsQty;
-  if(p.cfgDecimalsPrice!=null) CFG.decimalsPrice=p.cfgDecimalsPrice;
+	  if(p.cfgDecimalsQty!=null) CFG.decimalsQty=p.cfgDecimalsQty;
+	  if(p.cfgDecimalsQtyBudget!=null) CFG.decimalsQtyBudget=p.cfgDecimalsQtyBudget;
+	  if(p.cfgDecimalsPrice!=null) CFG.decimalsPrice=p.cfgDecimalsPrice;
   if(p.cfgDecimalsBudget!=null) CFG.decimalsBudget=p.cfgDecimalsBudget;
   if(p.cfgDecimalSeparator!=null) CFG.decimalSeparator=p.cfgDecimalSeparator;
   saveCFG();
@@ -1546,8 +1549,8 @@ function saveProjectSilent(){
     cfgPrintNotes:CFG.printNotes, cfgPrintBudgetNum:CFG.printBudgetNum,
     cfgPageSize:CFG.pageSize, cfgApuPrintMode:CFG.apuPrintMode,
     cfgCubPrintMode:CFG.cubPrintMode, cfgCurrency:CFG.currency,
-    cfgParity:CFG.parity, cfgDecimalsQty:CFG.decimalsQty,
-    cfgDecimalsPrice:CFG.decimalsPrice, cfgDecimalsBudget:CFG.decimalsBudget,
+	    cfgParity:CFG.parity, cfgDecimalsQty:CFG.decimalsQty, cfgDecimalsQtyBudget:CFG.decimalsQtyBudget,
+	    cfgDecimalsPrice:CFG.decimalsPrice, cfgDecimalsBudget:CFG.decimalsBudget,
     cfgDecimalSeparator:CFG.decimalSeparator
   };
   lsS('od_proj_'+currentProjectId,p);
