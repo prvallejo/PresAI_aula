@@ -100,9 +100,16 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
 .tbl-hdr span{padding:12px 6px;font-size:11px;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:.6px;display:flex;align-items:center;justify-content:flex-start}
 .tbl-hdr .r{justify-content:flex-end;text-align:right}
 .tbl-hdr .c{justify-content:center;text-align:center}
-.row-ch,.row-it{display:grid;border-bottom:1px solid var(--border);padding:0 8px;align-items:center}
+.row-gr,.row-ch,.row-it{display:grid;border-bottom:1px solid var(--border);padding:0 8px;align-items:center}
+.row-gr{grid-template-columns:50px minmax(120px,1fr) 60px 70px 110px 110px 140px;background:var(--navy);color:white;border-bottom:1px solid rgba(255,255,255,0.1);cursor:pointer}
 .row-ch{grid-template-columns:50px minmax(120px,1fr) 60px 70px 110px 110px 140px;background:rgba(30,58,95,.05);border-bottom:1px solid var(--border2)}
 .row-it{grid-template-columns:50px minmax(120px,1fr) 60px 70px 110px 110px 140px}
+.row-gr.collapsed + .group-content{display:none}
+.row-gr .ri.gr{font-weight:800;color:white;font-size:14px;text-transform:uppercase}
+.row-gr .ri.gr::placeholder{color:rgba(255,255,255,0.5)}
+.row-gr .span-gr-tot{padding:10px 6px;text-align:right;font-family:var(--mono);font-size:14px;font-weight:700;color:#86efac}
+.row-gr .toggle-icon{font-size:12px;transition:transform 0.2s;display:inline-block;margin-right:8px}
+.row-gr.collapsed .toggle-icon{transform:rotate(-90deg)}
 .row-it:hover{background:#f6f8ff}.row-ch:hover{background:rgba(30,58,95,.08)}
 .ri{font-family:var(--ff);font-size:13px;color:var(--txt);background:transparent;border:none;outline:none;width:100%;padding:10px 6px;line-height:1.3}
 .ri::placeholder{color:var(--txt3);font-style:italic}.ri:focus::placeholder{opacity:0}
@@ -124,6 +131,7 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
 .bs.apu{font-size:9px;padding:3px 6px;background:var(--amber-lt);color:var(--amber);border-color:var(--amber)}
 .bs.cub{font-size:9px;padding:3px 6px;background:var(--magenta-lt);color:var(--magenta);border-color:var(--magenta)}
 .bs.addp{font-size:9px;padding:3px 6px;background:var(--green-lt);color:var(--green);border-color:var(--green)}
+.bs.addg{font-size:9px;padding:3px 6px;background:var(--navy);color:white;border-color:rgba(255,255,255,0.3)}
 
 /* ── TOTALS ── */
 .tot-card{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
@@ -355,7 +363,8 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
 
       <div class="tbl-wrap">
 <div class="tbl-hdr">
-	          <span>Ítem</span><span>Descripción de la Partida</span><span class="c">Unid</span><span class="r">Cant.</span><span class="r" id="hdr-punit">P.Unit.</span><span class="r" id="hdr-total">Total</span><span></span>
+	          <span>Ítem</span><span>Descripción de la Partida</span><span class="c">Unid</span><span class="r">Cant.</span><span class="r" id="hdr-punit">P.Unit.</span><span class="r" id="hdr-total">Total</span>
+	          <span class="no-print" style="justify-content:flex-end;padding-right:12px"><button class="bs addg" onclick="addGr()" style="background:var(--navy);color:white;border:none;padding:6px 12px;font-weight:700;border-radius:6px">+ GRUPO</button></span>
 	        </div>
         <div id="brows"></div>
         <div class="tbl-add no-print">
@@ -556,16 +565,28 @@ function numToWords(n){
 }
 
 /* ── CORE LOGIC ── */
+var collapsedGroups = {};
+
 function reNum(){
-  var cn=0,itn=0,cc=0;
+  var gn=0, cn=0, itn=0;
+  var cg=0, cc=0;
   items=items.map(function(it){
-    if(it.t==='ch'){cn++;itn=0;cc=cn;return Object.assign({},it,{num:cn+'.-'});}
-    itn++;return Object.assign({},it,{num:cc+'.'+itn});
+    if(it.t==='gr'){gn++; cn=0; itn=0; cg=gn; return Object.assign({},it,{num:gn+''});}
+    if(it.t==='ch'){cn++; itn=0; cc=cn; return Object.assign({},it,{num:cg+'.'+cn});}
+    itn++; return Object.assign({},it,{num:cg+'.'+cc+'.'+itn});
   });
 }
 function ctotals(){
-  var ct={},cur=null;
-  items.forEach(function(it){if(it.t==='ch'){cur=it.id;ct[it.id]=0;}else if(cur)ct[cur]+=N(it.qty)*N(it.price);});
+  var ct={}, curG=null, curC=null;
+  items.forEach(function(it){
+    if(it.t==='gr'){ curG=it.id; ct[it.id]=0; }
+    else if(it.t==='ch'){ curC=it.id; ct[it.id]=0; }
+    else {
+      var val = N(it.qty)*N(it.price);
+      if(curC) ct[curC] += val;
+      if(curG) ct[curG] += val;
+    }
+  });
   return ct;
 }
 
@@ -576,9 +597,29 @@ function rb(){
   document.getElementById('hdr-punit').textContent = 'P.Unit. (' + s + ')';
   document.getElementById('hdr-total').textContent = 'Total (' + s + ')';
   var cont=document.getElementById('brows');
-  cont.innerHTML=items.map(function(it){
-    if(it.t==='ch'){
-      return `<div class="row-ch" data-id="${it.id}">
+  var html = '';
+  var inGroup = false;
+
+  items.forEach(function(it, idx){
+    if(it.t==='gr'){
+      if(inGroup) html += `</div>`;
+      var isCollapsed = collapsedGroups[it.id];
+      html += `<div class="row-gr ${isCollapsed?'collapsed':''}" data-id="${it.id}" onclick="toggleGroup('${it.id}', event)">
+        <input class="ri mono gr" data-field="num" data-id="${it.id}" value="${esc(it.num)}" readonly/>
+        <div style="display:flex;align-items:center">
+          <span class="toggle-icon">▼</span>
+          <input class="ri gr" data-field="name" data-id="${it.id}" placeholder="Nombre del Grupo..." value="${esc(it.name)}" onclick="event.stopPropagation()" oninput="markUnsaved()" autocomplete="off"/>
+        </div>
+        <span></span><span></span><span></span>
+        <span class="span-gr-tot">${fmtB(ct[it.id]||0)}</span>
+        <span class="span-acts no-print" onclick="event.stopPropagation()">
+          <button class="bs addp" style="background:white;color:var(--navy)" onclick="addChToGroup('${it.id}')">+ Capítulo</button>
+          <button class="bs del" onclick="di('${it.id}')">×</button>
+        </span>
+      </div><div class="group-content">`;
+      inGroup = true;
+    } else if(it.t==='ch'){
+      html += `<div class="row-ch" data-id="${it.id}">
         <input class="ri mono ch" data-field="num" data-id="${it.id}" placeholder="N°" value="${esc(it.num)}" autocomplete="off"/>
         <input class="ri ch" data-field="name" data-id="${it.id}" placeholder="Nombre del capítulo..." value="${esc(it.name)}" autocomplete="off"/>
         <span></span><span></span><span></span>
@@ -587,31 +628,40 @@ function rb(){
           <button class="bs addp" onclick="addItToChapter('${it.id}')">+ Partida</button>
           <button class="bs del" onclick="di('${it.id}')">×</button>
         </span></div>`;
+    } else {
+      var tot=N(it.qty)*N(it.price);
+      var ha=apuData[it.id],hc=tofData[it.id]&&tofData[it.id].length;
+      var qtyClass=it.isCub?'ri r magenta':'ri r';
+      var priceClass=it.isApu?'ri r magenta':'ri r';
+      html += `<div class="row-it" data-id="${it.id}">
+        <div style="display:flex;align-items:center;gap:4px">
+          <button class="bs" style="padding:2px 5px;font-size:10px;font-weight:700;color:${it.note?'var(--magenta)':'#94a3b8'};border-color:${it.note?'var(--magenta)':'#e2e8f0'}" onclick="openItemNote('${it.id}')">T</button>
+          <input class="ri mono" style="width:40px" data-field="num" data-id="${it.id}" placeholder="N°" value="${esc(it.num)}" autocomplete="off"/>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column">
+          <input class="ri" data-field="name" data-id="${it.id}" placeholder="Descripción..." value="${esc(it.name)}" autocomplete="off"/>
+          ${it.note ? `<div style="font-size:10px;color:#64748b;font-style:italic;margin-top:2px;padding-left:4px;line-height:1.2">${esc(it.note)}</div>` : ''}
+        </div>
+        <input class="ri" style="width:60px;text-align:center" data-field="unit" data-id="${it.id}" placeholder="Unid" value="${esc(it.unit)}" autocomplete="off"/>
+        <input class="${qtyClass}" data-field="qty" data-id="${it.id}" placeholder="0" value="${fmtQBudget(N(it.qty))}" onfocus="this.select()" autocomplete="off"/>
+        <input class="${priceClass}" data-field="price" data-id="${it.id}" placeholder="P.Unit." value="${fmtP(N(it.price))}" onfocus="this.select()" autocomplete="off"/>
+        <span class="span-tot ${it.isApu||it.isCub?'magenta':''}">${fmtB(tot)}</span>
+        <span class="span-acts no-print">
+          <button class="bs cub${hc?' done':''}" onclick="openTof('${it.id}')">${hc?'✓Cub':'Cub'}</button>
+          <button class="bs apu${ha?' done':''}" onclick="openApu('${it.id}')">${ha?'✓APU':'APU'}</button>
+          <button class="bs del" onclick="di('${it.id}')">×</button>
+        </span></div>`;
     }
-    var tot=N(it.qty)*N(it.price);
-    var ha=apuData[it.id],hc=tofData[it.id]&&tofData[it.id].length;
-    var qtyClass=it.isCub?'ri r magenta':'ri r';
-    var priceClass=it.isApu?'ri r magenta':'ri r';
-    return `<div class="row-it" data-id="${it.id}">
-      <div style="display:flex;align-items:center;gap:4px">
-        <button class="bs" style="padding:2px 5px;font-size:10px;font-weight:700;color:${it.note?'var(--magenta)':'#94a3b8'};border-color:${it.note?'var(--magenta)':'#e2e8f0'}" onclick="openItemNote('${it.id}')">T</button>
-        <input class="ri mono" style="width:40px" data-field="num" data-id="${it.id}" placeholder="N°" value="${esc(it.num)}" autocomplete="off"/>
-      </div>
-      <div style="flex:1;display:flex;flex-direction:column">
-        <input class="ri" data-field="name" data-id="${it.id}" placeholder="Descripción..." value="${esc(it.name)}" autocomplete="off"/>
-        ${it.note ? `<div style="font-size:10px;color:#64748b;font-style:italic;margin-top:2px;padding-left:4px;line-height:1.2">${esc(it.note)}</div>` : ''}
-      </div>
-      <input class="ri" style="width:60px;text-align:center" data-field="unit" data-id="${it.id}" placeholder="Unid" value="${esc(it.unit)}" autocomplete="off"/>
-	      <input class="${qtyClass}" data-field="qty" data-id="${it.id}" placeholder="0" value="${fmtQBudget(N(it.qty))}" onfocus="this.select()" autocomplete="off"/>
-      <input class="${priceClass}" data-field="price" data-id="${it.id}" placeholder="P.Unit." value="${fmtP(N(it.price))}" onfocus="this.select()" autocomplete="off"/>
-      <span class="span-tot ${it.isApu||it.isCub?'magenta':''}">${fmtB(tot)}</span>
-      <span class="span-acts no-print">
-        <button class="bs cub${hc?' done':''}" onclick="openTof('${it.id}')">${hc?'✓Cub':'Cub'}</button>
-        <button class="bs apu${ha?' done':''}" onclick="openApu('${it.id}')">${ha?'✓APU':'APU'}</button>
-        <button class="bs del" onclick="di('${it.id}')">×</button>
-      </span></div>`;
-  }).join('');
+  });
+  if(inGroup) html += `</div>`;
+  cont.innerHTML = html;
   rc();refreshApuTab();refreshCubTab();
+}
+
+function toggleGroup(id, e){
+  if(e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') return;
+  collapsedGroups[id] = !collapsedGroups[id];
+  rb();
 }
 
 function uUnit(id,v){items=items.map(x=>x.id===id?Object.assign(x,{unit:v}):x);markUnsaved();}
@@ -651,20 +701,47 @@ function initEvents(){
   });
 }
 
+function addGr(){
+  items.push({id:gid(),t:'gr',num:'',name:'',unit:'',qty:0,price:0});
+  rb();markUnsaved();
+}
+function addChToGroup(grId){
+  var gi=items.findIndex(x=>x.id===grId);
+  var last=gi;for(var i=gi+1;i<items.length;i++){if(items[i].t==='gr')break;last=i;}
+  items.splice(last+1,0,{id:gid(),t:'ch',num:'',name:'',unit:'',qty:0,price:0});
+  rb();markUnsaved();
+}
 function addItToChapter(chId){
   var ci=items.findIndex(x=>x.id===chId);
-  var last=ci;for(var i=ci+1;i<items.length;i++){if(items[i].t==='ch')break;last=i;}
+  var last=ci;for(var i=ci+1;i<items.length;i++){if(items[i].t==='gr'||items[i].t==='ch')break;last=i;}
   items.splice(last+1,0,{id:gid(),t:'it',num:'',name:'',unit:'un',qty:1,price:0,isApu:false,isCub:false});
   rb();markUnsaved();
 }
 function addCh(){
-  items.push({id:gid(),t:'ch',num:'',name:'',unit:'',qty:0,price:0,isApu:false,isCub:false});
-  rb();markUnsaved();
+  var lastGr=null;for(var i=items.length-1;i>=0;i--){if(items[i].t==='gr'){lastGr=items[i];break;}}
+  if(lastGr) addChToGroup(lastGr.id);
+  else {let gid_val=gid();items.push({id:gid_val,t:'gr',num:'',name:'',unit:'',qty:0,price:0});addChToGroup(gid_val);}
 }
 function addIt(){
   var lastCh=null;for(var i=items.length-1;i>=0;i--){if(items[i].t==='ch'){lastCh=items[i];break;}}
   if(lastCh) addItToChapter(lastCh.id);
-  else {let cid=gid();items.push({id:cid,t:'ch',num:'1.-',name:'',unit:'',qty:0,price:0,isApu:false,isCub:false});addItToChapter(cid);}
+  else {
+    var lastGr=null;for(var i=items.length-1;i>=0;i--){if(items[i].t==='gr'){lastGr=items[i];break;}}
+    if(lastGr){
+      let cid=gid();addChToGroup(lastGr.id);
+      let nch=items.find(x=>x.id===cid); // Note: cid is not assigned to items yet in this way
+      // Re-doing logic for safety
+      var gi=items.findIndex(x=>x.id===lastGr.id);
+      var cid_new=gid();
+      var last_pos=gi;for(var j=gi+1;j<items.length;j++){if(items[j].t==='gr')break;last_pos=j;}
+      items.splice(last_pos+1,0,{id:cid_new,t:'ch',num:'',name:'',unit:'',qty:0,price:0});
+      addItToChapter(cid_new);
+    } else {
+      let grid=gid();items.push({id:grid,t:'gr',num:'',name:'',unit:'',qty:0,price:0});
+      let cid=gid();items.push({id:cid,t:'ch',num:'',name:'',unit:'',qty:0,price:0});
+      addItToChapter(cid);
+    }
+  }
 }
 function di(id){if(confirm('¿Eliminar fila?')){items=items.filter(it=>it.id!==id);rb();markUnsaved();}}
 
@@ -1421,6 +1498,7 @@ function openProjects(){
 function loadP(id){
   let p=lsL('od_proj_'+id);if(!p)return;
   currentProjectId=id;items=p.items;ggSubgroups=p.ggSubgroups||[];apuData=p.apuData;tofData=p.tofData;
+  collapsedGroups=p.collapsedGroups||{};
   CFG.notes=p.notes||[];
   CFG.extraNotes=p.extraNotes||[];
   CFG.noteImages=p.noteImages||[];
@@ -1457,8 +1535,9 @@ function loadP(id){
 	  if(p.cfgDecimalsQtyBudget!=null) CFG.decimalsQtyBudget=p.cfgDecimalsQtyBudget;
 	  if(p.cfgDecimalsPrice!=null) CFG.decimalsPrice=p.cfgDecimalsPrice;
   if(p.cfgDecimalsBudget!=null) CFG.decimalsBudget=p.cfgDecimalsBudget;
-if(p.cfgDecimalSeparator!=null) CFG.decimalSeparator=p.cfgDecimalSeparator;
+  if(p.cfgDecimalSeparator!=null) CFG.decimalSeparator=p.cfgDecimalSeparator;
 	  if(p.cfgPrintPcts!=null) CFG.printPcts=p.cfgPrintPcts;
+	  if(p.collapsedGroups!=null) collapsedGroups=p.collapsedGroups;
 	  saveCFG();
   document.getElementById('pObra').value=p.obra;
   document.getElementById('pMandante').value=p.mandante||'';
@@ -1728,15 +1807,16 @@ function setupAutoSave(){
 function saveProjectSilent(){
   let obra=document.getElementById('pObra').value.trim();
   if(!obra || !currentProjectId) return;
+  let mandante=document.getElementById('pMandante').value;
+  let ubicacion=document.getElementById('pUbicacion').value;
+  let profesional=document.getElementById('pProfesional').value;
+  let fecha=document.getElementById('pFecha').value;
+  let payment=document.getElementById('pPayment').value;
+  let execution=document.getElementById('pExecution').value;
   let p={
-    id:currentProjectId, obra,
-    mandante:document.getElementById('pMandante').value,
-    ubicacion:document.getElementById('pUbicacion').value,
-    profesional:document.getElementById('pProfesional').value,
-    fecha:document.getElementById('pFecha').value,
-    payment:document.getElementById('pPayment').value,
-    execution:document.getElementById('pExecution').value,
+    id:currentProjectId, obra, mandante, ubicacion, profesional, fecha, payment, execution,
     items, ggSubgroups, apuData, tofData, notes:CFG.notes, extraNotes:CFG.extraNotes, noteImages:CFG.noteImages,
+    collapsedGroups: collapsedGroups,
     pGG:document.getElementById('pGG').value,
     pUtil:document.getElementById('pUtil').value,
     pImp:document.getElementById('pImp').value,
@@ -1806,15 +1886,31 @@ function exportXlsx(projId){
 
   // 2. PRESUPUESTO
   const presData = [['Ítem', 'Descripción', 'Unid', 'Cantidad', 'P. Unit.', 'Total']];
-  let cn=0, itn=0, cc=0;
+  let gn=0, cn=0, itn=0;
+  let cg=0, cc=0;
   const numbered = pitems.map(it => {
-    if(it.t==='ch'){cn++; itn=0; cc=cn; return Object.assign({}, it, {num: cn+'.-'});}
-    itn++; return Object.assign({}, it, {num: cc+'.'+itn});
+    if(it.t==='gr'){gn++; cn=0; itn=0; cg=gn; return Object.assign({}, it, {num: gn+''});}
+    if(it.t==='ch'){cn++; itn=0; cc=cn; return Object.assign({}, it, {num: cg+'.'+cn});}
+    itn++; return Object.assign({}, it, {num: cg+'.'+cc+'.'+itn});
+  });
+
+  const ct = {};
+  let curG=null, curC=null;
+  numbered.forEach(it => {
+    if(it.t==='gr'){ curG=it.id; ct[it.id]=0; }
+    else if(it.t==='ch'){ curC=it.id; ct[it.id]=0; }
+    else {
+      let val = (parseFloat(it.qty)||0)*(parseFloat(it.price)||0);
+      if(curC) ct[curC] = (ct[curC]||0) + val;
+      if(curG) ct[curG] = (ct[curG]||0) + val;
+    }
   });
 
   numbered.forEach(it => {
-    if(it.t==='ch'){
-      presData.push([it.num, it.name, '', '', '', 0]);
+    if(it.t==='gr'){
+      presData.push([it.num, it.name.toUpperCase(), '', '', '', ct[it.id]||0]);
+    } else if(it.t==='ch'){
+      presData.push([it.num, it.name, '', '', '', ct[it.id]||0]);
     } else {
       presData.push([it.num, it.name, it.unit||'', parseFloat(it.qty)||0, parseFloat(it.price)||0, {f: `D${presData.length+1}*E${presData.length+1}`}]);
     }
