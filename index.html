@@ -1040,7 +1040,9 @@ function genPrintHtml(){
 
   var trows='';
   items.forEach(it=>{
-    if(it.t==='ch'){
+    if(it.t==='gr'){
+      trows+='<tr style="background:'+color+';color:white"><td colspan="2" style="font-weight:800;padding:8px 8px;font-size:11px;text-transform:uppercase">'+esc(it.num)+'&nbsp;&nbsp;'+esc(it.name)+'</td><td></td><td></td><td></td><td style="text-align:right;font-family:monospace;font-weight:800;padding:8px 8px">'+fmtB(ct[it.id]||0)+'</td></tr>';
+    } else if(it.t==='ch'){
       trows+='<tr style="background:'+color+'18"><td colspan="2" style="font-weight:700;color:'+color+';padding:6px 8px;font-size:10px">'+esc(it.num)+'&nbsp;&nbsp;'+esc(it.name)+'</td><td></td><td></td><td></td><td style="text-align:right;font-family:monospace;font-weight:700;color:'+color+';padding:6px 8px">'+fmtB(ct[it.id]||0)+'</td></tr>';
     } else {
 	      trows+='<tr><td style="font-family:monospace;font-size:9px;padding:5px 8px;color:#475569">'+esc(it.num)+'</td><td style="padding:5px 8px">'+esc(it.name)+(CFG.printItemNotes && it.note ? '<div style="font-size:8px;color:#64748b;font-style:italic;margin-top:2px">'+esc(it.note)+'</div>' : '')+'</td><td style="text-align:center;padding:5px 8px;font-size:9px">'+esc(it.unit)+'</td><td style="text-align:right;font-family:monospace;padding:5px 8px">'+fmtQBudget(N(it.qty))+'</td><td style="text-align:right;font-family:monospace;padding:5px 8px">'+fmtP(N(it.price))+'</td><td style="text-align:right;font-family:monospace;padding:5px 8px;font-weight:500">'+fmtB(N(it.qty)*N(it.price))+'</td></tr>';
@@ -1391,8 +1393,8 @@ function hCov(i){let r=new FileReader();r.onload=e=>{CFG.coverImgUrl=e.target.re
 function newProject(){
   if(isDirty&&!confirm('¿Descartar cambios?'))return;
   currentProjectId=null;isDirty=false;
-  items=[{id:gid(),t:'ch',num:'1.-',name:'',unit:'',qty:0,price:0,isApu:false,isCub:false},{id:gid(),t:'it',num:'1.1',name:'',unit:'',qty:0,price:0,isApu:false,isCub:false}];
-  ggSubgroups=[];apuData={};tofData={};
+  items=[{id:gid(),t:'gr',num:'1',name:'',unit:'',qty:0,price:0},{id:gid(),t:'ch',num:'1.1',name:'',unit:'',qty:0,price:0,isApu:false,isCub:false},{id:gid(),t:'it',num:'1.1.1',name:'',unit:'',qty:0,price:0,isApu:false,isCub:false}];
+  ggSubgroups=[];apuData={};tofData={};collapsedGroups={};
   
 	  // Configuración predeterminada solicitada
 	  CFG.currency = 'CLP';
@@ -1429,7 +1431,7 @@ function saveProject(){
     fecha:document.getElementById('pFecha').value,
     payment:document.getElementById('pPayment').value,
     execution:document.getElementById('pExecution').value,
-    items,ggSubgroups,apuData,tofData,notes:CFG.notes,extraNotes:CFG.extraNotes,noteImages:CFG.noteImages,
+    items,ggSubgroups,apuData,tofData,notes:CFG.notes,extraNotes:CFG.extraNotes,noteImages:CFG.noteImages,collapsedGroups,
     pGG:document.getElementById('pGG').value,
     pUtil:document.getElementById('pUtil').value,
     pImp:document.getElementById('pImp').value,
