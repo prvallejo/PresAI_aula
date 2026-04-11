@@ -321,7 +321,8 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
       <button class="hbtn" onclick="newProject()"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Nuevo</button>
       <button class="hbtn" onclick="saveProject()"><svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Guardar</button>
       <button class="hbtn" onclick="previewReport()"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> Vista Previa</button>
-      <button class="hbtn green" onclick="doPrint()"><svg viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg> Imprimir</button>
+      <button class="hbtn green      '<button class="hbtn" onclick="doPrint()"><svg viewBox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>Imprimir</button>'+
+      '<button class="hbtn" onclick="openHelp()" title="Ayuda"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>'+
       <button class="hbtn" onclick="openHelp()"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></button>
       <button class="hbtn" onclick="openSettings()"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button>
     </div>
@@ -1058,8 +1059,8 @@ apuHtml+='<tr style="background:#fffdf0"><td colspan="4" style="padding:3px 8px"
   }
 
   var signatures='<div style="display:flex;justify-content:space-around;margin-top:80px;page-break-inside:avoid">'+
-    '<div style="text-align:center;width:200px;border-top:1px solid #333;padding-top:10px"><div style="font-size:10px;font-weight:700">REPRESENTANTE LEGAL</div><div style="font-size:9px">'+esc(CFG.repLegal)+'</div></div>'+
-    '<div style="text-align:center;width:200px;border-top:1px solid #333;padding-top:10px"><div style="font-size:10px;font-weight:700">PROFESIONAL A CARGO</div><div style="font-size:9px">'+esc(CFG.profName||profesional)+'</div></div>'+
+    '<div style="text-align:center;width:200px;border-top:1px solid #333;padding-top:10px"><div style="font-size:10px;font-weight:700">REPRESENTANTE CONSTRUCTORA</div><div style="font-size:9px">'+esc(CFG.repLegal)+'</div></div>'+
+    '<div style="text-align:center;width:200px;border-top:1px solid #333;padding-top:10px"><div style="font-size:10px;font-weight:700">MANDANTE / CLIENTE</div><div style="font-size:9px">'+esc(CFG.profName||profesional)+'</div></div>'+
     '</div>';
 
   var addrLine = esc(CFG.companyAddress)+(CFG.companyPhone?' | '+esc(CFG.companyPhone):'')+(CFG.companyEmail?' | '+esc(CFG.companyEmail):'')+(CFG.companyWeb?' | '+esc(CFG.companyWeb):'');
@@ -1250,18 +1251,71 @@ function openSettings(activeTab){
 
     /* Firmantes dentro de Empresa */
     '<div class="cfg-section"><h4>Firmantes</h4><div class="cfg-grid">'+
-      '<div class="cfg-field"><label>Rep. Legal</label><input value="'+esc(CFG.repLegal)+'" oninput="CFG.repLegal=this.value;saveCFG()"/></div>'+
-      '<div class="cfg-field"><label>Profesional</label><input value="'+esc(CFG.profName)+'" oninput="CFG.profName=this.value;saveCFG()"/></div>'+
+      '<div class="cfg-field"><label>Rep. Constructora</label><input value="'+esc(CFG.repLegal)+'" oninput="CFG.repLegal=this.value;saveCFG()"/></div>'+
+      '<div class="cfg-field"><label>Mandante / Cliente</label><input value="'+esc(CFG.profName)+'" oninput="CFG.profName=this.value;saveCFG()"/></div>'+
     '</div></div>'+
 
-    /* Imagen Portada dentro de Empresa */
+    /* Imagen Portada dentro de Empresa - MOVIDA A INFORME */;
+
+  /* ── Contenido pestaña INFORME ── */
+  let pnlInforme =
+    '<div class="cfg-section"><h4>Estilos del Informe</h4><div class="cfg-grid">'+
+      '<div class="cfg-field"><label>Color Informe</label><input type="color" value="'+CFG.colorHeader+'" oninput="CFG.colorHeader=this.value;saveCFG();applyColor()"/></div>'+
+      '<div class="cfg-field"><label>Logo</label>'+
+        '<div style="display:flex;gap:10px;align-items:center">'+
+          '<button class="bs" onclick="document.getElementById(\'logoInp\').click()">Subir Logo</button>'+
+          (CFG.logoDataUrl?'<img src="'+CFG.logoDataUrl+'" style="height:30px;border:1px solid #eee"/>':'')+
+        '</div>'+
+        '<input type="file" id="logoInp" style="display:none" onchange="hLogo(this)"/>'+
+      '</div>'+
+    '</div></div>'+
+
     '<div class="cfg-section"><h4>Imagen Portada</h4>'+
       '<div style="display:flex;gap:15px;align-items:center">'+
         '<button class="bs" onclick="document.getElementById(\'covInp\').click()">Subir Imagen Portada</button>'+
-        (CFG.coverImgUrl?'<img src="'+CFG.coverImgUrl+'" style="height:40px;border:1px solid #eee"/><button class="bs del" onclick="CFG.coverImgUrl=\'\';saveCFG();openSettings(\'empresa\')">×</button>':'')+
+        (CFG.coverImgUrl?'<img src="'+CFG.coverImgUrl+'" style="height:40px;border:1px solid #eee"/><button class="bs del" onclick="CFG.coverImgUrl=\'\';saveCFG();openSettings(\'informe\')">×</button>':'')+
       '</div>'+
       '<input type="file" id="covInp" style="display:none" onchange="hCov(this)"/>'+
-    '</div>';
+    '</div>'+
+
+    '<div class="cfg-section"><h4>Formato de Impresión</h4><div class="cfg-grid">'+
+      '<div class="cfg-field"><label>Tamaño de Hoja</label><select onchange="CFG.pageSize=this.value;saveCFG()">'+
+        '<option value="letter" '+(CFG.pageSize==='letter'?'selected':'')+'>Carta (Letter)</option>'+
+        '<option value="legal" '+(CFG.pageSize==='legal'?'selected':'')+'>Oficio (Legal)</option>'+
+      '</select></div>'+
+      '<div class="cfg-field"><label>Numeración Presupuesto</label><select onchange="CFG.printBudgetNum=(this.value===\'on\');saveCFG()">'+
+        '<option value="off" '+(!CFG.printBudgetNum?'selected':'')+'>Off</option>'+
+        '<option value="on" '+(CFG.printBudgetNum?'selected':'')+'>On</option>'+
+      '</select></div>'+
+    '</div>'+
+    '<div style="margin-top:12px"><label style="font-size:10px;font-weight:600;color:var(--txt2);text-transform:uppercase;letter-spacing:.6px;display:block;margin-bottom:8px">Incluir en impresión</label>'+
+      '<div style="display:flex;flex-direction:column;gap:8px">'+
+        '<label class="chk-opt"><input type="checkbox" '+(CFG.printCover?'checked':'')+' onchange="CFG.printCover=this.checked;saveCFG()"> Portada</label>'+
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:center">'+
+          '<label style="display:flex;align-items:center;gap:5px;white-space:nowrap"><input type="checkbox" '+(CFG.printApu?'checked':'')+' onchange="CFG.printApu=this.checked;saveCFG()"/> APUs</label>'+
+          '<select onchange="CFG.apuPrintMode=this.value;saveCFG()" style="padding:4px 6px;border-radius:4px;border:1px solid var(--border2);font-size:11px">'+
+            '<option value="continuo" '+(CFG.apuPrintMode==='continuo'?'selected':'')+'>Continuo</option>'+
+            '<option value="por hoja" '+(CFG.apuPrintMode==='por hoja'?'selected':'')+'>Por hoja</option>'+
+          '</select></div>'+
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:center">'+
+          '<label style="display:flex;align-items:center;gap:5px;white-space:nowrap"><input type="checkbox" '+(CFG.printCub?'checked':'')+' onchange="CFG.printCub=this.checked;saveCFG()"/> Cubicaciones</label>'+
+          '<select onchange="CFG.cubPrintMode=this.value;saveCFG()" style="padding:4px 6px;border-radius:4px;border:1px solid var(--border2);font-size:11px">'+
+            '<option value="continuo" '+(CFG.cubPrintMode==='continuo'?'selected':'')+'>Continuo</option>'+
+            '<option value="por hoja" '+(CFG.cubPrintMode==='por hoja'?'selected':'')+'>Por hoja</option>'+
+          '</select></div>'+
+        '<label class="chk-opt"><input type="checkbox" '+(CFG.printGG?'checked':'')+' onchange="CFG.printGG=this.checked;saveCFG()"> Gastos Generales</label>'+
+        '<label class="chk-opt"><input type="checkbox" '+(CFG.printPayment?'checked':'')+' onchange="CFG.printPayment=this.checked;saveCFG()"> Forma de pago</label>'+
+        '<label class="chk-opt"><input type="checkbox" '+(CFG.printExecution?'checked':'')+' onchange="CFG.printExecution=this.checked;saveCFG()"> Plazo ejecución</label>'+
+        '<label class="chk-opt"><input type="checkbox" '+(CFG.printNotes?'checked':'')+' onchange="CFG.printNotes=this.checked;saveCFG()"> Notas</label>'+
+	        '<label class="chk-opt" style="margin-left:20px"><input type="checkbox" '+(CFG.printItemNotes?'checked':'')+' onchange="CFG.printItemNotes=this.checked;saveCFG();rb()"> Texto en partidas</label>'+
+	        '<div style="margin-left:20px;display:flex;align-items:center;gap:10px">'+
+	          '<span style="font-size:11px;color:var(--txt2)">Imágenes</span>'+
+	          '<select onchange="CFG.printNoteImages=(this.value===\'on\');saveCFG()" style="padding:2px 4px;border-radius:4px;border:1px solid var(--border2);font-size:11px">'+
+	            '<option value="on" '+(CFG.printNoteImages? 'selected':'')+'>Si</option>'+
+	            '<option value="off" '+(!CFG.printNoteImages? 'selected':'')+'>No</option>'+
+	          '</select>'+
+	        '</div>'+
+      '</div></div>';
 
   /* ── Contenido pestaña MONEDA Y DECIMALES ── */
   let pnlMoneda =
@@ -1292,16 +1346,15 @@ function openSettings(activeTab){
 
     /* Barra de pestañas */
     '<div class="cfg-tabs">'+
-      '<button class="cfg-tab'+(activeTab==='proyecto'?' cfg-tab-on':'')+'" onclick="cfgSwitchTab(\'proyecto\',this)">📋 Proyecto</button>'+
-      '<button class="cfg-tab'+(activeTab==='empresa'?' cfg-tab-on':'')+'" onclick="cfgSwitchTab(\'empresa\',this)">🏗️ Empresa Constructora</button>'+
-      '<button class="cfg-tab'+(activeTab==='moneda'?' cfg-tab-on':'')+'" onclick="cfgSwitchTab(\'moneda\',this)">💱 Moneda y Decimales</button>'+
-    '</div>'+
-
-    /* Paneles */
-    '<div id="cfg-pnl-proyecto" class="cfg-tab-pnl'+(activeTab==='proyecto'?' cfg-tab-pnl-on':'')+'">'+pnlProyecto+'</div>'+
-    '<div id="cfg-pnl-empresa" class="cfg-tab-pnl'+(activeTab==='empresa'?' cfg-tab-pnl-on':'')+'">'+pnlEmpresa+'</div>'+
-    '<div id="cfg-pnl-moneda" class="cfg-tab-pnl'+(activeTab==='moneda'?' cfg-tab-pnl-on':'')+'">'+pnlMoneda+'</div>'+
-
+        '<button class="cfg-tab'+(activeTab==='proyecto'?' cfg-tab-on':'')+' onclick="cfgSwitchTab(\'proyecto\',this)">📋 Proyecto</button>'+
+      '<button class="cfg-tab'+(activeTab==='empresa'?' cfg-tab-on':'')+' onclick="cfgSwitchTab(\'empresa\',this)">🏗️ Empresa Constructora</button>'+
+      '<button class="cfg-tab'+(activeTab==='informe'?' cfg-tab-on':'')+' onclick="cfgSwitchTab(\'informe\',this)">📄 Informe</button>'+
+      '<button class="cfg-tab'+(activeTab==='moneda'?' cfg-tab-on':'')+' onclick="cfgSwitchTab(\'moneda\',this)">💱 Moneda y Decimales</button>'++
+    '</div>'+    /* Paneles */
+    '<div id="cfg-pnl-proyecto" class="cfg-tab-pnl'+(activeTab==='proyecto'?' cfg-tab-pnl-on':'')+'">'+ pnlProyecto+'</div>'+
+    '<div id="cfg-pnl-empresa" class="cfg-tab-pnl'+(activeTab==='empresa'?' cfg-tab-pnl-on':'')+'">'+ pnlEmpresa+'</div>'+
+    '<div id="cfg-pnl-informe" class="cfg-tab-pnl'+(activeTab==='informe'?' cfg-tab-pnl-on':'')+'">'+ pnlInforme+'</div>'+
+    '<div id="cfg-pnl-moneda" class="cfg-tab-pnl'+(activeTab==='moneda'?' cfg-tab-pnl-on':'')+'">'+ pnlMoneda+'</div>'+
     '</div>'+
     '<div class="mf"><button class="btn-p blue" onclick="closeMod()">Listo</button></div>'+
   '</div>';
