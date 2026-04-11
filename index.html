@@ -64,7 +64,7 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
 #wow-screen .wow-btn.secondary { background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); }
 
 /* ── HEADER ── */
-.hdr{background:var(--navy);display:flex;flex-wrap:wrap;align-items:center;position:sticky;top:0;z-index:50;box-shadow:0 2px 10px rgba(0,0,0,0.3)}
+.hdr{background:var(--navy);display:flex;flex-wrap:wrap;align-items:center;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,0.3)}
 .hdr-left{display:flex;align-items:center;gap:10px;padding:9px 16px;flex:1;min-width:200px}
 .hdr-logo-wrap{width:38px;height:38px;min-width:38px;border-radius:8px;background:rgba(255,255,255,0.15);display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer;border:1px solid rgba(255,255,255,0.2)}
 .hdr-logo-wrap img,.hdr-logo-wrap svg{max-width:100%;max-height:100%;object-fit:contain}
@@ -84,7 +84,7 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
 .hbtn svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;flex-shrink:0}
 
 	/* ── TABS ── */
-	.tabs{background:var(--bg);border-bottom:1px solid var(--border);display:flex;padding:0 14px;overflow-x:auto;position:sticky;top:56px;z-index:40;align-items:center;justify-content:space-between}
+	.tabs{background:var(--bg);border-bottom:1px solid var(--border);display:flex;padding:0 14px;overflow-x:auto;position:sticky;top:56px;z-index:90;align-items:center;justify-content:space-between}
 	.tabs-list{display:flex;overflow-x:auto}
 .tab{padding:10px 13px;font-size:11px;font-weight:500;color:var(--txt2);cursor:pointer;border-bottom:2px solid transparent;text-transform:uppercase;letter-spacing:0.5px;white-space:nowrap}
 .tab.on{color:var(--navy);border-bottom-color:var(--navy)}
@@ -96,12 +96,13 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
 
 /* ── BUDGET TABLE ── */
 .tbl-wrap{background:var(--bg);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:12px}
-.tbl-hdr{display:grid;grid-template-columns:50px minmax(120px,1fr) 55px 70px 110px 110px 140px;background:var(--bg2);border-bottom:1px solid var(--border2);padding:0 8px}
-.tbl-hdr span{padding:9px 6px;font-size:9px;font-weight:600;color:var(--txt2);text-transform:uppercase;letter-spacing:.6px}
-.tbl-hdr .r{text-align:right}
+.tbl-hdr{display:grid;grid-template-columns:50px minmax(120px,1fr) 65px 70px 110px 110px 140px;background:var(--bg2);border-bottom:1px solid var(--border2);padding:0 8px;position:sticky;top:92px;z-index:30;box-shadow:0 1px 3px rgba(0,0,0,0.1)}
+.tbl-hdr span{padding:10px 6px;font-size:10px;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:.6px;display:flex;align-items:center}
+.tbl-hdr .r{justify-content:flex-end;text-align:right}
+.tbl-hdr .c{justify-content:center;text-align:center}
 .row-ch,.row-it{display:grid;border-bottom:1px solid var(--border);padding:0 8px;align-items:center}
-.row-ch{grid-template-columns:50px minmax(120px,1fr) 55px 70px 110px 110px 140px;background:rgba(30,58,95,.05);border-bottom:1px solid var(--border2)}
-.row-it{grid-template-columns:50px minmax(120px,1fr) 55px 70px 110px 110px 140px}
+.row-ch{grid-template-columns:50px minmax(120px,1fr) 65px 70px 110px 110px 140px;background:rgba(30,58,95,.05);border-bottom:1px solid var(--border2)}
+.row-it{grid-template-columns:50px minmax(120px,1fr) 65px 70px 110px 110px 140px}
 .row-it:hover{background:#f6f8ff}.row-ch:hover{background:rgba(30,58,95,.08)}
 .ri{font-family:var(--ff);font-size:13px;color:var(--txt);background:transparent;border:none;outline:none;width:100%;padding:10px 6px;line-height:1.3}
 .ri::placeholder{color:var(--txt3);font-style:italic}.ri:focus::placeholder{opacity:0}
@@ -353,9 +354,9 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
       <input type="hidden" id="pExecution" value=""/>
 
       <div class="tbl-wrap">
-        <div class="tbl-hdr">
-          <span>Ítem</span><span>Descripción de la Partida</span><span class="r">Unid</span><span class="r">Cant.</span><span class="r" id="hdr-punit">P.Unit.</span><span class="r" id="hdr-total">Total</span><span></span>
-        </div>
+<div class="tbl-hdr">
+	          <span>Ítem</span><span>Descripción de la Partida</span><span class="c">Unid</span><span class="r">Cant.</span><span class="r" id="hdr-punit">P.Unit.</span><span class="r" id="hdr-total">Total</span><span></span>
+	        </div>
         <div id="brows"></div>
         <div class="tbl-add no-print">
           <button class="bs addp" onclick="addCh()">+ Nuevo Capítulo</button>
@@ -600,7 +601,7 @@ function rb(){
         <input class="ri" data-field="name" data-id="${it.id}" placeholder="Descripción..." value="${esc(it.name)}" autocomplete="off"/>
         ${it.note ? `<div style="font-size:10px;color:#64748b;font-style:italic;margin-top:2px;padding-left:4px;line-height:1.2">${esc(it.note)}</div>` : ''}
       </div>
-      <input class="ri" style="width:55px" data-field="unit" data-id="${it.id}" placeholder="Unid" value="${esc(it.unit)}" autocomplete="off"/>
+      <input class="ri" style="width:65px;text-align:center" data-field="unit" data-id="${it.id}" placeholder="Unid" value="${esc(it.unit)}" autocomplete="off"/>
 	      <input class="${qtyClass}" data-field="qty" data-id="${it.id}" placeholder="0" value="${fmtQBudget(N(it.qty))}" onfocus="this.select()" autocomplete="off"/>
       <input class="${priceClass}" data-field="price" data-id="${it.id}" placeholder="P.Unit." value="${fmtP(N(it.price))}" onfocus="this.select()" autocomplete="off"/>
       <span class="span-tot ${it.isApu||it.isCub?'magenta':''}">${fmtB(tot)}</span>
