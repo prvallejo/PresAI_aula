@@ -95,14 +95,14 @@ body{font-family:var(--ff);color:var(--txt);font-size:13px;background:var(--bg3)
 .pnl{display:none}.pnl.on{display:block}
 
 /* ── BUDGET TABLE ── */
-.tbl-wrap{background:var(--bg);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:12px}
-.tbl-hdr{display:grid;grid-template-columns:50px minmax(120px,1fr) 65px 70px 110px 110px 140px;background:var(--bg2);border-bottom:1px solid var(--border2);padding:0 8px;position:sticky;top:92px;z-index:30;box-shadow:0 1px 3px rgba(0,0,0,0.1)}
-.tbl-hdr span{padding:10px 6px;font-size:10px;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:.6px;display:flex;align-items:center}
+.tbl-wrap{background:var(--bg);border:1px solid var(--border);border-radius:10px;overflow:visible;margin-bottom:12px;position:relative}
+.tbl-hdr{display:grid;grid-template-columns:50px minmax(120px,1fr) 60px 70px 110px 110px 140px;background:var(--bg2);border-bottom:2px solid var(--border2);padding:0 8px;position:sticky;top:92px;z-index:30;box-shadow:0 2px 8px rgba(0,0,0,0.1);background-color:var(--bg2)}
+.tbl-hdr span{padding:12px 6px;font-size:11px;font-weight:800;color:var(--navy);text-transform:uppercase;letter-spacing:.6px;display:flex;align-items:center;justify-content:flex-start}
 .tbl-hdr .r{justify-content:flex-end;text-align:right}
 .tbl-hdr .c{justify-content:center;text-align:center}
 .row-ch,.row-it{display:grid;border-bottom:1px solid var(--border);padding:0 8px;align-items:center}
-.row-ch{grid-template-columns:50px minmax(120px,1fr) 65px 70px 110px 110px 140px;background:rgba(30,58,95,.05);border-bottom:1px solid var(--border2)}
-.row-it{grid-template-columns:50px minmax(120px,1fr) 65px 70px 110px 110px 140px}
+.row-ch{grid-template-columns:50px minmax(120px,1fr) 60px 70px 110px 110px 140px;background:rgba(30,58,95,.05);border-bottom:1px solid var(--border2)}
+.row-it{grid-template-columns:50px minmax(120px,1fr) 60px 70px 110px 110px 140px}
 .row-it:hover{background:#f6f8ff}.row-ch:hover{background:rgba(30,58,95,.08)}
 .ri{font-family:var(--ff);font-size:13px;color:var(--txt);background:transparent;border:none;outline:none;width:100%;padding:10px 6px;line-height:1.3}
 .ri::placeholder{color:var(--txt3);font-style:italic}.ri:focus::placeholder{opacity:0}
@@ -601,7 +601,7 @@ function rb(){
         <input class="ri" data-field="name" data-id="${it.id}" placeholder="Descripción..." value="${esc(it.name)}" autocomplete="off"/>
         ${it.note ? `<div style="font-size:10px;color:#64748b;font-style:italic;margin-top:2px;padding-left:4px;line-height:1.2">${esc(it.note)}</div>` : ''}
       </div>
-      <input class="ri" style="width:65px;text-align:center" data-field="unit" data-id="${it.id}" placeholder="Unid" value="${esc(it.unit)}" autocomplete="off"/>
+      <input class="ri" style="width:60px;text-align:center" data-field="unit" data-id="${it.id}" placeholder="Unid" value="${esc(it.unit)}" autocomplete="off"/>
 	      <input class="${qtyClass}" data-field="qty" data-id="${it.id}" placeholder="0" value="${fmtQBudget(N(it.qty))}" onfocus="this.select()" autocomplete="off"/>
       <input class="${priceClass}" data-field="price" data-id="${it.id}" placeholder="P.Unit." value="${fmtP(N(it.price))}" onfocus="this.select()" autocomplete="off"/>
       <span class="span-tot ${it.isApu||it.isCub?'magenta':''}">${fmtB(tot)}</span>
